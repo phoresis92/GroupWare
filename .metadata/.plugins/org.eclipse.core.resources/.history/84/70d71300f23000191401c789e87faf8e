@@ -1,0 +1,11 @@
+package project.groupware.approval;
+
+import java.util.ArrayList;
+
+import dto.Department_Dto;
+
+public interface Approval_Dao {
+
+	public ArrayList<Department_Dto> selectAllDept(); 
+	
+}

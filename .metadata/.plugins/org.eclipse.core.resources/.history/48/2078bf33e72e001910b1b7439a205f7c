@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kitri.test.member.Dao">
+
+	<resultMap id="memberResult" type="com.kitri.test.member.Member">
+		<result column="id" property="id" />
+		<result column="pwd" property="pwd" />
+		<result column="name" property="name" />
+		<result column="email" property="email" />
+		<result column="type" property="type" />
+	</resultMap>
+
+	<insert id="insert" parameterType="com.kitri.test.member.Member">
+		insert into prod_mem values(#{id}, #{pwd}, #{name}, #{email}, #{type})
+	</insert>
+	
+	<select id="select" parameterType="String" resultMap="memberResult">
+		select * from prod_mem where id = #{id}
+	</select>
+	
+	<select id="update" parameterType="com.kitri.test.member.Member">
+		update prod_mem set pwd=#{pwd}, name=#{name}, email=#{email} where id=#{id}
+	</select>
+	
+	<update id="delete" parameterType="String">
+		delete prod_mem where id=#{id}
+	</update>
+	
+	<select id="login" parameterType="String" resultType="String">
+		select pwd from prod_mem where id = #{id}
+	</select>
+	
+
+</mapper>
+

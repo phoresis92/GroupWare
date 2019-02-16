@@ -1,0 +1,10 @@
+INDEX VERSION 1.4+C:\Users\hushe\dev\eclipse-jee-2018-12-R-win32-x86_64\gware\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+2125493731.index
+838875323.index
+1319666779.index
+1942962172.index
+1211965267.index
+1817511983.index
+3594158864.index
+662391456.index
+662391456.index

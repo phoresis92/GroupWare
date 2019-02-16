@@ -1,0 +1,5 @@
+package it.kit.gware.calendar;
+
+public class Cal_ServiceImpl {
+
+}

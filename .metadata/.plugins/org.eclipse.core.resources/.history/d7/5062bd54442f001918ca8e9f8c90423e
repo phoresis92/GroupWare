@@ -1,0 +1,14 @@
+package it.kit.gware.calendar;
+
+import java.util.List;
+
+import dto.Calendar_Dto;
+
+public interface Calendar_Dao {
+
+	public int insertCal(Calendar_Dto calDto);
+	public int deleteCal(int calendar_id);
+	public int updateCal(Calendar_Dto calDto);
+	public List<Calendar_Dto> selectAllCal();
+	
+}

@@ -1,0 +1,49 @@
+package project.groupware.approval;
+
+import java.util.ArrayList;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import project.groupware.department.Department;
+import project.groupware.department.Service;
+import project.groupware.member.MService;
+import project.groupware.member.MemberJoin;
+import project.groupware.rank.RService;
+import project.groupware.rank.Rank;
+
+@Controller
+public class Approval_Controller {
+	
+	@Resource(name="departmentService")
+	private Service deptService;
+	
+	@Resource(name="memberService")
+	private MService memService;
+	
+	@Resource(name="rankService")
+	private RService rankService;
+
+	@RequestMapping(value="/approval")
+	public String approval(Model model) {
+		
+		ArrayList<Department> deptList = deptService.getAll(); //department
+		
+		model.addAttribute("deptList",deptList);
+		
+		ArrayList<MemberJoin> memList = memService.getAllMemJoin();
+		
+		model.addAttribute("memList",memList);
+		
+		ArrayList<Rank> rankList = rankService.getAll();
+		
+		model.addAttribute("rankList", rankList);
+		
+		
+		return "/approval/listtest";
+	}
+	
+}
