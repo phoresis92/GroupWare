@@ -77,6 +77,10 @@
 		select * from member m , department d, rank k where m.member_department = d.department_id(+) and m.member_rank = k.rank_id(+) and member_name like #{member_name}
 	</select>
 
+	<select id="selectById" parameterType="int" resultMap="memberJoinResult">
+		select * from member m , department d, rank k where m.member_department = d.department_id(+) and m.member_rank = k.rank_id(+) and member_id = #{member_id}
+	</select>
+
 
 </mapper>
 

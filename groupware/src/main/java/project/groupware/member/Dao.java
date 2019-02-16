@@ -20,4 +20,6 @@ public interface Dao {
 	
 	ArrayList<MemberJoin> selectByName(String searchName);
 	
+	MemberJoin selectById(int member_id);
+
 }

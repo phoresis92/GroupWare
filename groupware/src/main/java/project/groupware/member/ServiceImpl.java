@@ -72,6 +72,12 @@ public class ServiceImpl implements MService{
 		dao = sqlSession.getMapper(Dao.class); // DaoImpl 객체를 생성
 		return dao.selectByName("%"+searchName+"%");
 	}
+
+	@Override
+	public MemberJoin searchById(int member_id) {
+		dao = sqlSession.getMapper(Dao.class); // DaoImpl 객체를 생성
+		return dao.selectById(member_id);
+	}
 	
 	
 }

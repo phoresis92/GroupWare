@@ -137,19 +137,34 @@
     
     </table>
     
-    <span id="authMemList" num="1" style="display: inline-block; border: 1px solid black; width: 100px; height: 100px"></span>
-    <span id="authMemList" num="2" style="display: inline-block; border: 1px solid black; width: 100px; height: 100px"></span>
-    <span id="authMemList" num="3" style="display: inline-block; border: 1px solid black; width: 100px; height: 100px"></span>
+    <button onclick="apply()" >적용</button>
+    <button onclick="window.close();" >닫기</button>
     
     
     <script>
     
+    
     $(document).ready(function(){
+		 MIN_NUM = 1;
+		 MAX_NUM = 3;
     	
-    	var getMem = $(opener.document).find('#authMem').text();
-    	$('#authMemList').text(getMem);
+    	for(var i = MIN_NUM; i <= MAX_NUM ; i++){
+    		
+	    	if($(opener.document).find('#authRank'+i+'').text() != ''){
+	    	$('#rank_'+i+'').text($(opener.document).find('#authRank'+i+'').text());
+	    	$('#name_'+i+'').text($(opener.document).find('#authName'+i+'').text());
+	    	$('#dept_'+i+'').text($(opener.document).find('#authDept'+i+'').text());
+	    	$('#memId_'+i+'').text($(opener.document).find('#authId'+i+'').text());
+    		
+			 $('#del_'+i+'').html('<a class="xBtn" onclick="delLine('+i+')">[ X ]</a>');
+			 $('#order_'+i+'').html('&nbsp;<a class="upBtn" onclick="upBtn('+i+')">▲</a>&nbsp;<a class="dnBtn" onclick="dnBtn('+i+')">▼</a>&nbsp;')
+			 $('#'+i+'').val('exist');
+
+	    	}// if end
+			 
+    	}// for end
     	
-    })
+    })// ready end
     
     $('#tt').tree({
     	onClick: function(node){
@@ -198,42 +213,9 @@
             						console.log(arr[1])
             						var member_id = arr[1];
             						
-            						$('#authMemList')
-            						 
-            						var trArr = $('#finalList > tr');
-            						MAX_NUM = trArr.length;
-            						 
-            						var cnt = 3;
-            						for(var j = MIN_NUM; j <= MAX_NUM ; j++){
-            							
-            							if(parseInt($('#memId_'+j+'').text()) == member_id){
-            								alert('이미 추가되어 있는 결재자 입니다.')
-            								return;
-            							} 
-
-            							if(trArr[j-1].value == null || trArr[j-1].value == ''){
-            								cnt--;
-            							} 
-            							
-            						}
+            						pikAuthMem(member_id);
+            						return;
             						
-            						if(cnt == 3){
-            							alert('결재자가 모두 선택되었습니다. 삭제하고 다시 추가해주세요.');
-            							return;
-            						}
-            						
-            						 for(var i = 0 ; i < trArr.length ; i++){
-            							 
-            							 if(trArr[i].value == null || trArr[i].value == ''){
-            								 
-            								 $('#memId_'+(i+1)+'').text(member_id);
-            								 $('#del_'+(i+1)+'').html('<a class="xBtn" onclick="delLine('+(i+1)+')">[ X ]</a>');
-            								 $('#order_'+(i+1)+'').html('&nbsp;<a class="upBtn" onclick="upBtn('+(i+1)+')">▲</a>&nbsp;<a class="dnBtn" onclick="dnBtn('+(i+1)+')">▼</a>&nbsp;')
-            								 trArr[i].value = 'exist';
-            								 return;
-            							 }
-            							 
-            						 }
             						
             					} //catch end ==================================================================================================================final process end
             					
@@ -305,19 +287,15 @@
 			}
 	 }
 	 
-	 var MIN_NUM = 1;
-	 var MAX_NUM;
 
 	 function pikAuthMem(member_id){
-		 //=====================================================================================================================================================최종 처리
-		 
+		 //===================================================================================================================================================== final process end
 		 
 		 
 		 
 		$('#authMemList')
 		 
 		var trArr = $('#finalList > tr');
-		MAX_NUM = trArr.length;
 		 
 		var cnt = 3;
 		for(var j = MIN_NUM; j <= MAX_NUM ; j++){
@@ -337,12 +315,51 @@
 			alert('결재자가 모두 선택되었습니다. 삭제하고 다시 추가해주세요.');
 			return;
 		}
+
+		var rank_name;
+		var department_name;
+		var member_name;
+		
+		var param = "member_id="+member_id;
+		 $.ajax({
+             type: 'POST',
+             async: false,
+             url: "${ pageContext.request.contextPath }/approval/searchById",
+             data: param,
+             success: function(data) {
+				
+            	 var result = JSON.parse(data);
+            	 
+            	 console.log(result);
+            	 
+            	 rank_name = result.rank_name;
+            	 department_name = result.department_name;
+            	 member_name = result.member_name;
+					
+					
+			}
+		}); //ajax end
+		
+		console.log(rank_name)
+		console.log(department_name)
+		console.log(member_name)
+		
+		if(rank_name == null){
+			rank_name = '입사대기';
+		}
+		if(department_name == null){
+			department_name = '발령대기'
+		}
 		
 		 for(var i = 0 ; i < trArr.length ; i++){
 			 
 			 if(trArr[i].value == null || trArr[i].value == ''){
 				 
 				 $('#memId_'+(i+1)+'').text(member_id);
+				 $('#dept_'+(i+1)+'').text(department_name);
+				 $('#name_'+(i+1)+'').text(member_name);
+				 $('#rank_'+(i+1)+'').text(rank_name);
+				 
 				 $('#del_'+(i+1)+'').html('<a class="xBtn" onclick="delLine('+(i+1)+')">[ X ]</a>');
 				 $('#order_'+(i+1)+'').html('&nbsp;<a class="upBtn" onclick="upBtn('+(i+1)+')">▲</a>&nbsp;<a class="dnBtn" onclick="dnBtn('+(i+1)+')">▼</a>&nbsp;')
 				 trArr[i].value = 'exist';
@@ -352,9 +369,26 @@
 		 }
 		 
 		 
-		 $(opener.document).find('#authMem').text(member_id);
 		 
 	 } // pikAuthMem() end
+	 //===================================================================================================================================================== final process end
+
+	 
+	 function apply(){
+		 
+		 for(var i = MIN_NUM; i <= MAX_NUM ; i++){
+			 
+			$(opener.document).find('#authName'+i).text($('#name_'+i).text());
+			$(opener.document).find('#authRank'+i).text($('#rank_'+i).text());
+			$(opener.document).find('#authDept'+i).text($('#dept_'+i).text());
+			$(opener.document).find('#authId'+i).text($('#memId_'+i).text());
+			
+		 }
+		 
+		
+		window.close();
+		
+	 }
 	 
 	 
 	 function delLine(i){

@@ -21,5 +21,7 @@ public interface MService {
 	ArrayList<MemberJoin> searchByDeptId(int id);
 	
 	ArrayList<MemberJoin> searchByName(String searchName);
+	
+	MemberJoin searchById(int member_id);
 
 }

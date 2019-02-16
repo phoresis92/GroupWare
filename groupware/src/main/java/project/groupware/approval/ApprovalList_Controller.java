@@ -115,4 +115,20 @@ public class ApprovalList_Controller {
 		return arr.toJSONString();
 	}
 	
+	@ResponseBody
+	@RequestMapping(value="/approval/searchById", method=RequestMethod.POST, produces = "application/text; charset=utf8")
+	public String searchById(@RequestParam("member_id") String id) {
+		
+		//System.out.println(id);
+		
+		MemberJoin memj = memService.searchById(Integer.parseInt(id));
+		
+			JSONObject jobj = new JSONObject();
+			jobj.put("department_name", memj.getDepartment_name());
+			jobj.put("member_name", memj.getMember_name());
+			jobj.put("rank_name", memj.getRank_name());
+		
+		return jobj.toJSONString();
+	}
+	
 }
