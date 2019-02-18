@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import dto.Calendar_Cate;
 import dto.Calendar_Dto;
-import project.groupware.member.Member;
+import project.groupware.member.MemberJoin;
 
 @Controller
 public class Calendar_Controller {
@@ -88,7 +88,7 @@ public class Calendar_Controller {
 		
 		
 		HttpSession session = req.getSession();
-		Member m = (Member) session.getAttribute("member");
+		MemberJoin m = (MemberJoin) session.getAttribute("member");
 		
 		int id = m.getMember_id();
 		

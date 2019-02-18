@@ -1,0 +1,45 @@
+package dto;
+
+import java.util.Date;
+
+public class Approval_Dto {
+	
+	private int approval_id;	
+	private int approval_cate;	
+	private int approval_member_id;	
+	private int approval_mem1;	
+	private int approval_mem2;	
+	private int approval_mem3;	
+	private int approval_auth1;	
+	private int approval_auth2;	
+	private int approval_auth3;	
+	private String approval_title;	
+	private String approval_content;	
+	private String approval_filepath;	
+	private String approval_filename;	
+	private String approval_return;	
+	private Date approval_indate;	
+	private Date approval_enddate;	
+	private String approval_cc;	
+	
+	
+	create table approval(
+			approval_id number auto_increment primary key,
+			approval_cate number(3) not null,
+			approval_member_id number(20) not null,
+			approval_mem1 number(20),
+			approval_mem2 number(20),
+			approval_mem3 number(20),
+			approval_auth1 number(1),
+			approval_auth2 number(1),
+			approval_auth3 number(1),
+			approval_title varchar2(500) not null,
+			approval_content varchar2(5000) not null,
+			approval_filepath varchar2(1000),
+			approval_filename varchar2(1000),
+			approval_return varchar2(1000),
+			approval_indate date default sysdate,
+			approval_enddate date,
+			approval_cc varchar2(1000),
+
+}

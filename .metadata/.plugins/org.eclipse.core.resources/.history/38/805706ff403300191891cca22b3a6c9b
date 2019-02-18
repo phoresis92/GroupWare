@@ -1,0 +1,11 @@
+package project.groupware.approval;
+
+import java.util.ArrayList;
+
+import dto.Approval_Cate;
+
+public interface ApvService {
+	
+	ArrayList<Approval_Cate> getAllCate();	
+
+}

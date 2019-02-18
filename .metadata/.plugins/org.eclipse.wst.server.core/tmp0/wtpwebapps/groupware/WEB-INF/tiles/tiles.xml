@@ -26,4 +26,8 @@
     <put-attribute name="content" value="/WEB-INF/views/member/login.jsp"></put-attribute>
 </definition>
 
+<definition name="/approval/pikAuthMem" extends="empty">
+    <put-attribute name="content" value="/WEB-INF/views/approval/approvalList.jsp"></put-attribute>
+</definition>
+
 </tiles-definitions>

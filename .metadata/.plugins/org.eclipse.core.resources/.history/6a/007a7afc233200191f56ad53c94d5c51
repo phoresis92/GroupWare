@@ -1,0 +1,7 @@
+package dto;
+
+public class Approval_Cate {
+
+	private int apv_cate_id;
+	private String apv_cate_name;
+}

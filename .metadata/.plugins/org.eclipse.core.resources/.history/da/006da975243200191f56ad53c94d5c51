@@ -1,0 +1,16 @@
+package project.groupware.approval;
+
+import javax.annotation.Resource;
+
+import org.apache.ibatis.session.SqlSession;
+
+
+public class ApvServiceImpl implements ApvService {
+	
+	@Resource(name="sqlSession")
+	private SqlSession sqlSession; // mybatis에서 사용
+	private ApvDao dao;
+	
+	
+
+}

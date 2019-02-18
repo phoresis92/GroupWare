@@ -116,6 +116,12 @@ apv_cate_id number(3) primary key,
 apv_cate_name varchar2(50) not null
 );
 
+create sequence seq_apv_cate;
+
+insert into approval_cate values(seq_apv_cate.nextval, '기안서');
+insert into approval_cate values(seq_apv_cate.nextval, '업무일지');
+insert into approval_cate values(seq_apv_cate.nextval, '계약확인서');
+
 create table approval_auth(
 apv_auth_id number(1) primary key,
 apv_auth_name varchar2(30) not null
@@ -150,6 +156,13 @@ references approval_auth(apv_auth_id) on delete cascade,
 constraint approval_member_id_fk foreign key (approval_member_id)
 references member(member_id) on delete cascade
 );
+
+insert into approval_auth values(0, '');
+insert into approval_auth values(1, '승인');
+insert into approval_auth values(2, '반려');
+insert into approval_auth values(3, '예결');
+
+
 
 create sequence seq_approval_id;
 
@@ -224,7 +237,11 @@ create sequence seq_cal_cate_id;
   calendar_content varchar2(3000) not null,
   calendar_color varchar2(10),
   calendar_allDay number(1) constraint calendar_allDay_ck check(calendar_allDay = 0 or calendar_allDay = 1),
-  calendar_indate Date default sysdate
+  calendar_indate Date default sysdate,
+  constraint calendar_member_id_fk foreign key (calendar_member_id)
+  references member(member_id) on delete cascade,
+  constraint calendar_cate_fk foreign key (calendar_cate)
+  references calendar_cate(cal_cate_id) on delete cascade
   );
 
   create sequence seq_calendar_id;

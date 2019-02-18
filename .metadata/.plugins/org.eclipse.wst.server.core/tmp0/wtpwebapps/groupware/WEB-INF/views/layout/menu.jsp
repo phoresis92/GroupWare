@@ -17,9 +17,22 @@
       </div>
       <div id="collapseOne" class="collapse" data-parent="#accordion">
         <div class="card-body">
-            <a class="card-link" href="${ pageContext.request.contextPath }/approval">결재</a><br>
+            <a class="card-link" href="${ pageContext.request.contextPath }/approval">일반결재</a><br>
             <a class="card-link" href="${ pageContext.request.contextPath }/approval/pikAuthMem">결재자 테스트</a><br>
-    		<a class="card-link" href="#">결재보기</a><br>
+    		<a class="card-link" href="#">지난결재</a><br>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-header">
+        <a class="card-link" data-toggle="collapse" href="#collapseOne">
+    		결재함
+        </a>
+      </div>
+      <div id="collapseOne" class="collapse" data-parent="#accordion">
+        <div class="card-body">
+    		<a class="card-link" href="${ pageContext.request.contextPath }/approval/myApvList?page=1">내문서함</a><br>
     		<a class="card-link" href="#">지난결재</a><br>
         </div>
       </div>

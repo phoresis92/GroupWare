@@ -168,16 +168,13 @@
     
     $('#tt').tree({
     	onClick: function(node){
-    		//alert(node.text);  // alert node text property when clicked
     		
-    		//console.log(typeof(node.text))
     		if(node.text == 'GROUP WARE'){
     			$.ajax({
                     type: 'POST',
                     url: "${ pageContext.request.contextPath }/approval/getMemList",
                     data: param,
                     success: function(data) {
-      					//console.log(data);
 
       					var obj = JSON.parse(data);
       					
@@ -201,21 +198,17 @@
                           url: "${ pageContext.request.contextPath }/approval/searchDept",
                           data: param,
                           success: function(data) {
-            					//console.log(data);
 
             					try{
             					var obj = JSON.parse(data);
             					}catch(Exception){
-            						//=================================================================================================================================최종처리
-            						console.log(data)
+            						//=================================================================================================================================final process
             						
             						var arr = data.split('|');
-            						console.log(arr[1])
             						var member_id = arr[1];
             						
             						pikAuthMem(member_id);
             						return;
-            						
             						
             					} //catch end ==================================================================================================================final process end
             					
@@ -255,7 +248,6 @@
              url: "${ pageContext.request.contextPath }/approval/searchName",
              data: param,
              success: function(data) {
-					//console.log(data);
 					if(data == 'error'){
 						return;
 					}
@@ -276,7 +268,7 @@
 	 
 	 function printList(obj){
 			for(var i in obj){
-				//console.log(obj[i])
+				
 			if(obj[i].department_name == null) obj[i].department_name = '발령대기'
 				if(obj[i].rank_name == null) obj[i].rank_name = '입사대기'	
 				$('<tr></tr>').css('cursor','pointer').attr('class','hovBg').attr('onclick','pikAuthMem('+obj[i].member_id+')').attr('id', obj[i].member_id).appendTo('#tbody');
@@ -291,7 +283,10 @@
 	 function pikAuthMem(member_id){
 		 //===================================================================================================================================================== final process end
 		 
-		 
+		 if(member_id == ${ sessionScope.member.member_id }){
+			 alert('본인은 선택하실 수 없습니다.');
+			 return;
+		 }
 		 
 		$('#authMemList')
 		 
@@ -330,19 +325,12 @@
 				
             	 var result = JSON.parse(data);
             	 
-            	 console.log(result);
-            	 
             	 rank_name = result.rank_name;
             	 department_name = result.department_name;
             	 member_name = result.member_name;
 					
-					
 			}
 		}); //ajax end
-		
-		console.log(rank_name)
-		console.log(department_name)
-		console.log(member_name)
 		
 		if(rank_name == null){
 			rank_name = '입사대기';

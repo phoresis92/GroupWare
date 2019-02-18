@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.groupware.approval.ApvDao"> <!-- Dao implements한 클래스 이름지정 -->
+
+	<resultMap id="apvCateResult" type="dto.Approval_Cate"> <!-- id:검색된결과를 반환, type:Bean/DTO/VO -->
+		<result column="apv_cate_id" property="apv_cate_id" /> <!-- column:컬럼이름, property:멤버변수 -->
+		<result column="apv_cate_name" property="apv_cate_name" />
+	</resultMap>
+	
+	<resultMap id="apvResult" type="dto.Approval_Dto"> <!-- id:검색된결과를 반환, type:Bean/DTO/VO -->
+		<result column="approval_id" property="approval_id" /> <!-- column:컬럼이름, property:멤버변수 -->
+		<result column="approval_cate" property="approval_cate" />
+		<result column="approval_member_id" property="approval_member_id" />
+		<result column="approval_mem1" property="approval_mem1" />
+		<result column="approval_mem2" property="approval_mem2" />
+		<result column="approval_mem3" property="approval_mem3" />
+		<result column="approval_auth1" property="approval_auth1" />
+		<result column="approval_auth2" property="approval_auth2" />
+		<result column="approval_auth3" property="approval_auth3" />
+		<result column="approval_title" property="approval_title" />
+		<result column="approval_content" property="approval_content" />
+		<result column="approval_filepath" property="approval_filepath" />
+		<result column="approval_filename" property="approval_filename" />
+		<result column="approval_return" property="approval_return" />
+		<result column="approval_indate" property="approval_indate" />
+		<result column="approval_enddate" property="approval_enddate" />
+		<result column="approval_cc" property="approval_cc" />
+	</resultMap>
+	
+	
+approval_cc varchar2(1000),
+	
+
+	
+	<select id="selectAllCate" resultMap="apvCateResult">
+		SELECT * FROM approval_cate
+	</select>
+	
+	<select id="selectSeqNum" resultType="int">
+		select seq_approval_id.nextval from dual
+	</select>
+	
+	<insert id="insertApv" parameterType="dto.Approval_Dto">
+		insert into approval values(#{approval_id}, #{approval_cate}, #{approval_member_id}, #{approval_mem1}, #{approval_mem2, jdbcType=VARCHAR}, #{approval_mem3, jdbcType=VARCHAR}, 0, 0, 0, #{approval_title}, #{approval_content}, #{approval_filepath, jdbcType=VARCHAR}, #{approval_filename, jdbcType=VARCHAR}, #{approval_return, jdbcType=VARCHAR}, sysdate, #{approval_enddate, jdbcType=DATE}, #{approval_cc, jdbcType=VARCHAR})
+	</insert>
+	
+	<select id="selectAllApv" parameterType="int" resultMap="">
+		select * from approval where approval_member_id = #{member_id}
+	</select>
+	
+</mapper>

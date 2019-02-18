@@ -1,0 +1,42 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	${ apvList }
+	
+	<table>
+	
+	<tr>
+	<th>문서번호</th>
+	<th>문서분류</th>
+	<th>상태</th>
+	<th>기안일</th>
+	</tr>
+	
+	</table>
+
+
+approval_member_id number(20) not null,
+approval_mem1 number(20),
+approval_mem2 number(20),
+approval_mem3 number(20),
+approval_auth1 number(1),
+approval_auth2 number(1),
+approval_auth3 number(1),
+approval_title varchar2(500) not null,
+approval_content varchar2(5000) not null,
+approval_filepath varchar2(1000),
+approval_filename varchar2(1000),
+approval_return varchar2(1000),
+approval_indate date default sysdate,
+approval_enddate date,
+approval_cc varchar2(1000),
+
+</body>
+</html>

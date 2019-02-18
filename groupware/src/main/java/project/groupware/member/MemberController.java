@@ -49,7 +49,7 @@ public class MemberController {
 	public String login(HttpServletRequest req, Member member) {
 		String result = "";
 		boolean flag = false;
-		Member m = service.getMyInfo(member.getMember_id());
+		MemberJoin m = service.searchById(member.getMember_id());
 		if (m != null && m.getMember_pw() != null && m.getMember_pw().equals(member.getMember_pw())) {		
 			flag = true;
 		}		

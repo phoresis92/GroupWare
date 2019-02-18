@@ -1,0 +1,18 @@
+package project.groupware.approval;
+
+import java.util.ArrayList;
+
+import dto.Approval_Cate;
+import dto.Approval_Dto;
+
+public interface ApvDao {
+
+	public ArrayList<Approval_Cate> selectAllCate();
+	
+	public int selectSeqNum();
+	
+	public int insertApv(Approval_Dto dto);
+	
+	public ArrayList<Approval_Dto> selectAllApvNEnd(int member_id);
+	
+}

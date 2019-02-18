@@ -2,12 +2,15 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="color" key="selection"/>
+		<item value="jquery" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="jquery"/>
+			<item value="console."/>
+			<item value="ready"/>
 			<item value="color"/>
 			<item value="string"/>
 			<item value=".add"/>
@@ -20,9 +23,6 @@
 			<item value="psubject"/>
 			<item value="allDay"/>
 			<item value="modadChBx()"/>
-			<item value="adChBx"/>
-			<item value="adChBx()"/>
-			<item value="calendar_id"/>
 		</list>
 		<list key="replacehistory">
 		</list>
