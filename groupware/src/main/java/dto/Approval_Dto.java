@@ -40,9 +40,22 @@ public class Approval_Dto {
 	
 	private String apv_cate_name;
 	
+	private String member_name;
+	private String department_name;
+	private String rank_name;
+
+	private String rank_name1;
+	private String rank_name2;
+	private String rank_name3;
+
+	private Date approval_auth_date1;
+	private Date approval_auth_date2;
+	private Date approval_auth_date3;
 	
 	
+
 	
+
 	@Override
 	public String toString() {
 		return "Approval_Dto [approval_id=" + approval_id + ", approval_cate=" + approval_cate + ", approval_member_id="
@@ -52,7 +65,14 @@ public class Approval_Dto {
 				+ ", approval_content=" + approval_content + ", approval_filepath=" + approval_filepath
 				+ ", approval_filename=" + approval_filename + ", approval_return=" + approval_return
 				+ ", approval_indate=" + approval_indate + ", approval_enddate=" + approval_enddate + ", approval_cc="
-				+ approval_cc + ", apv_cate_name=" + apv_cate_name + ", file=" + file + "]";
+				+ approval_cc + ", file=" + file + ", member_name1=" + member_name1 + ", member_name2=" + member_name2
+				+ ", member_name3=" + member_name3 + ", department_name1=" + department_name1 + ", department_name2="
+				+ department_name2 + ", department_name3=" + department_name3 + ", apv_auth_name1=" + apv_auth_name1
+				+ ", apv_auth_name2=" + apv_auth_name2 + ", apv_auth_name3=" + apv_auth_name3 + ", apv_cate_name="
+				+ apv_cate_name + ", member_name=" + member_name + ", department_name=" + department_name
+				+ ", rank_name=" + rank_name + ", rank_name1=" + rank_name1 + ", rank_name2=" + rank_name2
+				+ ", rank_name3=" + rank_name3 + ", approval_auth_date1=" + approval_auth_date1
+				+ ", approval_auth_date2=" + approval_auth_date2 + ", approval_auth_date3=" + approval_auth_date3 + "]";
 	}
 	public Approval_Dto() {
 		super();
@@ -60,8 +80,12 @@ public class Approval_Dto {
 	public Approval_Dto(int approval_id, int approval_cate, int approval_member_id, String approval_mem1,
 			String approval_mem2, String approval_mem3, int approval_auth1, int approval_auth2, int approval_auth3,
 			String approval_title, String approval_content, String approval_filepath, String approval_filename,
-			String approval_return, Date approval_indate, Date approval_enddate, String approval_cc,
-			String apv_cate_name, MultipartFile file) {
+			String approval_return, Date approval_indate, Date approval_enddate, String approval_cc, MultipartFile file,
+			String member_name1, String member_name2, String member_name3, String department_name1,
+			String department_name2, String department_name3, String apv_auth_name1, String apv_auth_name2,
+			String apv_auth_name3, String apv_cate_name, String member_name, String department_name, String rank_name,
+			String rank_name1, String rank_name2, String rank_name3, Date approval_auth_date1, Date approval_auth_date2,
+			Date approval_auth_date3) {
 		super();
 		this.approval_id = approval_id;
 		this.approval_cate = approval_cate;
@@ -80,8 +104,134 @@ public class Approval_Dto {
 		this.approval_indate = approval_indate;
 		this.approval_enddate = approval_enddate;
 		this.approval_cc = approval_cc;
-		this.apv_cate_name = apv_cate_name;
 		this.file = file;
+		this.member_name1 = member_name1;
+		this.member_name2 = member_name2;
+		this.member_name3 = member_name3;
+		this.department_name1 = department_name1;
+		this.department_name2 = department_name2;
+		this.department_name3 = department_name3;
+		this.apv_auth_name1 = apv_auth_name1;
+		this.apv_auth_name2 = apv_auth_name2;
+		this.apv_auth_name3 = apv_auth_name3;
+		this.apv_cate_name = apv_cate_name;
+		this.member_name = member_name;
+		this.department_name = department_name;
+		this.rank_name = rank_name;
+		this.rank_name1 = rank_name1;
+		this.rank_name2 = rank_name2;
+		this.rank_name3 = rank_name3;
+		this.approval_auth_date1 = approval_auth_date1;
+		this.approval_auth_date2 = approval_auth_date2;
+		this.approval_auth_date3 = approval_auth_date3;
+	}
+	public Date getApproval_auth_date1() {
+		return approval_auth_date1;
+	}
+	public void setApproval_auth_date1(Date approval_auth_date1) {
+		this.approval_auth_date1 = approval_auth_date1;
+	}
+	public Date getApproval_auth_date2() {
+		return approval_auth_date2;
+	}
+	public void setApproval_auth_date2(Date approval_auth_date2) {
+		this.approval_auth_date2 = approval_auth_date2;
+	}
+	public Date getApproval_auth_date3() {
+		return approval_auth_date3;
+	}
+	public void setApproval_auth_date3(Date approval_auth_date3) {
+		this.approval_auth_date3 = approval_auth_date3;
+	}
+	public String getRank_name() {
+		return rank_name;
+	}
+	public void setRank_name(String rank_name) {
+		this.rank_name = rank_name;
+	}
+	public String getRank_name1() {
+		return rank_name1;
+	}
+	public void setRank_name1(String rank_name1) {
+		this.rank_name1 = rank_name1;
+	}
+	public String getRank_name2() {
+		return rank_name2;
+	}
+	public void setRank_name2(String rank_name2) {
+		this.rank_name2 = rank_name2;
+	}
+	public String getRank_name3() {
+		return rank_name3;
+	}
+	public void setRank_name3(String rank_name3) {
+		this.rank_name3 = rank_name3;
+	}
+	public String getDepartment_name() {
+		return department_name;
+	}
+	public void setDepartment_name(String department_name) {
+		this.department_name = department_name;
+	}
+	public String getMember_name() {
+		return member_name;
+	}
+	public void setMember_name(String member_name) {
+		this.member_name = member_name;
+	}
+	public String getMember_name1() {
+		return member_name1;
+	}
+	public void setMember_name1(String member_name1) {
+		this.member_name1 = member_name1;
+	}
+	public String getMember_name2() {
+		return member_name2;
+	}
+	public void setMember_name2(String member_name2) {
+		this.member_name2 = member_name2;
+	}
+	public String getMember_name3() {
+		return member_name3;
+	}
+	public void setMember_name3(String member_name3) {
+		this.member_name3 = member_name3;
+	}
+	public String getDepartment_name1() {
+		return department_name1;
+	}
+	public void setDepartment_name1(String department_name1) {
+		this.department_name1 = department_name1;
+	}
+	public String getDepartment_name2() {
+		return department_name2;
+	}
+	public void setDepartment_name2(String department_name2) {
+		this.department_name2 = department_name2;
+	}
+	public String getDepartment_name3() {
+		return department_name3;
+	}
+	public void setDepartment_name3(String department_name3) {
+		this.department_name3 = department_name3;
+	}
+	public String getApv_auth_name1() {
+		return apv_auth_name1;
+	}
+	public void setApv_auth_name1(String apv_auth_name1) {
+		this.apv_auth_name1 = apv_auth_name1;
+	}
+	public String getApv_auth_name2() {
+		return apv_auth_name2;
+	}
+	public void setApv_auth_name2(String apv_auth_name2) {
+		this.apv_auth_name2 = apv_auth_name2;
+	}
+	public String getApv_auth_name3() {
+		return apv_auth_name3;
+	}
+	public void setApv_auth_name3(String apv_auth_name3) {
+		this.apv_auth_name3 = apv_auth_name3;
 	}
 	public String getApv_cate_name() {
 		return apv_cate_name;

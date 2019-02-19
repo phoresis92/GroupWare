@@ -6,6 +6,8 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Resource;
@@ -20,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
-import dto.Approval_Auth;
 import dto.Approval_Cate;
 import dto.Approval_Dto;
 import dto.PageInfo;
@@ -154,14 +156,99 @@ public class Approval_Controller {
 		ArrayList<Approval_Dto> apvList =  apvService.getMyAllApv(mj.getMember_id());
 		model.addAttribute("apvList", apvList);
 		
-		ArrayList<Approval_Auth> apvAuthList = apvService.getAllApvAuth();
-		model.addAttribute("apvAuthList", apvAuthList);
+		model.addAttribute("auth" , 0);
+		
+		model.addAttribute("pageInfo", paging(page,apvList));
+		
+	} // myApvList end
+	
+
+	@RequestMapping(value="/approval/myApvDetail", method=RequestMethod.POST)
+	public void approvalDetail(@RequestParam(value="approval_id") int approval_id, @RequestParam(value="auth", required=false) int auth, Model model) {
+		
+		Approval_Dto dto = apvService.getApvDetail(approval_id);
+		
+		System.out.println(dto);
+		
+		model.addAttribute("apvDto", dto);
+		if(auth == 1) {
+			model.addAttribute("auth", auth);
+		}
 		
 		
+		
+	}
+	
+	@RequestMapping("/approval/down")
+	public ModelAndView download(@RequestParam(value="path") String path) throws Exception {
+		
+		String base_path ="C:/Users/hushe/dev/eclipse-jee-2018-12-R-win32-x86_64/gware/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/webapps";
+		
+		
+		File downloadFile = new File(base_path+path);
+		System.out.println(base_path+path);
+		System.out.println(downloadFile);
+		//param1: 뷰 페이지경로, param2: 뷰 페이지에서 부를 데이터이름, param3: 뷰 페이지로 전달할 값
+		return new ModelAndView ("download", "downloadFile", downloadFile);
+	}
+	
+	
+	
+	@RequestMapping(value="/approval/notAuthApvList", method=RequestMethod.GET)
+	public String notAuthApv(HttpServletRequest req, Model model, @RequestParam (value="page") int page ) {
+		
+		HttpSession session = req.getSession();
+		
+		MemberJoin mj = (MemberJoin) session.getAttribute("member");
+		
+		ArrayList<Approval_Dto> apvList =  apvService.getNotAuthApv(mj.getMember_id());
+		model.addAttribute("apvList", apvList);
+		
+		
+		model.addAttribute("pageInfo", paging(page,apvList));
+		
+		model.addAttribute("auth" , 1);
+		
+		return "approval/myApvList";
+	} // myApvList end
+	
+	@ResponseBody
+	@RequestMapping(value="/approval/notAuthApvCount", method=RequestMethod.POST, produces = "application/text; charset=utf8")
+	public String notAuthApvCount(HttpServletRequest req) {
+		
+		HttpSession session = req.getSession();
+		
+		MemberJoin mj = (MemberJoin) session.getAttribute("member");
+		
+		ArrayList<Approval_Dto> apvList =  apvService.getNotAuthApv(mj.getMember_id());
+		
+		return apvList.size()+"";
+	} // myApvList end
+	
+	
+	@RequestMapping(value="/approval/yesAuthApvList", method=RequestMethod.GET)
+	public String yesAuthApvList(HttpServletRequest req, Model model, @RequestParam (value="page") int page ) {
+		
+		HttpSession session = req.getSession();
+		
+		MemberJoin mj = (MemberJoin) session.getAttribute("member");
+		
+		ArrayList<Approval_Dto> apvList =  apvService.getYesAuthApv(mj.getMember_id());
+		model.addAttribute("apvList", apvList);
+		
+		
+		model.addAttribute("pageInfo", paging(page,apvList));
+		
+		model.addAttribute("auth" , 0);
+		
+		return "approval/myApvList";
+	} // myApvList end
+	
+	public PageInfo paging(int page, ArrayList apvList) {
 		//==========================================================
 		
 		
-			
+		
 		int countList = 10; //페이지당 게시물 수
 		int countPage = 10; //페이지 수
 		
@@ -170,7 +257,6 @@ public class Approval_Controller {
 		int totalPage = totalCount / countList; // 총 페이지 수;
 		if(totalCount%countList>0) { totalPage++; }
 		if(totalPage < page) { page = totalPage; }
-		
 		
 		int startPage = ((page-1)  / countPage ) * countPage + 1; 
 		int endPage = startPage + countPage - 1;
@@ -189,28 +275,44 @@ public class Approval_Controller {
 		pageInfo.setEndPage(endPage);
 		pageInfo.setTotalPage(totalPage);
 		pageInfo.setCountList(countList);
-		pageInfo.setStartNum(startNum-1);
-		pageInfo.setEndNum(endNum-1);
+		if(totalCount != 0) {
+			startNum--;
+			endNum--;
+		}
+		pageInfo.setStartNum(startNum);
+		pageInfo.setEndNum(endNum);
+		pageInfo.setTotalCount(totalCount);
 		
-		model.addAttribute("pageInfo", pageInfo);
-		
-	} // myApvList end
-	
-
-	@RequestMapping(value="/approval/myApvDetail", method=RequestMethod.POST)
-	public void approvalDetail(@RequestParam(value="approval_id") int approval_id, Model model) {
-		
-		Approval_Dto dto = apvService.getApvDetail(approval_id);
-		
-		System.out.println(dto);
-		
-		model.addAttribute("apvDto", dto);
-		
-		
-		
+		return pageInfo;
 	}
-	
-	
 
+	@RequestMapping("/approval/approve")
+	public String approve(@RequestParam(value="where") int where, @RequestParam(value="what") int what, @RequestParam(value="approval_id") int approval_id, @RequestParam(value="why") String why) {
+		
+		System.out.println(where);
+		System.out.println(what);
+		System.out.println(approval_id);
+		System.out.println(why);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("approval_id", approval_id);
+		map.put("what", what);
+		map.put("why", why);
+		
+		int result = 0;
+		
+		if(where == 1) {
+			result = apvService.authApv1(map);
+		}
+		if(where == 2) {
+			result = apvService.authApv2(map);
+		}
+		if(where == 3) {
+			result = apvService.authApv2(map);
+		}
+		
+		System.out.println(result);
+		return "redirect:/approval/notAuthApvList?page=1";
+	}
 	
 }

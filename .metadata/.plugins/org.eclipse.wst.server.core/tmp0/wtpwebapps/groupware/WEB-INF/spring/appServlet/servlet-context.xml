@@ -31,7 +31,7 @@
 	<beans:bean
 		class="org.springframework.web.servlet.view.tiles3.TilesViewResolver"
 		id="tilesviewResolver">
-		<beans:property value="0" name="order" />
+		<beans:property value="1" name="order" />
 	</beans:bean>
 
 	<beans:bean
@@ -79,10 +79,16 @@
 		<beans:constructor-arg name="sqlSessionFactory"
 			ref="sqlSessionFactory" />
 	</beans:bean>
-
+	
+	
+	<!-- 파일 업로드 -->
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
 
-	
+		<!-- 파일 다운로드 -->
+<beans:bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+  <beans:property name="order" value="0" />
+ </beans:bean>
+ <beans:bean id="download" class="dto.DownloadView" />
 	
 	
 </beans:beans>

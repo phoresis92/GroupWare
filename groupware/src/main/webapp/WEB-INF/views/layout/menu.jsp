@@ -6,6 +6,20 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+
+$.ajax({
+	type:'POST',
+	url: '${ pageContext.request.contextPath }/approval/notAuthApvCount',
+	success: function(data){
+		//console.log(data);
+		$('#apvCount').text(data);
+	}
+})
+
+</script>
+
 </head>
 <body>
 <div id="accordion">
@@ -33,7 +47,8 @@
       <div id="collapseOne" class="collapse" data-parent="#accordion">
         <div class="card-body">
     		<a class="card-link" href="${ pageContext.request.contextPath }/approval/myApvList?page=1">내문서함</a><br>
-    		<a class="card-link" href="#">지난결재</a><br>
+    		<a class="card-link" href="${ pageContext.request.contextPath }/approval/notAuthApvList?page=1">미결재문서(<span id="apvCount"></span>)</a><br>
+    		<a class="card-link" href="${ pageContext.request.contextPath }/approval/yesAuthApvList?page=1">결재완료문서</a><br>
         </div>
       </div>
     </div>

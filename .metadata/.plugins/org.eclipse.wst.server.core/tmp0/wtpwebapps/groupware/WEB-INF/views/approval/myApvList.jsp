@@ -21,6 +21,7 @@ function detail(j){
 	
 	$('<form></form>').attr('action',"${pageContext.request.contextPath}/approval/myApvDetail").attr('method', 'POST').attr('id','detail').appendTo('#body');
 	$('<input></input>').attr('type','hidden').attr('value',j).attr('name','approval_id').appendTo('#detail');
+	$('<input></input>').attr('type','hidden').attr('value', ${ auth }).attr('name','auth').appendTo('#detail');
 	$('#detail').submit();
 }
 
@@ -29,7 +30,9 @@ function detail(j){
 </head>
 <body id="body">
 
-	<%-- ${ apvList } --%>
+	<button>일반결제문서</button>
+	<button>지출결제문서</button>
+	<button>근태/휴가결제문서</button>
 	
 	<table>
 	
@@ -41,6 +44,7 @@ function detail(j){
 	<th>기안일</th>
 	</tr>
 	
+	<c:if test="${ pageInfo.totalCount != 0 }">
 	<c:forEach var="item" items="${ apvList }" begin="${ pageInfo.startNum }" end="${ pageInfo.endNum }">
 	
 		<tr onclick="detail(${item.approval_id})" style="cursor: pointer;">
@@ -50,26 +54,24 @@ function detail(j){
 			
 			<c:choose>
 			
-				<c:when test="${ empty item.approval_auth3 }">
+				<c:when test="${ empty item.apv_auth_name3 }">
 					<c:choose>
 					
-						<c:when test="${ empty item.approval_auth2 }">
+						<c:when test="${ empty item.apv_auth_name2 }">
 						
-							<c:forEach var="i" items="${ apvAuthList }">
-					
-								<c:if test="${ item.approval_auth1 == i.apv_auth_id }"><td>${ i.apv_auth_name }</td></c:if>
-					
-							</c:forEach>
+							<td>${ item.apv_auth_name1 }</td>
+						
+						</c:when>
+						
+						<c:when test="${ item.approval_auth1 == 2 }">
+						
+							<td>${ item.apv_auth_name1 }</td>
 						
 						</c:when>
 					
 						<c:otherwise>
 						
-							<c:forEach var="i" items="${ apvAuthList }">
-					
-								<c:if test="${ item.approval_auth2 == i.apv_auth_id }"><td>${ i.apv_auth_name }</td></c:if>
-					
-							</c:forEach>
+							<td>${ item.apv_auth_name2 }</td>
 						
 						</c:otherwise>
 					
@@ -77,13 +79,15 @@ function detail(j){
 				
 				</c:when>
 				
+				<c:when test="${ item.approval_auth2 == 2 }">
+				
+					<td>${ item.apv_auth_name2 }</td>
+				
+				</c:when>
+				
 				<c:otherwise>
 				
-					<c:forEach var="i" items="${ apvAuthList }">
-					
-						<c:if test="${ item.approval_auth3 == i.apv_auth_id }"><td>${ i.apv_auth_name }</td></c:if>
-					
-					</c:forEach>
+					<td>${ item.apv_auth_name3 }</td>
 					
 				</c:otherwise>
 			
@@ -93,7 +97,7 @@ function detail(j){
 		</tr>
 	
 	</c:forEach>
-	
+	</c:if>
 	
 	</table>
 	

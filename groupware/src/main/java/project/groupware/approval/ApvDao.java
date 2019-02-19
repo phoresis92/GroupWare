@@ -1,6 +1,7 @@
 package project.groupware.approval;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import dto.Approval_Auth;
 import dto.Approval_Cate;
@@ -19,5 +20,17 @@ public interface ApvDao {
 	public ArrayList<Approval_Auth> selectAllApvAuth();
 	
 	public Approval_Dto selectApvDetail(int approval_id);
+	
+	public ArrayList<Approval_Dto> selectNotAuthApv1(int member_id);
+	public ArrayList<Approval_Dto> selectNotAuthApv2(int member_id);
+	public ArrayList<Approval_Dto> selectNotAuthApv3(int member_id);
+	
+	public int updateApv1(Map<String, Object> map);
+	public int updateApv2(Map<String, Object> map);
+	public int updateApv3(Map<String, Object> map);
+	
+	public ArrayList<Approval_Dto> selectYesAuthApv1(int member_id);
+	public ArrayList<Approval_Dto> selectYesAuthApv2(int member_id);
+	public ArrayList<Approval_Dto> selectYesAuthApv3(int member_id);
 	
 }

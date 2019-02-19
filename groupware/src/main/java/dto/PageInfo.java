@@ -9,7 +9,14 @@ public class PageInfo {
 	private int countList;
 	private int startNum;
 	private int endNum;
+	private int totalCount;
 	
+	public int getTotalCount() {
+		return totalCount;
+	}
+	public void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
+	}
 	public int getPage() {
 		return page;
 	}

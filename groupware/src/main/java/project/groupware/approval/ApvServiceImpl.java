@@ -1,6 +1,7 @@
 package project.groupware.approval;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -52,6 +53,42 @@ public class ApvServiceImpl implements ApvService {
 	public Approval_Dto getApvDetail(int approval_id) {
 		dao = sqlSession.getMapper(ApvDao.class);
 		return dao.selectApvDetail(approval_id);
+	}
+
+	@Override
+	public ArrayList<Approval_Dto> getNotAuthApv(int member_id) {
+		dao = sqlSession.getMapper(ApvDao.class);
+		ArrayList<Approval_Dto> list = dao.selectNotAuthApv1(member_id);
+		list.addAll(dao.selectNotAuthApv2(member_id));
+		list.addAll(dao.selectNotAuthApv3(member_id));
+		return list;
+	}
+
+	@Override
+	public int authApv1(Map<String, Object> map) {
+		dao = sqlSession.getMapper(ApvDao.class);
+		return dao.updateApv1(map);
+	}
+
+	@Override
+	public int authApv2(Map<String, Object> map) {
+		dao = sqlSession.getMapper(ApvDao.class);
+		return dao.updateApv2(map);
+	}
+
+	@Override
+	public int authApv3(Map<String, Object> map) {
+		dao = sqlSession.getMapper(ApvDao.class);
+		return dao.updateApv3(map);
+	}
+
+	@Override
+	public ArrayList<Approval_Dto> getYesAuthApv(int member_id) {
+		dao = sqlSession.getMapper(ApvDao.class);
+		ArrayList<Approval_Dto> list = dao.selectYesAuthApv1(member_id);
+		list.addAll(dao.selectYesAuthApv2(member_id));
+		list.addAll(dao.selectYesAuthApv3(member_id));
+		return list;
 	}
 	
 
