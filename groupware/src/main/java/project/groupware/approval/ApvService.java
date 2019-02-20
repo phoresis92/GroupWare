@@ -29,4 +29,10 @@ public interface ApvService {
 	
 	public ArrayList<Approval_Dto> getYesAuthApv(int member_id);
 	
+	public ArrayList<Approval_Dto> getTempApvList(int member_id);
+	
+	public int saveReWrite(Approval_Dto dto);
+	
+	public int deleteTemp(int approval_id);
+	
 }

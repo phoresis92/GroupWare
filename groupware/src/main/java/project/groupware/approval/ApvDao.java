@@ -33,4 +33,10 @@ public interface ApvDao {
 	public ArrayList<Approval_Dto> selectYesAuthApv2(int member_id);
 	public ArrayList<Approval_Dto> selectYesAuthApv3(int member_id);
 	
+	public ArrayList<Approval_Dto> selectTempApvList(int member_id);
+	
+	public int updateReWrite(Approval_Dto dto);
+	
+	public int deleteApv(int approval_id);
+	
 }

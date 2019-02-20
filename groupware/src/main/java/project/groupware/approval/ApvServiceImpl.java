@@ -90,6 +90,24 @@ public class ApvServiceImpl implements ApvService {
 		list.addAll(dao.selectYesAuthApv3(member_id));
 		return list;
 	}
+
+	@Override
+	public ArrayList<Approval_Dto> getTempApvList(int member_id) {
+		dao = sqlSession.getMapper(ApvDao.class);
+		return dao.selectTempApvList(member_id);
+	}
+
+	@Override
+	public int saveReWrite(Approval_Dto dto) {
+		dao = sqlSession.getMapper(ApvDao.class);
+		return dao.updateReWrite(dto);
+	}
+
+	@Override
+	public int deleteTemp(int approval_id) {
+		dao = sqlSession.getMapper(ApvDao.class);
+		return dao.deleteApv(approval_id);
+	}
 	
 
 }

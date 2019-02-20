@@ -95,6 +95,7 @@ and me.member_rank = myrank.rank_id(+)
 and a.approval_cate = c.apv_cate_id(+)
 and a.approval_member_id = me.member_id
 and me.member_department = mydept.department_id(+)
+and approval_cc is null
 and a.approval_member_id = #{member_id} order by approval_indate desc
 	</select>
 	
@@ -148,6 +149,7 @@ and me.member_rank = myrank.rank_id(+)
 and a.approval_cate = c.apv_cate_id(+)
 and a.approval_member_id = me.member_id
 and me.member_department = mydept.department_id(+)
+and approval_cc is null
 and approval_mem1 = #{member_id} and (approval_auth1 = 0 or approval_auth1 is null) order by approval_indate desc
 	</select>
 	<select id="selectNotAuthApv2" parameterType="int" resultMap="apvResult">
@@ -171,6 +173,7 @@ and me.member_rank = myrank.rank_id(+)
 and a.approval_cate = c.apv_cate_id(+)
 and a.approval_member_id = me.member_id
 and me.member_department = mydept.department_id(+)
+and approval_cc is null
 and approval_mem2 = #{member_id} and (approval_auth2 = 0 or approval_auth2 is null) order by approval_indate desc
 	</select>
 	<select id="selectNotAuthApv3" parameterType="int" resultMap="apvResult">
@@ -194,17 +197,29 @@ and me.member_rank = myrank.rank_id(+)
 and a.approval_cate = c.apv_cate_id(+)
 and a.approval_member_id = me.member_id
 and me.member_department = mydept.department_id(+)
+and approval_cc is null
 and approval_mem3 = #{member_id} and (approval_auth3 = 0 or approval_auth3 is null) order by approval_indate desc
 	</select>
 	
 	<update id="updateApv1" parameterType="map">
-		update approval set approval_auth1 = #{what}, approval_return = #{why} where approval_id = #{approval_id}
+		update approval set approval_auth1 = #{what},
+		<if test="why != null">
+			approval_return = #{why},
+			approval_auth2 = 4,
+			approval_auth3 = 4,
+		</if>
+		approval_auth_date1 = sysdate where approval_id = #{approval_id}
 	</update>
 	<update id="updateApv2" parameterType="map">
-		update approval set approval_auth2 = #{what}, approval_return = #{why} where approval_id = #{approval_id}
+		update approval set approval_auth2 = #{what},
+		<if test="why != null">
+			approval_return = #{why},
+			approval_auth3 = 4,
+		</if>
+		approval_auth_date2 = sysdate where approval_id = #{approval_id}
 	</update>
 	<update id="updateApv3" parameterType="map">
-		update approval set approval_auth3 = #{what}, approval_return = #{why} where approval_id = #{approval_id}
+		update approval set approval_auth3 = #{what}, approval_return = #{why}, approval_auth_date3 = sysdate where approval_id = #{approval_id}
 	</update>
 	
 	
@@ -231,6 +246,7 @@ and me.member_rank = myrank.rank_id(+)
 and a.approval_cate = c.apv_cate_id(+)
 and a.approval_member_id = me.member_id
 and me.member_department = mydept.department_id(+)
+and approval_cc is null
 and approval_mem1 = #{member_id} and (approval_auth1 != 0 and approval_auth1 is not null) order by approval_indate desc
 	</select>
 	<select id="selectYesAuthApv2" parameterType="int" resultMap="apvResult">
@@ -254,6 +270,7 @@ and me.member_rank = myrank.rank_id(+)
 and a.approval_cate = c.apv_cate_id(+)
 and a.approval_member_id = me.member_id
 and me.member_department = mydept.department_id(+)
+and approval_cc is null
 and approval_mem2 = #{member_id} and (approval_auth2 != 0 and approval_auth2 is not null) order by approval_indate desc
 	</select>
 	<select id="selectYesAuthApv3" parameterType="int" resultMap="apvResult">
@@ -277,7 +294,50 @@ and me.member_rank = myrank.rank_id(+)
 and a.approval_cate = c.apv_cate_id(+)
 and a.approval_member_id = me.member_id
 and me.member_department = mydept.department_id(+)
+and approval_cc is null
 and approval_mem3 = #{member_id} and (approval_auth3 != 0 and approval_auth3 is not null) order by approval_indate desc
 	</select>
+	
+		<select id="selectTempApvList" parameterType="int" resultMap="apvResult">
+select approval_id,approval_cate,approval_member_id,approval_mem1,approval_mem2,approval_mem3,approval_auth1,approval_auth2,approval_auth3,
+approval_title,approval_content,approval_filepath,approval_filename,approval_return,approval_indate,approval_enddate,approval_cc, approval_auth_date1, approval_auth_date2, approval_auth_date3,
+m1.member_name member_name1,m2.member_name member_name2,m3.member_name member_name3,
+d1.department_name department_name1,d2.department_name department_name2,d3.department_name department_name3,
+a1.apv_auth_name apv_auth_name1, a2.apv_auth_name apv_auth_name2, a3.apv_auth_name apv_auth_name3,
+c.apv_cate_name, me.member_name,
+r1.rank_name rank_name1, r2.rank_name rank_name2, r3.rank_name rank_name3, myrank.rank_name 
+from approval a , member m1, member m2, member m3, member me,
+rank r1, rank r2, rank r3, rank myrank,
+department d1, department d2, department d3, department mydept,
+approval_auth a1, approval_auth a2, approval_auth a3,
+approval_cate c
+where a.approval_mem1 = m1.member_id(+) and a.approval_mem2 = m2.member_id(+) and a.approval_mem3 = m3.member_id(+)
+and m1.member_department = d1.department_id(+) and m2.member_department = d2.department_id(+) and m3.member_department = d3.department_id(+)
+and a.approval_auth1 = a1.apv_auth_id(+) and a.approval_auth2 = a2.apv_auth_id(+) and a.approval_auth3 = a3.apv_auth_id(+)
+and m1.member_rank = r1.rank_id(+) and m2.member_rank = r2.rank_id(+) and m3.member_rank = r3.rank_id(+)
+and me.member_rank = myrank.rank_id(+)
+and a.approval_cate = c.apv_cate_id(+)
+and a.approval_member_id = me.member_id
+and me.member_department = mydept.department_id(+)
+and approval_cc is not null
+and approval_member_id = #{member_id} order by approval_indate desc
+	</select>
+	
+	<update id="updateReWrite" parameterType="dto.Approval_Dto">
+update approval set 
+approval_mem1 = #{approval_mem1}
+approval_mem2 = #{approval_mem2}
+approval_mem3 = #{approval_mem3}
+approval_title = #{approval_title}
+approval_content = #{approval_content}
+approval_indate = #{approval_indate}
+approval_cc = #{approval_cc}
+where approval_id = #{approval_id}
+	</update>
+	
+	<delete id="deleteApv">
+		delete approval where approval_id = #{approval_id}
+	</delete>
+	
 	
 </mapper>

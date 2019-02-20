@@ -55,12 +55,21 @@ public class Approval_Controller {
 		HttpSession session = req.getSession();
 		dto.setApproval_member_id(((MemberJoin) session.getAttribute("member")).getMember_id());
 		
+		boolean ck = false;
+		
+		int seq = 0;
+		if(dto.getApproval_id() == 0) {
+			seq = apvService.getSeqNum();
+			dto.setApproval_id(seq);
+			ck = true;
+		}
+		
+		if(dto.getApproval_cc().equals("")) {
+		
 		String file_path = "C:\\Users\\hushe\\dev\\eclipse-jee-2018-12-R-win32-x86_64\\gware\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\webapps\\Approval_File\\";
 
 		MultipartFile file = dto.getFile();
 		
-		int seq = apvService.getSeqNum();
-		dto.setApproval_id(seq);
 		
 		if(!dto.getFile().getOriginalFilename().equals("")) {
 
@@ -84,11 +93,25 @@ public class Approval_Controller {
 		int result = apvService.createApv(dto);
 		
 		System.out.println("insert result : "+result);
+		
 		/*
 		 * String[] arr = dto.getApproval_filename().split("\\)\\)\\)");
 		 * System.out.println(arr[0]); System.out.println(arr[1]);
 		 */
-		
+		}else {
+			
+			if(ck) { //처음 들어온 임시저장
+				int result = apvService.createApv(dto);
+				System.out.println("insert result : "+result);
+			}else { //재수정 임시저장
+				System.out.println(dto);
+				
+				int result = apvService.saveReWrite(dto);
+				System.out.println("insert result : "+result);
+				
+			}
+			
+		}
 		
 		return "redirect:/approval";
 	}
@@ -147,7 +170,7 @@ public class Approval_Controller {
 	
 	
 	@RequestMapping(value="/approval/myApvList", method=RequestMethod.GET)
-	public void myApvList(HttpServletRequest req, Model model, @RequestParam (value="page") int page ) {
+	public String myApvList(HttpServletRequest req, Model model, @RequestParam (value="page") int page ) {
 		
 		HttpSession session = req.getSession();
 		
@@ -160,22 +183,22 @@ public class Approval_Controller {
 		
 		model.addAttribute("pageInfo", paging(page,apvList));
 		
+		return "/approval/myApvList";
+		
 	} // myApvList end
 	
 
 	@RequestMapping(value="/approval/myApvDetail", method=RequestMethod.POST)
-	public void approvalDetail(@RequestParam(value="approval_id") int approval_id, @RequestParam(value="auth", required=false) int auth, Model model) {
+	public String approvalDetail(@RequestParam(value="approval_id") int approval_id, @RequestParam(value="auth", required=false) int auth, Model model) {
 		
 		Approval_Dto dto = apvService.getApvDetail(approval_id);
 		
 		System.out.println(dto);
 		
 		model.addAttribute("apvDto", dto);
-		if(auth == 1) {
-			model.addAttribute("auth", auth);
-		}
+		model.addAttribute("auth", auth);
 		
-		
+		return "/approval/myApvDetail";
 		
 	}
 	
@@ -209,7 +232,7 @@ public class Approval_Controller {
 		
 		model.addAttribute("auth" , 1);
 		
-		return "approval/myApvList";
+		return "/approval/myApvList";
 	} // myApvList end
 	
 	@ResponseBody
@@ -241,7 +264,7 @@ public class Approval_Controller {
 		
 		model.addAttribute("auth" , 0);
 		
-		return "approval/myApvList";
+		return "/approval/myApvList";
 	} // myApvList end
 	
 	public PageInfo paging(int page, ArrayList apvList) {
@@ -308,11 +331,56 @@ public class Approval_Controller {
 			result = apvService.authApv2(map);
 		}
 		if(where == 3) {
-			result = apvService.authApv2(map);
+			result = apvService.authApv3(map);
 		}
 		
 		System.out.println(result);
 		return "redirect:/approval/notAuthApvList?page=1";
 	}
+	
+	
+	@RequestMapping(value="/approval/tempApvList", method=RequestMethod.GET)
+	public String tempApvList(HttpServletRequest req, Model model, @RequestParam (value="page") int page ) {
+		
+		HttpSession session = req.getSession();
+		
+		MemberJoin mj = (MemberJoin) session.getAttribute("member");
+		
+		ArrayList<Approval_Dto> apvList =  apvService.getTempApvList(mj.getMember_id());
+		model.addAttribute("apvList", apvList);
+		
+		model.addAttribute("pageInfo", paging(page,apvList));
+		
+		model.addAttribute("auth" , 2);
+		
+		return "/approval/myApvList";
+	} // myApvList end
+	
+	
+	@RequestMapping(value="/approval/reWrite", method=RequestMethod.POST)
+	public String reWrite(@RequestParam(value="approval_id") int approval_id, Model model) {
+		
+		Approval_Dto apv =  apvService.getApvDetail(approval_id);
+		
+		model.addAttribute("apvReWrite", apv);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 d일");
+		
+		model.addAttribute("now",sdf.format(new Date()));
+		
+		return "/approval/writeForm1";
+	}
+	
+	@RequestMapping(value="/approval/deleteTemp", method=RequestMethod.POST)
+	public String deleteTemp(@RequestParam(value="approval_id") int approval_id) {
+		
+		int result =  apvService.deleteTemp(approval_id);
+		
+		System.out.println("result : "+result);
+		
+		return "/approval/writeForm1";
+	}
+	
+	
 	
 }

@@ -29,7 +29,7 @@ margin: 50px;
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 
 </head>
-<body class="body">
+<body id="body" class="body">
 
 
 <div class="container">
@@ -182,22 +182,27 @@ margin: 50px;
 		<p style="font-weight: bold;">(주)그룹웨어</p>
 	</div>
 
-	<table border="1">
+	<table border="1" >
 	
 	<tr>
-	<c:if test="${ not empty apvDto.approval_auth_date1 }">
-	<th>결재기록</th>
-	<td>
-	<c:if test="${ not empty apvDto.approval_auth_date1 }">[<fmt:formatDate value="${ apvDto.approval_auth_date1 }"  pattern="yyyy-MM-dd HH:mm:ss"/>]&nbsp;&nbsp;${ apvDto.department_name1 }&nbsp;${ apvDto.member_name1 }&nbsp;${ apvDto.rank_name1 }&nbsp;<Strong>${ apvDto.apv_auth_name1 }</Strong><br></c:if>		
-	<c:if test="${ not empty apvDto.approval_auth_date2 }">[<fmt:formatDate value="${ apvDto.approval_auth_date2 }"  pattern="yyyy-MM-dd HH:mm:ss"/>]&nbsp;&nbsp;${ apvDto.department_name2 }&nbsp;${ apvDto.member_name2 }&nbsp;${ apvDto.rank_name2 }&nbsp;<Strong>${ apvDto.apv_auth_name2 }</Strong><br></c:if>
-	<c:if test="${ not empty apvDto.approval_auth_date3 }">[<fmt:formatDate value="${ apvDto.approval_auth_date3 }"  pattern="yyyy-MM-dd HH:mm:ss"/>]&nbsp;&nbsp;${ apvDto.department_name3 }&nbsp;${ apvDto.member_name3 }&nbsp;${ apvDto.rank_name3 }&nbsp;<Strong>${ apvDto.apv_auth_name3 }</Strong><br></c:if>
-	</td>
-	</c:if>
+	<th rowspan="3">결재기록</th>
+	<td style="height: 30px;"><c:if test="${ not empty apvDto.approval_auth_date1 }">[<fmt:formatDate value="${ apvDto.approval_auth_date1 }"  pattern="yyyy-MM-dd HH:mm:ss"/>]&nbsp;&nbsp;${ apvDto.department_name1 }&nbsp;${ apvDto.member_name1 }&nbsp;${ apvDto.rank_name1 }&nbsp;<Strong>${ apvDto.apv_auth_name1 }</Strong></c:if></td>
+	</tr>
+	<tr>
+	<td style="height: 30px;"><c:if test="${ not empty apvDto.approval_auth_date2 }">[<fmt:formatDate value="${ apvDto.approval_auth_date2 }"  pattern="yyyy-MM-dd HH:mm:ss"/>]&nbsp;&nbsp;${ apvDto.department_name2 }&nbsp;${ apvDto.member_name2 }&nbsp;${ apvDto.rank_name2 }&nbsp;<Strong>${ apvDto.apv_auth_name2 }</Strong></c:if></td>
+	</tr>
+	<tr>
+	<td style="height: 30px;"><c:if test="${ not empty apvDto.approval_auth_date3 }">[<fmt:formatDate value="${ apvDto.approval_auth_date3 }"  pattern="yyyy-MM-dd HH:mm:ss"/>]&nbsp;&nbsp;${ apvDto.department_name3 }&nbsp;${ apvDto.member_name3 }&nbsp;${ apvDto.rank_name3 }&nbsp;<Strong>${ apvDto.apv_auth_name3 }</Strong></c:if></td>
 	</tr>
 	
 	<c:if test="${ not empty apvDto.approval_return }">
 	<th>반려사유</th>
 	<td>${ apvDto.approval_return }</td>
+	</c:if>
+
+	<c:if test="${ not empty apvDto.approval_cc }">
+	<th>임시저장 태그</th>
+	<td>${ apvDto.approval_cc }</td>
 	</c:if>
 
 	</table>
@@ -210,6 +215,13 @@ margin: 50px;
 
 </div>
 
+
+<c:if test="${ auth == 2 }">
+	<div class="float-right">
+		<button onclick="reWrite()">재작성</button>
+		<button onclick="deleteApv()">삭제</button>
+	</div>
+</c:if>
 
 <c:if test="${ not empty auth }">
 	<div class="float-right" id="authDiv">
@@ -270,30 +282,32 @@ console.log(${ sessionScope.member.member_id })
 console.log(where)
 	$('#where').val(where);
 
-
+if(${ auth } == 1){
 if( where == 1 ){
 	$('<button></button>').text('승인').attr('onclick','auth()').appendTo('#authDiv');
 	$('<button></button>').text('반려').attr('data-toggle','modal').attr('data-target','#returning').appendTo('#authDiv');
 }else if( where == 2 ){
 	if(${ apvDto.approval_auth1 != 2 }){
-		$('<button></button>').text('승인').attr('onclick','auth()').appendTo('#authDiv');
-		$('<button></button>').text('반려').attr('data-toggle','modal').attr('data-target','#returning').appendTo('#authDiv');
 		if(${ apvDto.approval_auth1 == 0 }){
 			console.log('예결가능')
 			$('<button></button>').text('예결').attr('onclick','preAuth()').appendTo('#authDiv');
+		}else{
+			$('<button></button>').text('승인').attr('onclick','auth()').appendTo('#authDiv');
+			$('<button></button>').text('반려').attr('data-toggle','modal').attr('data-target','#returning').appendTo('#authDiv');
 		}
 	}
 }else if( where == 3 ){
 	if(${ apvDto.approval_auth2 != 2 }){
-		$('<button></button>').text('승인').attr('onclick','auth()').appendTo('#authDiv');
-		$('<button></button>').text('반려').attr('data-toggle','modal').attr('data-target','#returning').appendTo('#authDiv');
 		if(${ apvDto.approval_auth2 == 0 }){
 			console.log('예결가능')
 			$('<button></button>').text('예결').attr('onclick','preAuth()').appendTo('#authDiv');
+		}else{
+			$('<button></button>').text('승인').attr('onclick','auth()').appendTo('#authDiv');
+			$('<button></button>').text('반려').attr('data-toggle','modal').attr('data-target','#returning').appendTo('#authDiv');
 		}
 	}
 }
-
+}
 
 var doubleSubmitFlag = true;
 
@@ -317,6 +331,24 @@ if(doubleSubmitFlag){
 			$('#approve').submit();
 			doubleSubmitFlag = false;
 		}
+	}
+}
+
+function reWrite(){
+	console.log("reWrite()");
+	console.log(${ apvDto.approval_id })
+	
+	$('<form></form>').attr('id','reWriteGo').attr('action','${ pageContext.request.contextPath }/approval/reWrite').attr('method','POST').appendTo('#body');
+	$('<input>').attr('type', 'hidden').attr('value','${ apvDto.approval_id }').attr('name','approval_id').appendTo('#reWriteGo');
+	$('#reWriteGo').submit();
+	
+}
+
+function deleteApv(){
+	if(confirm('정말 삭제하시겠습니까?')){
+	$('<form></form>').attr('id','deletetemp').attr('action','${ pageContext.request.contextPath }/approval/deleteTemp').attr('method','POST').appendTo('#body');
+	$('<input>').attr('type', 'hidden').attr('value','${ apvDto.approval_id }').attr('name','approval_id').appendTo('#deletetemp');
+	$('#deletetemp').submit();
 	}
 }
 

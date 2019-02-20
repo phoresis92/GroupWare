@@ -33,7 +33,7 @@ $.ajax({
         <div class="card-body">
             <a class="card-link" href="${ pageContext.request.contextPath }/approval">일반결재</a><br>
             <a class="card-link" href="${ pageContext.request.contextPath }/approval/pikAuthMem">결재자 테스트</a><br>
-    		<a class="card-link" href="#">지난결재</a><br>
+    		<a class="card-link" href="${ pageContext.request.contextPath }/approval/tempApvList?page=1">임시저장함</a><br>
         </div>
       </div>
     </div>

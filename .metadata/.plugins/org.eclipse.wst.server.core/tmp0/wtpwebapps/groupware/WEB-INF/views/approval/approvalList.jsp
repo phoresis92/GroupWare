@@ -150,11 +150,13 @@
     	
     	for(var i = MIN_NUM; i <= MAX_NUM ; i++){
     		
-	    	if($(opener.document).find('#authRank'+i+'').text() != ''){
+	    	if($(opener.document).find('#authRank'+i+'').text().trim() != ''){
 	    	$('#rank_'+i+'').text($(opener.document).find('#authRank'+i+'').text());
 	    	$('#name_'+i+'').text($(opener.document).find('#authName'+i+'').text());
 	    	$('#dept_'+i+'').text($(opener.document).find('#authDept'+i+'').text());
+	    	$('#dept_'+i+'').text($(opener.document).find('#authDept'+i+'').val());
 	    	$('#memId_'+i+'').text($(opener.document).find('#authId'+i+'').text());
+	    	$('#memId_'+i+'').text($(opener.document).find('#authId'+i+'').val());
     		
 			 $('#del_'+i+'').html('<a class="xBtn" onclick="delLine('+i+')">[ X ]</a>');
 			 $('#order_'+i+'').html('&nbsp;<a class="upBtn" onclick="upBtn('+i+')">▲</a>&nbsp;<a class="dnBtn" onclick="dnBtn('+i+')">▼</a>&nbsp;')
@@ -288,8 +290,6 @@
 			 return;
 		 }
 		 
-		$('#authMemList')
-		 
 		var trArr = $('#finalList > tr');
 		 
 		var cnt = 3;
@@ -370,6 +370,7 @@
 			$(opener.document).find('#authRank'+i).text($('#rank_'+i).text());
 			$(opener.document).find('#authDept'+i).text($('#dept_'+i).text());
 			$(opener.document).find('#authId'+i).text($('#memId_'+i).text());
+			$(opener.document).find('#apv_mem'+i).text($('#memId_'+i).text());
 			
 		 }
 		 
