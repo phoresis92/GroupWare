@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.groupware.rank.Dao"> <!-- Dao implements한 클래스 이름지정 -->
+
+	<resultMap id="rankResult" type="project.groupware.rank.Rank"> <!-- id:검색된결과를 반환, type:Bean/DTO/VO -->
+		<result column="rank_id" property="rank_id" /> <!-- column:컬럼이름, property:멤버변수 -->
+		<result column="rank_name" property="rank_name" />
+	</resultMap>
+
+	<insert id="insert" parameterType="project.groupware.rank.Rank"> <!-- id:interface method 이름, parameterType:객체 -->
+		INSERT INTO rank VALUES(#{rank_id}, #{rank_name})
+	</insert>
+	
+	<select id="selectAll" parameterType="int" resultMap="rankResult">
+		SELECT rank_id, rank_name FROM rank
+	</select>
+	
+	<select id="select" parameterType="int" resultType="String">
+		SELECT rank_id, rank_name FROM rank WHERE rank_id = #{rank_id}
+	</select>
+	
+	<update id="update" parameterType="int">
+		UPDATE rank SET rank_name = #{rank_name} WHERE rank_id = #{rank_id}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		DELETE rank WHERE rank_id = #{rank_id}
+	</delete>
+
+</mapper>
+

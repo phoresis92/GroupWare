@@ -32,7 +32,7 @@ $.ajax({
       <div id="collapseOne" class="collapse" data-parent="#accordion">
         <div class="card-body">
             <a class="card-link" href="${ pageContext.request.contextPath }/approval">일반결재</a><br>
-            <a class="card-link" href="${ pageContext.request.contextPath }/approval/pikAuthMem">결재자 테스트</a><br>
+            <a class="card-link" href="${ pageContext.request.contextPath }/apv_Vacat">근태/휴가결재</a><br>
     		<a class="card-link" href="${ pageContext.request.contextPath }/approval/tempApvList?page=1">임시저장함</a><br>
         </div>
       </div>
@@ -50,7 +50,7 @@ $.ajax({
     		<a class="card-link" href="${ pageContext.request.contextPath }/approval/notAuthApvList?page=1">미결재문서(<span id="apvCount"></span>)</a><br>
     		<a class="card-link" href="${ pageContext.request.contextPath }/approval/yesAuthApvList?page=1">결재완료문서</a><br>
         </div>
-      </div>
+      </div>	
     </div>
     
     <div class="card">

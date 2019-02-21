@@ -90,6 +90,12 @@ public class Approval_Controller {
 			
 		}
 		
+		try {
+		apvService.deleteTemp(dto.getApproval_id());
+		}catch(Exception e) {
+			
+		}
+		
 		int result = apvService.createApv(dto);
 		
 		System.out.println("insert result : "+result);
@@ -226,7 +232,6 @@ public class Approval_Controller {
 		
 		ArrayList<Approval_Dto> apvList =  apvService.getNotAuthApv(mj.getMember_id());
 		model.addAttribute("apvList", apvList);
-		
 		
 		model.addAttribute("pageInfo", paging(page,apvList));
 		

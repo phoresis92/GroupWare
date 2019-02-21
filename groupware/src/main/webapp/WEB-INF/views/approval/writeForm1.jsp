@@ -92,6 +92,8 @@ function sendApv(){
 	if(confirm('제출 이후에는 삭제하실 수 없습니다.\n정말 제출 하시겠습니까?')){
 		if(doubleSubmitFlag){
 			
+			$('#approval_cc').val('');
+			
 			for(var i = 1 ; i <=3 ; i++){
 		
 				$('#authId'+i+'').val($('#authId'+i+'').text())
@@ -111,10 +113,13 @@ function sendApv(){
 				return;
 			}
 		
-			console.log($(':radio[name="formList"]:checked').val());
+			//console.log($(':radio[name="formList"]:checked').val());
 			
-			$('#apvCateGo').val($(':radio[name="formList"]:checked').val());
-			
+			if('${ apvReWrite.approval_cate }' == '' || '${ apvReWrite.approval_cate }' == null){
+				$('#apvCateGo').val($(':radio[name="formList"]:checked').val());
+			}else{
+				$('<input></input>').attr('type','hidden').attr('value',${ apvReWrite.approval_id }).attr('name','approval_id').appendTo('#sendApv');
+			}
 			
 			
 			$('#sendApv').submit();
@@ -252,7 +257,7 @@ function sendApv(){
 	
 	${ apvReWrite }
 	
-<form id="sendApv" action="${ pageContext.request.contextPath }/approval/" method="POST" enctype="multipart/form-data"> <!-- ============================================================================================================================================================= -->
+<form id="sendApv" action="${ pageContext.request.contextPath }/approval" method="POST" enctype="multipart/form-data"> <!-- ============================================================================================================================================================= -->
 	
 
 	<input type="hidden" id="authId1" name="approval_mem1" value="${ apvReWrite.approval_mem1 }">
@@ -332,6 +337,9 @@ function sendApv(){
 			
 		}
 		
+		$('<input></input>').attr('type','hidden').attr('value',${ apvReWrite.approval_id }).attr('name','approval_id').appendTo('#sendApv');
+		
+		
 		if(($('#approval_title').val()).trim() == ''){
 			alert('제목을 입력해주세요')
 			return;
@@ -349,6 +357,7 @@ function sendApv(){
 		}
 		
 		$('#approval_cc').val($('#apv_comment').val());
+		
 		
 		if($('#apv_comment').val().trim() != ''){
 			$('#sendApv').submit();

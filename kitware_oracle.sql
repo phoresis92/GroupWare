@@ -47,7 +47,18 @@ drop table department;
 
 
 
+alter table member modify(member_vacation number(3,1) DEFAULT 0);
 
+UPDATE MEMBER SET MEMBER_VACATION = 14.5 WHERE MEMBER_ID = 19000004;
+
+
+commit;
+
+select A.SID, A.SERIAL#
+FROM V$SESSION A, V$LOCK B, DBA_OBJECTS C
+WHERE A.SID=B.SID AND B.ID1=C.OBJECT_ID AND B.TYPE='TM' AND C.OBJECT_NAME='MEMBER';
+
+ALTER SYSTEM KILL SESSION '14, 6273';
 
 
 
@@ -137,6 +148,9 @@ approval_mem3 number(20),
 approval_auth1 number(1),
 approval_auth2 number(1),
 approval_auth3 number(1),
+approval_auth_date1 date,
+approval_auth_date2 date,
+approval_auth_date3 date,
 approval_title varchar2(500) not null,
 approval_content varchar2(5000) not null,
 approval_filepath varchar2(1000),
@@ -161,6 +175,7 @@ insert into approval_auth values(0, '');
 insert into approval_auth values(1, '승인');
 insert into approval_auth values(2, '반려');
 insert into approval_auth values(3, '예결');
+insert into approval_auth values( 4 , '-');
 
 
 

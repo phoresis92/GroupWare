@@ -71,7 +71,7 @@
 	</select>
 	
 	<insert id="insertApv" parameterType="dto.Approval_Dto">
-		insert into approval values(#{approval_id}, #{approval_cate}, #{approval_member_id}, #{approval_mem1}, #{approval_mem2, jdbcType=VARCHAR}, #{approval_mem3, jdbcType=VARCHAR}, 0, null, null, #{approval_title}, #{approval_content}, #{approval_filepath, jdbcType=VARCHAR}, #{approval_filename, jdbcType=VARCHAR}, #{approval_return, jdbcType=VARCHAR}, sysdate, #{approval_enddate, jdbcType=DATE}, #{approval_cc, jdbcType=VARCHAR}, null, null, null)
+		insert into approval values(#{approval_id}, #{approval_cate}, #{approval_member_id}, #{approval_mem1}, #{approval_mem2, jdbcType=VARCHAR}, #{approval_mem3, jdbcType=VARCHAR}, 0, null, null, #{approval_title}, #{approval_content}, #{approval_filepath, jdbcType=VARCHAR}, #{approval_filename, jdbcType=VARCHAR}, #{approval_return, jdbcType=VARCHAR}, sysdate, #{approval_enddate, jdbcType=DATE}, #{approval_cc, jdbcType=VARCHAR}, null, null, null, #{approval_startdate, jdbcType=DATE})
 	</insert>
 	
 	<select id="selectMyAllApv" parameterType="int" resultMap="apvResult">
@@ -204,17 +204,21 @@ and approval_mem3 = #{member_id} and (approval_auth3 = 0 or approval_auth3 is nu
 	<update id="updateApv1" parameterType="map">
 		update approval set approval_auth1 = #{what},
 		<if test="why != null">
+		<if test="what == 2">
 			approval_return = #{why},
 			approval_auth2 = 4,
 			approval_auth3 = 4,
+		</if>
 		</if>
 		approval_auth_date1 = sysdate where approval_id = #{approval_id}
 	</update>
 	<update id="updateApv2" parameterType="map">
 		update approval set approval_auth2 = #{what},
 		<if test="why != null">
+		<if test="what == 2">
 			approval_return = #{why},
 			approval_auth3 = 4,
+		</if>
 		</if>
 		approval_auth_date2 = sysdate where approval_id = #{approval_id}
 	</update>
@@ -325,12 +329,12 @@ and approval_member_id = #{member_id} order by approval_indate desc
 	
 	<update id="updateReWrite" parameterType="dto.Approval_Dto">
 update approval set 
-approval_mem1 = #{approval_mem1}
-approval_mem2 = #{approval_mem2}
-approval_mem3 = #{approval_mem3}
-approval_title = #{approval_title}
-approval_content = #{approval_content}
-approval_indate = #{approval_indate}
+approval_mem1 = #{approval_mem1},
+approval_mem2 = #{approval_mem2},
+approval_mem3 = #{approval_mem3},
+approval_title = #{approval_title},
+approval_content = #{approval_content},
+approval_indate = sysdate,
 approval_cc = #{approval_cc}
 where approval_id = #{approval_id}
 	</update>

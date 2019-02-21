@@ -9,8 +9,8 @@
 <title>
 <tiles:insertAttribute name="title" ignore="true" />
 </title>
-<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js"></script>
-<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.7.2/js/solid.js"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.7.2/js/fontawesome.js"></script>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
