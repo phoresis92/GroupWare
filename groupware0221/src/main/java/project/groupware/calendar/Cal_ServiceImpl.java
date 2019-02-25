@@ -1,6 +1,7 @@
 package project.groupware.calendar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.annotation.Resource;
 
@@ -52,6 +53,16 @@ public class Cal_ServiceImpl implements Calendar_Service {
 	public ArrayList<Calendar_Cate> getCalCate() {
 		cal_Dao=sqlSession.getMapper(Calendar_Dao.class);
 		return cal_Dao.selectAllCate();
+	}
+
+	@Override
+	public Calendar_Cate getVacatNum(String cateVacat) {
+		cal_Dao=sqlSession.getMapper(Calendar_Dao.class);
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("cal_cate_n", cateVacat);
+		
+		return cal_Dao.selectVacatNum(map);
 	}
 
 

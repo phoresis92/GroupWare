@@ -46,7 +46,7 @@ public class ApprovalList_Controller {
 		model.addAttribute("rankList", rankList);
 		
 		
-		return "/approval/approvalList";
+		return "approval/approvalList";
 	}
 	
 	@ResponseBody

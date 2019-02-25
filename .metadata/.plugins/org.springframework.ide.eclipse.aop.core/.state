@@ -2,4 +2,5 @@
 <aop-reference-model>
 <aop-project name="gware"/>
 <aop-project name="groupware"/>
+<aop-project name="groupware0221"/>
 </aop-reference-model>

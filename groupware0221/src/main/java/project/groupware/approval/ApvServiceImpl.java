@@ -1,6 +1,7 @@
 package project.groupware.approval;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,6 +63,7 @@ public class ApvServiceImpl implements ApvService {
 		ArrayList<Approval_Dto> list = dao.selectNotAuthApv1(member_id);
 		list.addAll(dao.selectNotAuthApv2(member_id));
 		list.addAll(dao.selectNotAuthApv3(member_id));
+		Collections.sort(list);
 		return list;
 	}
 
@@ -121,6 +123,31 @@ public class ApvServiceImpl implements ApvService {
 		dao = sqlSession.getMapper(ApvDao.class);
 		return dao.updateRecoverVacat(map);
 	}
+
+	@Override
+	public int delWant(HashMap<String, Object> map) {
+		dao = sqlSession.getMapper(ApvDao.class);
+		return dao.updateDelWant(map);
+	}
+
+	@Override
+	public ArrayList<Approval_Dto> getAllApvForManager() {
+		dao = sqlSession.getMapper(ApvDao.class);
+		return dao.selectAllApvForManager();
+	}
+
+	@Override
+	public ArrayList<Approval_Dto> getDelListForManager() {
+		dao = sqlSession.getMapper(ApvDao.class);
+		return dao.selectDelListForManager();
+	}
+
 	
+	
+	@Override
+	public double getMember_vacation(int member_id) {
+		dao = sqlSession.getMapper(ApvDao.class);
+		return dao.selectMember_vacation(member_id);
+	}
 
 }

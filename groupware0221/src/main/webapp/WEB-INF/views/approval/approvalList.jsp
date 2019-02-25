@@ -31,7 +31,7 @@
         <ul id="tt" class="easyui-tree">
 
 
-<li><span>GROUP WARE</span>
+						<li><span>GROUP WARE</span>
 							<ul>
 								<c:forEach items="${deptList}" var="dept">
 									<li data-options="state:'open'"><span>${dept.department_id}) ${dept.department_name}</span>
@@ -155,9 +155,8 @@
 	    	$('#name_'+i+'').text($(opener.document).find('#authName'+i+'').text());
 	    	$('#dept_'+i+'').text($(opener.document).find('#authDept'+i+'').text());
 	    	$('#dept_'+i+'').text($(opener.document).find('#authDept'+i+'').val());
-	    	$('#memId_'+i+'').text($(opener.document).find('#authId'+i+'').text());
-	    	$('#memId_'+i+'').text($(opener.document).find('#authId'+i+'').val());
-    		
+	    	$('#memId_'+i+'').text($(opener.document).find('#apv_mem'+i+'').text());
+	    	
 			 $('#del_'+i+'').html('<a class="xBtn" onclick="delLine('+i+')">[ X ]</a>');
 			 $('#order_'+i+'').html('&nbsp;<a class="upBtn" onclick="upBtn('+i+')">▲</a>&nbsp;<a class="dnBtn" onclick="dnBtn('+i+')">▼</a>&nbsp;')
 			 $('#'+i+'').val('exist');
@@ -171,11 +170,12 @@
     $('#tt').tree({
     	onClick: function(node){
     		
+    		console.log(node.text);
+    		
     		if(node.text == 'GROUP WARE'){
     			$.ajax({
                     type: 'POST',
                     url: "${ pageContext.request.contextPath }/approval/getMemList",
-                    data: param,
                     success: function(data) {
 
       					var obj = JSON.parse(data);
@@ -190,7 +190,7 @@
 					return;
 				}
 		});
-    		}
+    		} // if end
     		
     		var arr = (node.text).split(')');
 		    		

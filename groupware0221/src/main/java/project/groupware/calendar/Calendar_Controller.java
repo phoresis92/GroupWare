@@ -27,17 +27,12 @@ public class Calendar_Controller {
 	private Calendar_Service cal_Service;
 	
 	@RequestMapping(value = "/calendar",method=RequestMethod.GET)
-	public ModelAndView calmain() {
+	public ModelAndView calmain(HttpServletRequest req) {
 		
 		ModelAndView mav = new ModelAndView("/calendar/calendar");
 		
 		  ArrayList<Calendar_Cate> cateList = cal_Service.getCalCate();
 		  
-		  //System.out.println(cateList);
-		  
-		  mav.addObject("cateList", cateList); 
-		  
-
 		  JSONArray arr = new JSONArray();
 		  for(Calendar_Cate cate : cateList) {
 			  JSONObject jobj = new JSONObject();
@@ -47,12 +42,48 @@ public class Calendar_Controller {
 			  jobj.put("cal_cate_color", cate.getCal_cate_color());
 			  arr.add(jobj);
 		  }
-		  System.out.println(arr);
 		  mav.addObject("cateList", arr);
 		  
+		  HttpSession session = req.getSession();
+		  
+		  int id = ((Member)session.getAttribute("member")).getMember_id();
+		  
+		  mav.addObject("who", id);
 		
+		  //=======================================================================
+		  
+		  ArrayList<Calendar_Dto> calList = cal_Service.getAllCal(id);
+		  
+		  JSONArray jArr = new JSONArray();
+		  for(Calendar_Dto dto : calList) {
+			  JSONObject jobj = new JSONObject();
+			  
+			  jobj.put("id", dto.getCalendar_id());
+			  jobj.put("calendar_cate", dto.getCalendar_cate());
+			  jobj.put("calendar_cateSelf", dto.getCalendar_cateSelf());
+			  jobj.put("member_id", dto.getCalendar_member_id());
+			  jobj.put("start", dto.getCalendar_start());
+			  jobj.put("end", dto.getCalendar_end());
+			  jobj.put("title", dto.getCalendar_title());
+			  jobj.put("content", dto.getCalendar_content());
+			  jobj.put("color", dto.getCalendar_color());
+			  boolean ad = false;
+			  if(dto.getCalendar_allDay() == 1) {
+				  ad = true;
+			  }else {
+				  ad = false;
+			  }
+			  jobj.put("allDay", ad);
+			  
+			  jArr.add(jobj);
+		  }
+		
+		mav.addObject("list",jArr.toJSONString());
+		  
+		  
 		return mav;
 	}
+	
 	
 	@ResponseBody
 	@RequestMapping(value="/calendar/addEvent", method=RequestMethod.POST, produces = "application/text; charset=utf8")
@@ -67,7 +98,7 @@ public class Calendar_Controller {
 		  
 		JSONObject jobj = new JSONObject();
 			  
-		jobj.put("calendar_id", result.getCalendar_id());
+		jobj.put("id", result.getCalendar_id());
 		jobj.put("calendar_cate", result.getCalendar_cate());
 		jobj.put("calendar_cateSelf", result.getCalendar_cateSelf());
 		jobj.put("calendar_member_id", result.getCalendar_member_id());
@@ -83,37 +114,39 @@ public class Calendar_Controller {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/calendar/getAll", method=RequestMethod.POST, produces = "application/text; charset=utf8")
-	public String getAllCal(HttpServletRequest req) {
+	@RequestMapping(value="/calendar/getCalList", method=RequestMethod.POST, produces = "application/text; charset=utf8")
+	public String getCalList(@RequestParam(value="member_id") String member_id) {
+
+		JSONArray arr = new JSONArray();
 		
+		try {
+			ArrayList<Calendar_Dto> calList = cal_Service.getAllCal(Integer.parseInt(member_id));
 		
-		HttpSession session = req.getSession();
-		Member m = (Member) session.getAttribute("member");
-		
-		int id = m.getMember_id();
-		
-		ArrayList<Calendar_Dto> calList = cal_Service.getAllCal(id);
-		
-		
-		
-		  JSONArray arr = new JSONArray();
 		  for(Calendar_Dto dto : calList) {
 			  JSONObject jobj = new JSONObject();
 			  
-			  jobj.put("calendar_id", dto.getCalendar_id());
+			  jobj.put("id", dto.getCalendar_id());
 			  jobj.put("calendar_cate", dto.getCalendar_cate());
 			  jobj.put("calendar_cateSelf", dto.getCalendar_cateSelf());
-			  jobj.put("calendar_member_id", dto.getCalendar_member_id());
+			  jobj.put("member_id", dto.getCalendar_member_id());
 			  jobj.put("start", dto.getCalendar_start());
 			  jobj.put("end", dto.getCalendar_end());
 			  jobj.put("title", dto.getCalendar_title());
 			  jobj.put("content", dto.getCalendar_content());
 			  jobj.put("color", dto.getCalendar_color());
-			  jobj.put("allDay", dto.getCalendar_allDay());
+			  boolean ad = false;
+			  if(dto.getCalendar_allDay() == 1) {
+				  ad = true;
+			  }else {
+				  ad = false;
+			  }
+			  jobj.put("allDay", ad);
 			  
 			  arr.add(jobj);
 		  }
-		
+		}catch(Exception e) {
+			
+		}
 		return arr.toJSONString();
 	}
 	
@@ -139,7 +172,7 @@ public class Calendar_Controller {
 		  
 		JSONObject jobj = new JSONObject();
 			  
-		jobj.put("calendar_id", result.getCalendar_id());
+		jobj.put("id", result.getCalendar_id());
 		jobj.put("calendar_cate", result.getCalendar_cate());
 		jobj.put("calendar_cateSelf", result.getCalendar_cateSelf());
 		jobj.put("calendar_member_id", result.getCalendar_member_id());

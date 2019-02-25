@@ -6,4 +6,5 @@
 <fullyQualifiedTypeName name="project.groupware.member.Member"/>
 <fullyQualifiedTypeName name="java.sql.Date"/>
 <fullyQualifiedTypeName name="java.util.Date"/>
+<fullyQualifiedTypeName name="javax.servlet.ServletRequest"/>
 </qualifiedTypeNameHistroy>

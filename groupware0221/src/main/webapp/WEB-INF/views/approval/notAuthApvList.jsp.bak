@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+	<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,7 +22,8 @@ function detail(j){
 	
 	$('<form></form>').attr('action',"${pageContext.request.contextPath}/approval/myApvDetail").attr('method', 'POST').attr('id','detail').appendTo('#body');
 	$('<input></input>').attr('type','hidden').attr('value',j).attr('name','approval_id').appendTo('#detail');
-	$('<input></input>').attr('type','hidden').attr('value', ${ auth }).attr('name','auth').appendTo('#detail');
+	$('<input></input>').attr('type','hidden').attr('value', 1).attr('name','auth').appendTo('#detail');
+	
 	$('#detail').submit();
 }
 
@@ -30,12 +32,7 @@ function detail(j){
 </head>
 <body id="body">
 
-
-	<button>일반결제문서</button>
-	<button>지출결제문서</button>
-	<button>근태/휴가결제문서</button>
-	
-	<table>
+		<table>
 	
 	<tr>
 	<th>문서번호</th>
@@ -46,7 +43,8 @@ function detail(j){
 	<th>기안일</th>
 	</tr>
 	
-	<c:if test="${ pageInfo.totalCount != 0 }">
+	
+<c:if test="${ pageInfo.totalCount != 0 }">	
 	<c:forEach var="item" items="${ apvList }" begin="${ pageInfo.startNum }" end="${ pageInfo.endNum }">
 	
 		<tr onclick="detail(${item.approval_id})" style="cursor: pointer;">
@@ -57,31 +55,45 @@ function detail(j){
 			
 			<c:choose>
 			
-				<c:when test="${ empty item.member_name3 || item.approval_auth3 == 3 || item.approval_auth3 == 4 }">
+				<c:when test="${ empty item.apv_auth_name3 }">
 					<c:choose>
-						<c:when test="${ empty item.member_name2 || item.approval_auth2 == 3 || item.approval_auth2 == 4}">
+					
+						<c:when test="${ empty item.apv_auth_name2 }">
+						
 							<td>${ item.apv_auth_name1 }</td>
+						
 						</c:when>
-						<c:when test="${ item.approval_auth2 == 0 && item.approval_auth1 == 0 }">
+						
+						<c:when test="${ item.approval_auth1 == 2 }">
+						
 							<td>${ item.apv_auth_name1 }</td>
-						</c:when>						
-						<c:when test="${ item.approval_auth2 == 4 }">
-							<td>${ item.apv_auth_name1 }</td>
+						
 						</c:when>
+					
 						<c:otherwise>
+						
 							<td>${ item.apv_auth_name2 }</td>
+						
 						</c:otherwise>
+					
 					</c:choose>
+				
 				</c:when>
 				
-				<c:when test="${ item.approval_auth2 == 0 }">
+				<c:when test="${ item.approval_auth2 == 4 }">
 					<td>${ item.apv_auth_name1 }</td>
 				</c:when>
-				<c:when test="${ item.approval_auth2 == 3 && item.approval_auth1 == 0 }">
-					<td>${ item.apv_auth_name1 }</td>
+				
+				<c:when test="${ item.approval_auth2 == 2 }">
+				
+					<td>${ item.apv_auth_name2 }</td>
+				
 				</c:when>
+				
 				<c:otherwise>
+				
 					<td>${ item.apv_auth_name3 }</td>
+					
 				</c:otherwise>
 			
 			</c:choose>
@@ -90,7 +102,7 @@ function detail(j){
 		</tr>
 	
 	</c:forEach>
-	</c:if>
+</c:if>	
 	
 	</table>
 	
@@ -196,28 +208,6 @@ function detail(j){
 
 
 			</div>
-
-
-	
-<!-- 	approval_id number auto_increment primary key,
-approval_cate number(3) not null,
-approval_member_id number(20) not null,
-approval_mem1 number(20),
-approval_mem2 number(20),
-approval_mem3 number(20),
-approval_auth1 number(1),
-approval_auth2 number(1),
-approval_auth3 number(1),
-approval_title varchar2(500) not null,
-approval_content varchar2(5000) not null,
-approval_filepath varchar2(1000),
-approval_filename varchar2(1000),
-approval_return varchar2(1000),
-approval_indate date default sysdate,
-approval_enddate date,
-approval_cc varchar2(1000),
- -->
-
 
 </body>
 </html>

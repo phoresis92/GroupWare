@@ -13,5 +13,6 @@ public interface Calendar_Service {
 	public ArrayList<Calendar_Dto> getAllCal(int id);
 	public ArrayList<Calendar_Cate> getCalCate();
 	
+	public Calendar_Cate getVacatNum(String cateVacat);
 	
 }

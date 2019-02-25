@@ -1,8 +1,0 @@
-package dto;
-
-public class Calendar_Cate {
-
-	private int cal_cate_id;
-	private String cal_cate_name;
-	
-}

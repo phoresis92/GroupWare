@@ -38,6 +38,13 @@ public interface ApvService {
 	
 	public int decreVacat(HashMap<String, Object> map);
 	public int recoverVacat(HashMap<String, Object> map);
+
+	public int delWant(HashMap<String, Object> map);
 	
+	public ArrayList<Approval_Dto> getAllApvForManager();
+	
+	public ArrayList<Approval_Dto> getDelListForManager();
+	
+	public double getMember_vacation(int member_id);
 	
 }

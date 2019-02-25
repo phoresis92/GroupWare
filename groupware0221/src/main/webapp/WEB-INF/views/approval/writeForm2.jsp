@@ -58,6 +58,7 @@ $( function() {
 
   $( function() {
 	    $( "#halfPick" ).datepicker({
+	    	defaultDate: new Date(),
 	    	beforeShow: function (textbox, instance) {
 			       var txtBoxOffset = $(this).offset();
 			       var top = txtBoxOffset.top;
@@ -78,7 +79,7 @@ $( function() {
     var dateFormat = "mm/dd/yy",
       from = $( "#from" )
         .datepicker({
-          defaultDate: "+1w",
+        	defaultDate: new Date(),
           changeMonth: true,
           beforeShow: function (textbox, instance) {
 		       var txtBoxOffset = $(this).offset();
@@ -98,7 +99,7 @@ $( function() {
           to.datepicker( "option", "minDate", getDate( this ) );
         }),
       to = $( "#to" ).datepicker({
-        defaultDate: "+1w",
+    	  defaultDate: new Date(),
         changeMonth: true,
         beforeShow: function (textbox, instance) {
 		       var txtBoxOffset = $(this).offset();
@@ -246,7 +247,7 @@ function sendApv(){
 			
 			if($('#whatV').val() == '1_wholeVacat'){ // 연차휴가
 					$('#approval_startdate').val(new Date(moment($('#from').val()).format('YYYY-MM-DD')+" "+$('#whole_start').val()));
-					$('#approval_enddate').val(new Date(moment($('#to').val()).format('YYYY-MM-DD')+" "+$('#whole_end').val()));
+					$('#approval_enddate').val(new Date(moment($('#to').val()).add(1, 'days').format('YYYY-MM-DD')+" "+$('#whole_end').val()));
 			}else{ // 반차
 				if($(':radio[name="AMPM"]:checked').val() == 'AM'){
 					$('#approval_startdate').val(new Date(moment($('#halfPick').val()).format('YYYY-MM-DD')+" "+$('#AM_start').val()));

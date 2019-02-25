@@ -43,4 +43,12 @@ public interface ApvDao {
 	public int updateDecreVacat(HashMap<String, Object> map);
 	public int updateRecoverVacat(HashMap<String, Object> map);
 
+	public int updateDelWant(HashMap<String, Object> map);
+	
+	public ArrayList<Approval_Dto> selectAllApvForManager();
+	
+	public ArrayList<Approval_Dto> selectDelListForManager();
+	
+	public double selectMember_vacation(int member_id);
+	
 }

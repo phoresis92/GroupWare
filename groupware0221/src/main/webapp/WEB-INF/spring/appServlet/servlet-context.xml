@@ -52,13 +52,15 @@
 			<beans:value>oracle.jdbc.driver.OracleDriver</beans:value>
 		</beans:property>
 		<beans:property name="url">
-			<beans:value>jdbc:oracle:thin:@183.101.196.162:1521:XE</beans:value>
+			<!-- <beans:value>jdbc:oracle:thin:@183.101.196.162:1521:XE</beans:value> -->
+			<beans:value>jdbc:oracle:thin:@dboracle.cue0lpn1hsuj.ap-northeast-2.rds.amazonaws.com:1521:ORCL</beans:value>
 		</beans:property>
 		<beans:property name="username">
-			<beans:value>groupware</beans:value>
+			<beans:value>phoresis92</beans:value>
+<!-- 			<beans:value>groupware</beans:value> -->
 		</beans:property>
 		<beans:property name="password">
-			<beans:value>1234</beans:value>
+			<beans:value>12341234</beans:value>
 		</beans:property>
 	</beans:bean>
 

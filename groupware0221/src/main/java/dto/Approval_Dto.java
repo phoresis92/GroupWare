@@ -1,11 +1,14 @@
 package dto;
 
-import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public class Approval_Dto {
+public class Approval_Dto implements Comparable<Approval_Dto> {
+	
+	
+
 	
 	private int approval_id;	
 	private int approval_cate;	
@@ -56,6 +59,21 @@ public class Approval_Dto {
 	
 	
 
+	@Override
+	public int compareTo(Approval_Dto o) {
+		
+		int compare = this.approval_indate.compareTo(o.getApproval_indate());
+		
+		if(compare > 0) {
+			// 1 > 2
+			return 1;
+		}else if( compare < 0) {
+			return -1;
+		}
+		return 0;
+	}
+	
+	
 	@Override
 	public String toString() {
 		return "Approval_Dto [approval_id=" + approval_id + ", approval_cate=" + approval_cate + ", approval_member_id="
@@ -355,6 +373,8 @@ public class Approval_Dto {
 	public void setApproval_cc(String approval_cc) {
 		this.approval_cc = approval_cc;
 	}
+	
+
 	
 	
 	

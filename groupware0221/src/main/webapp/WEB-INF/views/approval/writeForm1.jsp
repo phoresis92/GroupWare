@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <c:set var="mem1" value="${ apvReWrite.approval_mem1 }" />
+    <c:set var="mem2" value="${ apvReWrite.approval_mem2 }" />
+    <c:set var="mem3" value="${ apvReWrite.approval_mem3 }" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,9 +36,11 @@ height: 60px;
 
 <script type="text/javascript">
 
+
+
 $(document).ready(function(){
-	
-	  $('#summernote').summernote({
+
+	$('#summernote').summernote({
 		  lang: 'ko-KR',
 	      height: 400,
 	      popover: {
@@ -64,7 +69,10 @@ $(document).ready(function(){
 				}
 	  });
 	  
+
+
 }) // ready end
+
 
 
 function sendFile(file, el) {
@@ -100,8 +108,14 @@ function sendApv(){
 				
 			}
 			
+			
+			
+			$('#authId1').val($('#apv_mem1').text());
+			$('#authId2').val($('#apv_mem2').text());
+			$('#authId3').val($('#apv_mem3').text());
 			if($('#authId1').val() == ''){
 				alert('결재라인을 선택해주세요')
+				console.log($('#authId1').val());
 				return;
 			}
 			if(($('#approval_title').val()).trim() == ''){
@@ -259,12 +273,17 @@ function sendApv(){
 	
 	${ apvReWrite }
 	
+	
+	${ mem1 }
+	${ mem2 }
+	${ mem3 }
+	
 <form id="sendApv" action="${ pageContext.request.contextPath }/approval" method="POST" enctype="multipart/form-data"> <!-- ============================================================================================================================================================= -->
 	
 
-	<input type="hidden" id="authId1" name="approval_mem1" value="${ apvReWrite.approval_mem1 }">
-	<input type="hidden" id="authId2" name="approval_mem2" value="${ apvReWrite.approval_mem2 }">
-	<input type="hidden" id="authId3" name="approval_mem3" value="${ apvReWrite.approval_mem3 }">
+	<input type="hidden" id="authId1" name="approval_mem1" >
+	<input type="hidden" id="authId2" name="approval_mem2" >
+	<input type="hidden" id="authId3" name="approval_mem3" >
 	
 	<input type="hidden" id="apvCateGo" name="approval_cate" value="1">
 	
@@ -339,8 +358,9 @@ function sendApv(){
 			
 		}
 		
+		if(${ not empty apvReWrite.approval_id }){
 		$('<input></input>').attr('type','hidden').attr('value',${ apvReWrite.approval_id }).attr('name','approval_id').appendTo('#sendApv');
-		
+		}
 		
 		if(($('#approval_title').val()).trim() == ''){
 			alert('제목을 입력해주세요')
@@ -353,7 +373,7 @@ function sendApv(){
 	
 		console.log($(':radio[name="formList"]:checked').val());
 		
-		$('#apvCateGo').val($(':radio[name="formList"]:checked').val());
+		$('#apvCateGo').val(1);
 		if($('#apvCateGo').val() == ''){
 		$('#apvCateGo').val(${ apvReWrite.approval_cate });
 		}

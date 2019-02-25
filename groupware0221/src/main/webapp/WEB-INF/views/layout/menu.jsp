@@ -87,7 +87,19 @@ $.ajax({
     	 	<div><a class="card-link" href="${pageContext.request.contextPath}/manager/member">회원 관리</a></div>
     	 </div>	 
      <div><a class="card-link" href="${pageContext.request.contextPath}/manager/department">부서 관리</a></div>
-     <div><a class="card-link" href="${pageContext.request.contextPath}/manager/rank">직책 관리</a></div>     
+     <div><a class="card-link" href="${pageContext.request.contextPath}/manager/rank">직책 관리</a></div>
+     <div><a class="card-link" data-toggle="collapse" href="#collapse_manager_approval">결재 관리</a>
+    	 <div id="collapse_manager_approval" class="collapse w3-border">
+			<div><a class="card-link" href="${pageContext.request.contextPath}/manager/allApvList?page=1">전체결재 리스트</a></div>
+			<div><a class="card-link" href="${pageContext.request.contextPath}/manager/apvDelList?page=1">결재 삭제요청</a></div>
+    	 </div>	 
+     </div>
+     <div><a class="card-link" data-toggle="collapse" href="#collapse_manager_approval">일정 관리</a>
+    	 <div id="collapse_manager_approval" class="collapse w3-border">
+			<div><a class="card-link" href="${pageContext.request.contextPath}/manager/calendar/company">회사 일정 관리</a></div>
+			<div><a class="card-link" href="${pageContext.request.contextPath}/manager/calendar/member">사원 일정 조회</a></div>
+    	 </div>	 
+     </div>     
 </div>
 </c:if>
 </body>

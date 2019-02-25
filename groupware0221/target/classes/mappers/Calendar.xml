@@ -25,7 +25,7 @@
 
 
 	<insert id="insertCal" parameterType="dto.Calendar_Dto" >
-		insert into Calendar values(seq_calendar_id.nextval, #{calendar_cate}, #{calendar_cateSelf}, #{calendar_member_id}, #{calendar_start}, #{calendar_end}, #{calendar_title}, #{calendar_content}, #{calendar_color}, #{calendar_allDay}, sysdate)
+		insert into Calendar values(seq_calendar_id.nextval, #{calendar_cate}, #{calendar_cateSelf, jdbcType=VARCHAR}, #{calendar_member_id}, #{calendar_start} , #{calendar_end} , #{calendar_title}, #{calendar_content}, #{calendar_color, jdbcType=VARCHAR}, #{calendar_allDay}, sysdate)
 	</insert>
 	
 	<select id="selectAllCate" resultMap="cateResult">
@@ -33,7 +33,7 @@
 	</select>
 
 	<select id="selectAllCal" parameterType="int" resultMap="calResult">
-		select * from calendar where calendar_member_id = #{member_id}
+		select calendar_id,calendar_cate,calendar_cateSelf,calendar_member_id,calendar_title,calendar_content,calendar_color,calendar_allDay,calendar_start, calendar_end from calendar where calendar_member_id = #{member_id}
 	</select>
 	
 	<delete id="deleteCal" parameterType="int">
@@ -45,12 +45,17 @@
 	</select>
 	
 	<update id="updateCal" parameterType="dto.Calendar_Dto">
-		update calendar set calendar_cate = #{calendar_cate}, calendar_cateSelf = #{calendar_cateSelf}, calendar_member_id = #{calendar_member_id}, calendar_start = #{calendar_start}, calendar_end = #{calendar_end}, calendar_title = #{calendar_title}, calendar_content = #{calendar_content}, calendar_color = #{calendar_color}, calendar_allDay = #{calendar_allDay} where calendar_id = #{calendar_id}
+		update calendar set calendar_cate = #{calendar_cate}, calendar_cateSelf = #{calendar_cateSelf}, calendar_start = #{calendar_start}, calendar_end = #{calendar_end}, calendar_title = #{calendar_title}, calendar_content = #{calendar_content}, calendar_color = #{calendar_color}, calendar_allDay = #{calendar_allDay} where calendar_id = #{calendar_id}
 	</update>
 	
 	<select id="selectById" resultMap="calResult">
 		select * from calendar where calendar_id = #{calendar_id}
 	</select>
+
+	<select id="selectVacatNum" parameterType="map" resultMap="cateResult" >
+		select cal_cate_id, cal_cate_color from calendar_cate where cal_cate_name = #{cal_cate_n}
+	</select>
+
 
 <!-- 	public int insertCal(Calendar_Dto calDto);
 	public int deleteCal(int calendar_id);

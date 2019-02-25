@@ -1,6 +1,7 @@
 package project.groupware.calendar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import dto.Calendar_Cate;
 import dto.Calendar_Dto;
@@ -14,5 +15,7 @@ public interface Calendar_Dao {
 	public ArrayList<Calendar_Cate> selectAllCate();
 	public Calendar_Dto selectById(int  calendar_idd);
 	public Calendar_Dto selectLatestCal();
+	
+	public Calendar_Cate selectVacatNum(HashMap<String, Object> map);
 	
 }

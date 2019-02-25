@@ -10,14 +10,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- <META HTTP-EQUIV="refresh" CONTENT="60"> -->
   <title>Calendar</title>
-</head>
+
+
+
 
 <!-- bootstrap ref -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
-
 
 <!-- fullcalendar ref -->
 <link rel='stylesheet' href='${pageContext.request.contextPath}/resources/fullcalendar/fullcalendar.css' />
@@ -33,11 +34,19 @@
 <!-- jscolor -->
 <script src="${pageContext.request.contextPath}/resources/jscolor.js"></script>
 
-
+</head>
 
 <script type="text/javascript">
 
+
+
+var events_array = [];
+
 $(document).ready(function() {
+	
+	var arr = eval('${list}');
+	console.log(arr);
+	events_array = arr;
 	
 	  $('#summernote').summernote({
 		  lang: 'ko-KR',
@@ -80,34 +89,59 @@ $(document).ready(function() {
 });// ready end
 
 
-var events_array = [];
+var temp = [];
 
-//getAll =================================
-$.ajax({
-  type: 'POST',
-  url: "${pageContext.request.contextPath}/calendar/getAll",
-  success: function(data) {
-		var list = JSON.parse(data);
-		//console.log(list);
-		for(var i = 0 ; i<list.length; i++){
-			var start = new Date(list[i].start);
-			var end = new Date(list[i].end);
-			
-			var row = printCal(list[i]);
-			
-			if((end-start)%86400000 == 0){
-				row.allDay = true
-			}
-					events_array.push(row); // set default event
-			
-		} //for end
+function chk(){
+	console.log($('#campCal').is(':checked'))
+	if($('#campCal').is(':checked')){
 		
 		
+		$.ajax({
+			  type: 'POST',
+			  url: "${pageContext.request.contextPath}/calendar/getCalList",
+			  data: "member_id=99999",
+			  success: function(data) {	 
+					var list = JSON.parse(data);
+					//console.log(list);
+					for(var i = 0 ; i<list.length; i++){
+						var start = new Date(list[i].start);
+						var end = new Date(list[i].end);
+						
+						var row = printCal(list[i]);
+						
+						if((end-start)%86400000 == 0){
+							row.allDay = true
+						}
+						
+						console.log(list[i].id)
+						temp.push(list[i].id);
+						
+						$('#calendar').fullCalendar('addEventSource', [{
+					        id: list[i].id,
+					        title: list[i].title,
+					        start: list[i].start,
+					        end: list[i].end,
+					        content: list[i].content,
+					        calendar_cate: list[i].calendar_cate, 
+					        calendar_cateSelf: list[i].calendar_cateSelf, 
+					        member_id: list[i].member_id,
+					        color: list[i].color,
+					        allDay: list[i].allDay
+					    }]);
+						
+					} //for end
+			  }
+		})//ajax end
+	}else{
+		for(var i = 0 ; i < temp.length; i++){
+			$('#calendar').fullCalendar('removeEvents', temp[i])
+			console.log(temp[i])
+		}
+	}
+}//chk end
 
-  
-$(document).ready(function() {
 	  
-	  
+	$(document).ready(function(){  
 	  
     // We will refer to $calendar in future code
     var $calendar = $("#calendar").fullCalendar({ //start of options
@@ -132,7 +166,7 @@ $(document).ready(function() {
         	
         	
         	console.log(event.member_id)
-        		if (event.member_id == ${sessionScope.member.member_id}) {
+        		if (event.member_id == ${sessionScope.member.member_id} || (${sessionScope.member.member_status == 9}&& event.member_id == 99999)) {
         			
         			if(confirm("정말 변경하시겠습니까?")){
                       
@@ -160,6 +194,16 @@ $(document).ready(function() {
                       	var cateSelf = cate_name;
                       	var colorFix = event.color;
                       	var calId = event.id;
+                      	
+                      	
+                      	console.log(st)
+                      	console.log(en)
+                      	console.log(stitle)
+                      	console.log(scontent)
+                      	console.log(calCate)
+                      	console.log(cateSelf)
+                      	console.log(colorFix)
+                      	console.log(calId)
         				
 /*     			    	id: obj.calendar_id+"",
 						//username: obj.calendar_member_id+"",
@@ -171,7 +215,7 @@ $(document).ready(function() {
 						calendar_cate: obj.calendar_cateSelf,
 			        allDay: true */
         				
-          		    var param = "calendar_start="+st+"&calendar_end="+en+"&calendar_title="+stitle.trim()+"&calendar_content="+scontent+"&calendar_cate="+calCate+"&calendar_allDay="+allDayCheck+"&calendar_cateSelf="+cateSelf+"&calendar_color="+colorFix+"&calendar_id="+calId+"&calendar_member_id=${ sessionScope.member.member_id }";
+          		    var param = "calendar_start="+st+"&calendar_end="+en+"&calendar_title="+stitle.trim()+"&calendar_content="+scontent+"&calendar_cate="+calCate+"&calendar_allDay="+allDayCheck+"&calendar_cateSelf="+cateSelf+"&calendar_color="+colorFix+"&calendar_id="+calId+"&calendar_member_id=${ who }";
         	      	// +"&calendar_member_id=${ sessionScope.id }"
         	      	console.log(param);
         	      	
@@ -206,7 +250,7 @@ $(document).ready(function() {
         	
         
         	console.log(event.member_id)
-    		if (event.member_id == ${sessionScope.member.member_id}) {
+    		if (event.member_id == ${sessionScope.member.member_id} || (${sessionScope.member.member_status == 9}&& event.member_id == 99999)) {
     			
     			if(confirm("정말 변경하시겠습니까?")){
                   
@@ -245,7 +289,7 @@ $(document).ready(function() {
 					calendar_cate: obj.calendar_cateSelf,
 		        allDay: true */
     				
-      		    var param = "calendar_start="+st+"&calendar_end="+en+"&calendar_title="+stitle.trim()+"&calendar_content="+scontent+"&calendar_cate="+calCate+"&calendar_allDay="+allDayCheck+"&calendar_cateSelf="+cateSelf+"&calendar_color="+colorFix+"&calendar_id="+calId+"&calendar_member_id=${ sessionScope.member.member_id }";
+      		    var param = "calendar_start="+st+"&calendar_end="+en+"&calendar_title="+stitle.trim()+"&calendar_content="+scontent+"&calendar_cate="+calCate+"&calendar_allDay="+allDayCheck+"&calendar_cateSelf="+cateSelf+"&calendar_color="+colorFix+"&calendar_id="+calId+"&calendar_member_id=${ who }";
     	      	// +"&calendar_member_id=${ sessionScope.id }"
     	      	console.log(param);
     	      	
@@ -295,6 +339,10 @@ $(document).ready(function() {
         }, // End select callback
         // Callback triggered when we click on an event
         eventClick: function(event, jsEvent, view) {
+        	console.log(event.member_id)
+        	if(event.member_id == 99999 && ${sessionScope.member.member_status != 9}){
+        		return;
+        	}
         	
         	var cl = ${cateList};
         	
@@ -305,6 +353,11 @@ $(document).ready(function() {
 		       		cate_name = cl[o].cal_cate_name;
 	        	}
 	        }
+	        
+	        if(event.calendar_cate == 0){
+	        	cate_name = event.calendar_cateSelf;
+	        }
+	        
 	        
 	        	var cateNum = 0;
 	        //console.log(typeof(event.calendar_cate));
@@ -390,11 +443,10 @@ $(document).ready(function() {
     
   );// calendar end
   
-  }) //ready end
+	})//ready end
   
-  }
+
   
-  });//ajax end
   
   function registBtn(){
 	  
@@ -468,7 +520,7 @@ $(document).ready(function() {
 	      	allDayCheck = 0;
       	}
       	
-	    var param = "calendar_start="+st+"&calendar_end="+en+"&calendar_title="+stitle.trim()+"&calendar_content="+scontent+"&calendar_cate="+calCate+"&calendar_allDay="+allDayCheck+"&calendar_cateSelf="+cateSelf+"&calendar_color="+colorFix+"&calendar_member_id=${ sessionScope.member.member_id }";
+	    var param = "calendar_start="+st+"&calendar_end="+en+"&calendar_title="+stitle.trim()+"&calendar_content="+scontent+"&calendar_cate="+calCate+"&calendar_allDay="+allDayCheck+"&calendar_cateSelf="+cateSelf+"&calendar_color="+colorFix+"&calendar_member_id=${ who }";
       	// +"&calendar_member_id=${ sessionScope.member.member_id }"
       	console.log(param);
       	
@@ -690,14 +742,14 @@ $(document).ready(function() {
 		      	en = end+" "+end_time;
 		      	allDayCheck = 0;
 	      	}
-		    var param = "calendar_start="+st+"&calendar_end="+en+"&calendar_title="+stitle.trim()+"&calendar_content="+scontent+"&calendar_cate="+calCate+"&calendar_allDay="+allDayCheck+"&calendar_cateSelf="+cateSelf+"&calendar_color="+colorFix+"&calendar_id="+calId+"&calendar_member_id=${ sessionScope.member.member_id }";
+		    var param = "calendar_start="+st+"&calendar_end="+en+"&calendar_title="+stitle.trim()+"&calendar_content="+scontent+"&calendar_cate="+calCate+"&calendar_allDay="+allDayCheck+"&calendar_cateSelf="+cateSelf+"&calendar_color="+colorFix+"&calendar_id="+calId+"&calendar_member_id=${ who }";
 	      	// +"&calendar_member_id=${ sessionScope.id }"
 	      	
 	      	console.log(param);
 	      	
 	        $.ajax({
 	          type: 'POST',
-	          url: "${pageContext.request.contextPath}/calendar/modiEvent",
+	          url: "${pageContext.request.contextPath}/calendar/modiEvent", 	
 	          data: param,
 	          success: function(data) {
 	        	  if(data != null){
@@ -756,7 +808,7 @@ $(document).ready(function() {
 	  if(obj.allDay == 0){
 		  if(obj.calendar_cate != 0){
 				var event = {
-						id: obj.calendar_id+"",
+						id: obj.id+"",
 						member_id: obj.calendar_member_id,
 						title: obj.title+"",
 						content: obj.content+"",
@@ -767,7 +819,7 @@ $(document).ready(function() {
 				};
 			}else{
 				var event = {
-						id: obj.calendar_id+"",
+						id: obj.id+"",
 						member_id: obj.calendar_member_id,
 						title: obj.title+"",
 						content: obj.content+"",
@@ -780,7 +832,7 @@ $(document).ready(function() {
 	}else{
 		  if(obj.calendar_cate != 0){
 			    var event = {
-			    	id: obj.calendar_id+"",
+			    	id: obj.id+"",
 			    	member_id: obj.calendar_member_id,
 						title: obj.title+"",
 						content: obj.content+"",
@@ -792,7 +844,7 @@ $(document).ready(function() {
 			    };
 			  }else{
 			    var event = {
-			    	id: obj.calendar_id+"",
+			    	id: obj.id+"",
 			    	member_id: obj.calendar_member_id,
 						title: obj.title+"",
 						content: obj.content+"",
@@ -866,6 +918,11 @@ $(document).ready(function() {
 				<div align= "center">
 						<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">일정 등록하기</button>
 					</div>
+				<c:if test="${ who != 99999 }">	
+				<div>
+					<input id="campCal" type="checkbox" value="campCal" onchange="chk()">회사일정 같이보기
+				</div>
+				</c:if>
 			</div>
 			<!-- The calendar container -->
 			<div class="col-9">
