@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 import dto.Approval_Auth;
 import dto.Approval_Cate;
 import dto.Approval_Dto;
+import dto.ApvPayment_Dto;
+import dto.MemDeposit;
 
 @Component("ApvService")
 public class ApvServiceImpl implements ApvService {
@@ -148,6 +150,24 @@ public class ApvServiceImpl implements ApvService {
 	public double getMember_vacation(int member_id) {
 		dao = sqlSession.getMapper(ApvDao.class);
 		return dao.selectMember_vacation(member_id);
+	}
+
+	@Override
+	public int createApv_pay(ApvPayment_Dto pay) {
+		dao = sqlSession.getMapper(ApvDao.class);
+		return dao.insertApv_pay(pay);
+	}
+
+	@Override
+	public ArrayList<ApvPayment_Dto> getAllPayApv(int approval_id) {
+		dao = sqlSession.getMapper(ApvDao.class);
+		return dao.selectAllPayApv(approval_id);
+	}
+
+	@Override
+	public MemDeposit getDeposit(int approval_id) {
+		dao = sqlSession.getMapper(ApvDao.class);
+		return dao.selectDeposit(approval_id);
 	}
 
 }

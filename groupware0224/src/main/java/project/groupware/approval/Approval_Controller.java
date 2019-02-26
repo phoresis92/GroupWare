@@ -26,8 +26,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import dto.Approval_Cate;
 import dto.Approval_Dto;
+import dto.ApvPayment_Dto;
 import dto.Calendar_Cate;
 import dto.Calendar_Dto;
+import dto.MemDeposit;
 import dto.PageInfo;
 import project.groupware.calendar.Calendar_Service;
 import project.groupware.member.Member;
@@ -41,6 +43,8 @@ public class Approval_Controller {
 	@Resource(name="Cal_Service")
 	private Calendar_Service cal_Service;
 
+	
+	//================================================================================================================================================================
 	@RequestMapping(value="/approval", method=RequestMethod.GET)
 	public String approval(Model model) {
 		
@@ -58,6 +62,9 @@ public class Approval_Controller {
 	@RequestMapping(value="/approval", method=RequestMethod.POST)
 	public String approvalWrite(Approval_Dto dto, HttpServletRequest req, @RequestParam (value="countVacat", required=false) String countVacat ) {
 		
+		System.out.println(dto.getApproval_startdate());
+		System.out.println(dto.getApproval_enddate());
+		
 		HttpSession session = req.getSession();
 		dto.setApproval_member_id(((Member) session.getAttribute("member")).getMember_id());
 		
@@ -71,7 +78,7 @@ public class Approval_Controller {
 		}
 		
 		
-		if(dto.getApproval_cc().equals("") || dto.getApproval_cc().equals("1_wholeVacat") || dto.getApproval_cc().equals("2_halfVacat")) {
+		if(dto.getApproval_cc().equals("") || dto.getApproval_cc().equals("1_wholeVacat") || dto.getApproval_cc().equals("2_halfVacat_AM") || dto.getApproval_cc().equals("2_halfVacat_PM")) {
 		
 			if(dto.getApproval_cc().equals("1_wholeVacat")) {
 				
@@ -85,7 +92,7 @@ public class Approval_Controller {
 				System.out.println("result : "+ result);
 				
 				
-			}else if(dto.getApproval_cc().equals("2_halfVacat")) {
+			}else if(dto.getApproval_cc().equals("2_halfVacat_AM") || dto.getApproval_cc().equals("2_halfVacat_PM")) {
 				
 				HashMap<String, Object> map = new HashMap<String, Object>();
 				map.put("approval_member_id", dto.getApproval_member_id());
@@ -121,11 +128,7 @@ public class Approval_Controller {
 			
 		}
 		
-		try {
 		apvService.deleteTemp(dto.getApproval_id());
-		}catch(Exception e) {
-			
-		}
 		
 		int result = apvService.createApv(dto);
 		
@@ -141,6 +144,7 @@ public class Approval_Controller {
 				int result = apvService.createApv(dto);
 				System.out.println("insert result : "+result);
 			}else { //재수정 임시저장
+				
 				System.out.println(dto);
 				
 				int result = apvService.saveReWrite(dto);
@@ -205,6 +209,7 @@ public class Approval_Controller {
 		
 	}
 	
+	//========================================================================================================================================================일반결재
 	
 	@RequestMapping(value="/approval/myApvList", method=RequestMethod.GET)
 	public String myApvList(HttpServletRequest req, Model model, @RequestParam (value="page") int page ) {
@@ -237,6 +242,9 @@ public class Approval_Controller {
 		
 		System.out.println(dto);
 		
+		System.out.println(dto.getApproval_startdate());
+		System.out.println(dto.getApproval_enddate());
+		
 		model.addAttribute("apvDto", dto);
 		model.addAttribute("auth", auth);
 		
@@ -244,9 +252,32 @@ public class Approval_Controller {
 			return "/approval/myApvDetail1";
 		}else if(dto.getApproval_cate() == 2) {
 			return "/approval/myApvDetail2";
+		}else if(dto.getApproval_cate() == 3) {
+			
+			ArrayList<ApvPayment_Dto> list = apvService.getAllPayApv(approval_id);
+			model.addAttribute("payList", list);
+			
+			HashMap<Integer,String> titleMap = new HashMap<Integer,String>();
+			titleMap.put(2, "교통비");
+			titleMap.put(3, "사무비품");
+			titleMap.put(4, "출장비");
+			titleMap.put(5, "식대");
+			titleMap.put(6, "주유비");
+			model.addAttribute("titleMap", titleMap);
+			
+			HashMap<Integer,String> bankMap = new HashMap<Integer,String>();
+			bankMap.put(2, "우리");
+			bankMap.put(3, "신한");
+			bankMap.put(4, "농협");
+			model.addAttribute("bankMap", bankMap);
+			
+			return "/approval/myApvDetail3";
+			
 		}
 		return "/approval/myApvList";
 	}
+	
+	
 	
 	@RequestMapping("/approval/down")
 	public ModelAndView download(@RequestParam(value="path") String path) throws Exception {
@@ -296,7 +327,7 @@ public class Approval_Controller {
 	
 	@RequestMapping(value="/approval/yesAuthApvList", method=RequestMethod.GET)
 	public String yesAuthApvList(HttpServletRequest req, Model model, @RequestParam (value="page") int page ) {
-		
+		 
 		HttpSession session = req.getSession();
 		
 		Member mj = (Member) session.getAttribute("member");
@@ -354,6 +385,8 @@ public class Approval_Controller {
 		return pageInfo;
 	}
 
+	
+	//===================================================================================================================================결재
 	@RequestMapping("/approval/approve")
 	public String approve(@RequestParam(value="where") int where, @RequestParam(value="what") int what, @RequestParam(value="approval_id") int approval_id, @RequestParam(value="why", required=false) String why) {
 		
@@ -365,6 +398,16 @@ public class Approval_Controller {
 		Approval_Dto dto = apvService.getApvDetail(approval_id);
 		System.out.println(dto);
 		String cc = dto.getApproval_cc();
+		
+		int end = 0;
+		if(dto.getApproval_mem2() == null || dto.getApproval_mem2() == "") {
+			end = 1;
+		}else if(dto.getApproval_mem3() == null || dto.getApproval_mem3() == "") {
+			end = 2;
+		}else {
+			end = 3;
+		}
+		
 		
 		try {
 		if(cc.equals("1_wholeVacat") && what == 2) {
@@ -382,7 +425,7 @@ public class Approval_Controller {
 			
 			int result = apvService.recoverVacat(map);
 			System.out.println(result);
-		}else if(cc.equals("2_halfVacat") && what == 2) {
+		}else if((cc.equals("2_halfVacat_AM") || cc.equals("2_halfVacat_PM") ) && what == 2) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("approval_member_id", dto.getApproval_member_id());
 			map.put("countVacat", 0.5);
@@ -391,7 +434,7 @@ public class Approval_Controller {
 			System.out.println(result);
 		}
 		
-		if(cc.equals("1_wholeVacat") && what == 1) {
+		if(cc.equals("1_wholeVacat") && what == 1 && end == where) {
 			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 			
@@ -407,9 +450,11 @@ public class Approval_Controller {
 			calDto.setCalendar_end(sdf.format(dto.getApproval_enddate()));
 			cal_Service.addCal(calDto);
 			System.out.println("calDto: " + calDto);
-		}else if(cc.equals("2_halfVacat") && what == 1) {
+		}else if(cc.equals("2_halfVacat_AM") && what == 1 && end == where) {
 			
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String st = sdf.format(dto.getApproval_startdate());
+			String en = sdf.format(dto.getApproval_enddate());
 			
 			Calendar_Dto calDto = new Calendar_Dto();
 			calDto.setCalendar_allDay(0);
@@ -419,8 +464,27 @@ public class Approval_Controller {
 			calDto.setCalendar_content("<p>반차 결재승인 완료</p>");
 			calDto.setCalendar_title("반차");
 			calDto.setCalendar_member_id(dto.getApproval_member_id());
-			calDto.setCalendar_start(sdf.format(dto.getApproval_startdate()));
-			calDto.setCalendar_end(sdf.format(dto.getApproval_enddate()));
+			calDto.setCalendar_start(st + " " + "09:00:00");
+			calDto.setCalendar_end(en + " " + "13:00:00");
+			cal_Service.addCal(calDto);
+			System.out.println("calDto: " + calDto);
+			
+		}else if(cc.equals("2_halfVacat_PM") && what == 1 && end == where) {
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String st = sdf.format(dto.getApproval_startdate());
+			String en = sdf.format(dto.getApproval_enddate());
+			
+			Calendar_Dto calDto = new Calendar_Dto();
+			calDto.setCalendar_allDay(0);
+			Calendar_Cate cal_cate = cal_Service.getVacatNum("반차");
+			calDto.setCalendar_cate(cal_cate.getCal_cate_id());
+			calDto.setCalendar_color(cal_cate.getCal_cate_color());
+			calDto.setCalendar_content("<p>반차 결재승인 완료</p>");
+			calDto.setCalendar_title("반차");
+			calDto.setCalendar_member_id(dto.getApproval_member_id());
+			calDto.setCalendar_start(st + " " + "14:00:00");
+			calDto.setCalendar_end(en + " " + "18:00:00");
 			cal_Service.addCal(calDto);
 			System.out.println("calDto: " + calDto);
 			
@@ -434,6 +498,7 @@ public class Approval_Controller {
 		map.put("approval_id", approval_id);
 		map.put("what", what);
 		map.put("why", why);
+		map.put("end", end);
 		
 		int result = 0;
 		
@@ -548,16 +613,105 @@ public class Approval_Controller {
 //==================================================================================================================================================================================지출결재
 	
 	@RequestMapping(value="/apv_payment", method=RequestMethod.GET)
-	public String apv_payment(Model model) {
+	public String apv_payment(HttpServletRequest req ,Model model) {
 		
+		HttpSession session = req.getSession();
+		
+		Member m = (Member) session.getAttribute("member");
+		
+		//ToDo
+		//member Join 가져 올 것
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 d일");
-		
 		model.addAttribute("now",sdf.format(new Date()));
+		
+		MemDeposit depo = apvService.getDeposit(m.getMember_id());
+		model.addAttribute("deposit", depo);
+		
+		System.out.println(depo);
 		
 		return "/approval/writeForm3";
 		
 	}
+	
+	@RequestMapping(value="/apv_payment/approval", method=RequestMethod.POST)
+	public String payment_approval(Approval_Dto dto, @RequestParam(value="maxCount") int maxCount, HttpServletRequest req) {
+		
+		HttpSession session = req.getSession();
+		dto.setApproval_member_id(((Member) session.getAttribute("member")).getMember_id());
+		
+		
+		boolean ck = false;
+		int seq = 0;
+		if(dto.getApproval_id() == 0) {
+			seq = apvService.getSeqNum();
+			dto.setApproval_id(seq);
+			ck = true;
+		}
+		
+		String file_path = "C:\\Users\\hushe\\dev\\eclipse-jee-2018-12-R-win32-x86_64\\gware\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\webapps\\Approval_File\\";
+
+		MultipartFile file = dto.getFile();
+		
+		
+		if(!dto.getFile().getOriginalFilename().equals("")) {
+
+			//String fileName = p.getFile1().getOriginalFilename();
+			String fileName = mkFileName(file, dto.getApproval_cate(), seq);
+			String path = file_path + fileName;
+			File f = new File(path);// 업로드된 파일을 복사할 파일 생성
+			// c:/img 폴더에 동일한 이름으로 파일 생성
+			try {
+				file.transferTo(f);
+			}catch(IllegalStateException e) {
+				e.printStackTrace();
+			}catch(IOException e) {
+				e.printStackTrace();
+			}
+			dto.setApproval_filepath("/Approval_File/"+fileName);
+			dto.setApproval_filename(fileName);
+			
+		}
+		
+		System.out.println(dto);
+		
+		int createResult = apvService.createApv(dto);
+		
+		System.out.println("insert result : "+ createResult);
+		
+		ArrayList<ApvPayment_Dto> list = new ArrayList<ApvPayment_Dto>();
+		for(int i = 0 ; i < maxCount ; i++) {
+			ApvPayment_Dto pay = new ApvPayment_Dto();
+			
+			pay.setApproval_id(seq);
+			
+			pay.setPay_date(new Date(req.getParameter("pay_date"+i)));
+			pay.setPay_title(Integer.parseInt(req.getParameter("pay_title"+i).substring(1)));
+			pay.setPay_cash(Integer.parseInt(req.getParameter("pay_cash"+i)));
+			pay.setPay_bank(Integer.parseInt(req.getParameter("pay_bank"+i).substring(1)));
+			pay.setPay_deposit(req.getParameter("pay_deposit"+i));
+			pay.setPay_dpowner(req.getParameter("pay_dpowner"+i));
+			pay.setPay_comment(req.getParameter("pay_comment"+i));
+			
+			createResult = apvService.createApv_pay(pay);
+			
+			System.out.println("pay insert : "+ createResult);
+			
+			list.add(pay);
+		}
+		
+		
+		System.out.println(list);
+		
+
+		
+		
+		
+		
+		
+		
+		return "/member/main";
+	}; // payment_approval end
 	
 	
 	

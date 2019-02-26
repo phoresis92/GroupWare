@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <aop-reference-model>
-<aop-project name="gware"/>
-<aop-project name="groupware"/>
-<aop-project name="groupware0221"/>
+<aop-project name="groupware0224"/>
 </aop-reference-model>

@@ -379,15 +379,16 @@ function chk(){
         	
         	if(event.allDay){
 	        	$('#isallDay').val('1');
+	        	$('#pend').text(moment(event.end).subtract(1, 'days').format('YYYY-MM-DD  HH:mm:ss'));
         	}else{
 	        	$('#isallDay').val('0');
+	        	$('#pend').text(moment(event.end).format('YYYY-MM-DD  HH:mm:ss'));
         	}
         	
 	    	$("#pselect").text(cate_name);
         	$("#psubject").text(event.title);
         	$("#pcontent").html(event.content);
-        	$('#pstart').text(moment(event.start).format('YYYY-MM-DD  hh:mm:ss'));
-        	$('#pend').text(moment(event.end).format('YYYY-MM-DD  hh:mm:ss'));
+        	$('#pstart').text(moment(event.start).format('YYYY-MM-DD  HH:mm:ss'));
         	
         	$("#dayModal").modal();	
         	
@@ -734,8 +735,8 @@ function chk(){
 	      	var allDayCheck = 0;
 	      	if(allDay){
 	      		st = start;
-	      		//en = moment(end).add(1, 'days').format('YYYY-MM-DD');
-	      		en = end;
+	      		en = moment(end).add(1, 'days').format('YYYY-MM-DD');
+	      		//en = end;
 	      		allDayCheck = 1;
 	      	}else{
 		      	st = start+" "+start_time;
@@ -910,25 +911,26 @@ function chk(){
 <body>
 
 	<div class="container-fluid">
-		<div class="row">
-			<div class="col-3">
-				왼쪽 메뉴바
+		<div>
+		
+			<c:choose>
+				<c:when test="${ who != 99999 }">
+					<h1>내일정 관리</h1>
+				</c:when>
+				<c:otherwise>
+					<h1>회사일정 관리</h1>
+				</c:otherwise>
+			</c:choose>
 				
-				<div>캘린더 설정</div>
-				<div align= "center">
-						<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">일정 등록하기</button>
-					</div>
 				<c:if test="${ who != 99999 }">	
 				<div>
 					<input id="campCal" type="checkbox" value="campCal" onchange="chk()">회사일정 같이보기
 				</div>
 				</c:if>
-			</div>
+		
 			<!-- The calendar container -->
-			<div class="col-9">
-			
 				<div id="calendar"></div>
-			</div>
+				<!-- <input class="jscolor {hash:true}" value="ab2567"> -->
 		</div>
 	</div>
 	
@@ -988,7 +990,7 @@ function chk(){
 					</div>
 									
 						
-					<input class="jscolor {hash:true}" value="ab2567">
+					
 
 					<!-- 스케쥴 등록 MODAL 시작 ================================================================================================================================== -->
 					<div class="modal fade" id="myModal" role="dialog">
@@ -1138,7 +1140,7 @@ function chk(){
 												</c:choose>
 												
 											</c:forEach>
-											<option value="0" onchange="showInput()">직접 입력</option>
+											<!-- <option value="0" onchange="showInput()">직접 입력</option> -->
 											</select>
 											
 												<div id="modselfCate" style="display: none;">

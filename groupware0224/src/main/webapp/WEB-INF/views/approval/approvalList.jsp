@@ -20,21 +20,21 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/jquery-easyui/jquery.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/jquery-easyui/jquery.easyui.min.js"></script>
 
-	<div class=" container">
+	<div class=" container-fluid" style="margin:20px;">
 	
-	<div class="row" style="margin: 20px; overflow-x:hidden; overflow-y:auto;">
+	<div class="row" style="margin: 10px; overflow-x:hidden; overflow-y:auto;">
 	<h2>결재자 찾기</h2>
 	</div>
 	<div class="row">
-	<div class="container col-5" style="padding: 3px">
-    <div class="easyui-panel" style="padding:4px; ">
+	<div class="container col-4" style="margin: 0px; padding: 0px; width:200px; ">
+    <div class="easyui-panel" style="margin: 0px; width: 300px; height: 400px;">
         <ul id="tt" class="easyui-tree">
 
 
-						<li><span>GROUP WARE</span>
+						<li><span>KITWARE</span>
 							<ul>
 								<c:forEach items="${deptList}" var="dept">
-									<li data-options="state:'open'"><span>${dept.department_id}) ${dept.department_name}</span>
+									<li data-options="state:'closed'"><span>${dept.department_id}) ${dept.department_name}</span>
 										<ul>
  											<c:forEach items="${memList}" var="mem">
 												<c:if test="${dept.department_id eq mem.member_department}">
@@ -56,13 +56,9 @@
     </div>
     </div>
     
-    <div class="col-2 text-center">
-    	<br><br><br><br><br><br><p style="color: red">>>></p>
-    </div>
+    <div class="container col-4" style="height:400px; border: 1px solid gray; margin: 0px; padding: 5px 10px 5px 20px; overflow-x:hidden; overflow-y:auto;">
     
-    <div class="container col-5" style="border: 1px solid gray; padding: 5px 10px 5px 20px; overflow-x:hidden; overflow-y:auto;">
-    	
-    	<div class="row">
+    	<div class="row" > 
     	<label>성명</label>
     	<input type="text" id="searchN"/>
     	<button id="searchNm" onclick="searchName()">검색</button>
@@ -104,10 +100,9 @@
     
     </div>
 
-    
-    </div><!-- row  -->
-    
-    <table>
+	<div class="container col-4">
+	
+	<table>
     
       	<tr>
       	<th>No.</th>
@@ -136,10 +131,17 @@
     	</tbody>
     
     </table>
+	
+	</div>
+
     
-    <button onclick="apply()" >적용</button>
-    <button onclick="window.close();" >닫기</button>
+    </div ><!-- row  -->
     
+    
+    <div class="float-right">
+	    <button onclick="apply()" >적용</button>
+	    <button onclick="window.close();" >닫기</button>
+    </div>
     
     <script>
     
@@ -170,11 +172,13 @@
     $('#tt').tree({
     	onClick: function(node){
     		
+    		console.log(node);
     		console.log(node.text);
     		
-    		if(node.text == 'GROUP WARE'){
+    		if(node.text == "KITWARE"){
     			$.ajax({
                     type: 'POST',
+                    async: false,
                     url: "${ pageContext.request.contextPath }/approval/getMemList",
                     success: function(data) {
 
@@ -183,15 +187,14 @@
       					$('#tbody').empty();
       					
       					printList(obj);
-
-      					return;
-				},
-				error: function(){
-					return;
+						console.log('in if KITWARE')
+						return;
 				}
 		});
-    		} // if end
+    		}else{
+    			
     		
+    		console.log('out if KITWARE')
     		var arr = (node.text).split(')');
 		    		
     		var param = "deptId="+arr[0];
@@ -209,6 +212,9 @@
             						var arr = data.split('|');
             						var member_id = arr[1];
             						
+            						if(member_id == 'KITWARE'){
+            							return;
+            						}
             						pikAuthMem(member_id);
             						return;
             						
@@ -227,6 +233,7 @@
 			});
     		
     	}
+    	} // if end
     });
     
     
@@ -284,6 +291,11 @@
 
 	 function pikAuthMem(member_id){
 		 //===================================================================================================================================================== final process end
+		 try{
+			 parseInt(member_id);
+		 }catch(Exception){
+			 return;
+		 }
 		 
 		 if(member_id == ${ sessionScope.member.member_id }){
 			 alert('본인은 선택하실 수 없습니다.');

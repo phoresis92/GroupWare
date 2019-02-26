@@ -199,7 +199,7 @@ function sendFile(file, el) {
 
 
 function selectMem(){
-	window.open('${pageContext.request.contextPath}/approval/pikAuthMem','결제자선택','width=800 , height=500 ,resizable = no, scrollbars = no');
+	window.open('${pageContext.request.contextPath}/approval/pikAuthMem','결제자선택','width=1000 , height=500 ,resizable = no, scrollbars = no');
 } // selectMem end 
 
 
@@ -242,17 +242,19 @@ function sendApv(){
 			console.log($('#length').text())
 			$('#countVacat').val($('#length').text());
 			
-			$('#approval_cc').val($('#whatV').val());
 			console.log("approval_cc "+$('#whatV').val())
 			
 			if($('#whatV').val() == '1_wholeVacat'){ // 연차휴가
+					$('#approval_cc').val($('#whatV').val());
 					$('#approval_startdate').val(new Date(moment($('#from').val()).format('YYYY-MM-DD')+" "+$('#whole_start').val()));
 					$('#approval_enddate').val(new Date(moment($('#to').val()).add(1, 'days').format('YYYY-MM-DD')+" "+$('#whole_end').val()));
 			}else{ // 반차
 				if($(':radio[name="AMPM"]:checked').val() == 'AM'){
+					$('#approval_cc').val($('#whatV').val()+'_AM');
 					$('#approval_startdate').val(new Date(moment($('#halfPick').val()).format('YYYY-MM-DD')+" "+$('#AM_start').val()));
 					$('#approval_enddate').val(new Date(moment($('#halfPick').val()).format('YYYY-MM-DD')+" "+$('#AM_end').val()));
-				}else{
+				}else if($(':radio[name="AMPM"]:checked').val() == 'PM'){
+					$('#approval_cc').val($('#whatV').val()+'_PM');
 					$('#approval_startdate').val(new Date(moment($('#halfPick').val()).format('YYYY-MM-DD')+" "+$('#PM_start').val()));
 					$('#approval_enddate').val(new Date(moment($('#halfPick').val()).format('YYYY-MM-DD')+" "+$('#PM_end').val()));
 				}

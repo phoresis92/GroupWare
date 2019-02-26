@@ -241,9 +241,9 @@ function sendApv(){
 	</div>
 	
 
-	
-	<button onclick="selectMem()">결재라인 추가</button>
-
+	<div class="float-right">
+		<button onclick="selectMem()">결재라인 추가</button>
+	</div>
 	<div>
 	
 	기안일자 ${ now } <br>
@@ -347,16 +347,19 @@ function sendApv(){
 	<script type="text/javascript">
 	
 	function selectMem(){
-		window.open('${pageContext.request.contextPath}/approval/pikAuthMem','결제자선택','width=800 , height=500 ,resizable = no, scrollbars = no');
+		window.open('${pageContext.request.contextPath}/approval/pikAuthMem','결제자선택','width=1000 , height=500 ,resizable = no, scrollbars = no');
 	}
 	
 	function tempStore(){
 
 		for(var i = 1 ; i <=3 ; i++){
 			
-			$('#authId'+i+'').val($('#authId'+i+'').text())
+			$('#authId'+i+'').val($('#authId'+i+'').text());
 			
 		}
+			$('#authId1').val(${mem1});
+			$('#authId2').val(${mem2});
+			$('#authId3').val(${mem3});
 		
 		if(${ not empty apvReWrite.approval_id }){
 		$('<input></input>').attr('type','hidden').attr('value',${ apvReWrite.approval_id }).attr('name','approval_id').appendTo('#sendApv');

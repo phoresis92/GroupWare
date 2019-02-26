@@ -172,7 +172,7 @@ approval_auth1 number(1),
 approval_auth2 number(1),
 approval_auth3 number(1),
 approval_title varchar2(500) not null,
-approval_content varchar2(4000) not null,
+approval_content clob not null,
 approval_filepath varchar2(1000),
 approval_filename varchar2(1000),
 approval_return varchar2(1000),
@@ -319,3 +319,61 @@ email_pw varchar2(20) not null,
 constraint email_account_fk foreign key (member_id)
 references member(member_id) on delete cascade
 );
+
+
+======================================================================
+
+
+create table apv_payment(
+pay_id number primary key,
+approval_id number not null,
+pay_date date not null,
+pay_title number(2) not null,
+pay_cash number not null,
+pay_bank number(1) not null,
+pay_deposit number not null,
+pay_dpowner varchar2(10) not null,
+pay_comment varchar2(500),
+constraint payment_apvid_fk foreign key (approval_id)
+references approval(approval_id) on delete cascade
+);
+
+create sequence apv_payment_seq;
+
+
+======================================================================
+
+
+create table member_deposit(
+depo_member_id varchar2(20) primary key,
+depo_bank_id number(1) not null,
+depo_number varchar2(100) not null,
+constraint deposit_memId_fk foreign key (depo_member_id)
+references member(member_id) on delete cascade
+);
+
+insert into member_deposit values(1, 3, 1002338724382);
+
+
+
+
+insert into rank values(0, '사장');
+insert into rank values(1, '부사장');
+insert into rank values(2, '전무');
+insert into rank values(3, '상무');
+insert into rank values(4, '이사');
+insert into rank values(5, '부장');
+insert into rank values(6, '차장');
+insert into rank values(7, '과장');
+insert into rank values(8, '대리');
+insert into rank values(9, '주임');
+insert into rank values(10, '사원');
+
+commit;
+
+insert into department values(0, '비서실');
+insert into department values(1, '인사부');
+insert into department values(2, '총무부');
+insert into department values(3, '생산부');
+insert into department values(4, '홍보부');
+insert into department values(5, '관리부');

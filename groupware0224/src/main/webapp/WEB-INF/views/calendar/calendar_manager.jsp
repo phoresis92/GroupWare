@@ -164,15 +164,16 @@ function chk(){
         	
         	if(event.allDay){
 	        	$('#isallDay').val('1');
+	        	$('#pend').text(moment(event.end).subtract(1, 'days').format('YYYY-MM-DD  HH:mm:ss'));
         	}else{
 	        	$('#isallDay').val('0');
+	        	$('#pend').text(moment(event.end).format('YYYY-MM-DD  HH:mm:ss'));
         	}
         	
 	    	$("#pselect").text(cate_name);
         	$("#psubject").text(event.title);
         	$("#pcontent").html(event.content);
-        	$('#pstart').text(moment(event.start).format('YYYY-MM-DD  hh:mm:ss'));
-        	$('#pend').text(moment(event.end).format('YYYY-MM-DD  hh:mm:ss'));
+        	$('#pstart').text(moment(event.start).format('YYYY-MM-DD  HH:mm:ss'));
         	
         	$("#dayModal").modal();	
         	
@@ -296,24 +297,25 @@ function chk(){
 
 <body>
 
-	<div class="container-fluid">
+	<div class="container-fluid" style="margin-top:30px;">
 		<div class="row">
 			<div class="col-3">
-				왼쪽 메뉴바
 				
-				<div>캘린더 설정</div>
+					<h2>직원 선택</h2>
 					
+				<div id="showComp">
+					<input id="campCal" type="checkbox" value="campCal" onchange="chk()">회사일정 같이보기
+				</div>
 					
-					
-					<div class="container col-5" style="margin: 0px; width: 240px;">
-				    <div class="easyui-panel" style=" width: 230px;">
+					<div class="container col-5" style="padding:0px; margin: 0px; width: 500px;">
+				    <div class="easyui-panel" style="overflow-x:hidden; height:500px; width: 240px;">
 				        <ul id="tt" class="easyui-tree">
 
 
-						<li><span>GROUP WARE</span>
+						<li><span>KITWARE</span>
 							<ul>
 								<c:forEach items="${deptList}" var="dept">
-									<li data-options="state:'open'"><span>${dept.department_id}) ${dept.department_name}</span>
+									<li data-options="state:'closed'"><span>${dept.department_id}) ${dept.department_name}</span>
 										<ul>
  											<c:forEach items="${memList}" var="mem">
 												<c:if test="${dept.department_id eq mem.member_department}">
@@ -331,11 +333,7 @@ function chk(){
     </div>
 				
 					
-				<c:if test="${ who != 99999 }">	
-				<div>
-					<input id="campCal" type="checkbox" value="campCal" onchange="chk()">회사일정 같이보기
-				</div>
-				</c:if>
+				
 			</div>
 			<!-- The calendar container -->
 			<div class="col-9">
@@ -402,10 +400,14 @@ function chk(){
 	
 	<script>
 	
+	
+	
 	$('#tt').tree({
 		onClick: function(node){
 			$('#calendar').fullCalendar( 'removeEvents' );
 			console.log(node.text);
+			
+			$('#campCal').prop("checked", false);
 			
 			var arr = (node.text).split("|");
 			

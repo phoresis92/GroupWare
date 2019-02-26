@@ -7,6 +7,8 @@ import java.util.Map;
 import dto.Approval_Auth;
 import dto.Approval_Cate;
 import dto.Approval_Dto;
+import dto.ApvPayment_Dto;
+import dto.MemDeposit;
 
 public interface ApvDao {
 
@@ -50,5 +52,13 @@ public interface ApvDao {
 	public ArrayList<Approval_Dto> selectDelListForManager();
 	
 	public double selectMember_vacation(int member_id);
+	
+	
+	//=======================지출결제
+	public int insertApv_pay(ApvPayment_Dto pay);
+	
+	public ArrayList<ApvPayment_Dto> selectAllPayApv(int approval_id);
+	
+	public MemDeposit selectDeposit(int approval_id);
 	
 }

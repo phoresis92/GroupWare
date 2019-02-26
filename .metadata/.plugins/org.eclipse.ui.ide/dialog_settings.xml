@@ -8,10 +8,11 @@
 		<item value="true" key="WizardProjectsImportPage.STORE_COPY_PROJECT_ID"/>
 		<item value="true" key="WizardProjectsImportPage.STORE_ARCHIVE_SELECTED"/>
 		<list key="WizardProjectsImportPage.STORE_DIRECTORIES">
-			<item value="C:\Users\hushe\dev\eclipse-jee-2018-12-R-win32-x86_64\gware\Servers"/>
 			<item value=""/>
+			<item value="C:\Users\hushe\dev\eclipse-jee-2018-12-R-win32-x86_64\gware\Servers"/>
 		</list>
 		<list key="WizardProjectsImportPage.STORE_ARCHIVES">
+			<item value="C:\Users\hushe\Desktop\groupware0224.zip"/>
 			<item value="C:\Users\hushe\Desktop\groupware0221.zip"/>
 			<item value="C:\Users\hushe\Desktop\groupware.zip"/>
 		</list>

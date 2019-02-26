@@ -117,10 +117,13 @@ public class ApprovalList_Controller {
 	@RequestMapping(value="/approval/searchById", method=RequestMethod.POST, produces = "application/text; charset=utf8")
 	public String searchById(@RequestParam("member_id") String id) {
 		
+		Member memj = null;
 		//System.out.println(id);
-		
-		Member memj = memService.searchById(Integer.parseInt(id));
-		
+		try {
+		memj = memService.searchById(Integer.parseInt(id));
+		}catch(Exception e) {
+			return "error";
+		}
 			JSONObject jobj = new JSONObject();
 			jobj.put("department_name", memj.getDepartment_name());
 			jobj.put("member_name", memj.getMember_name());

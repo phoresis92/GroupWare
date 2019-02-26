@@ -63,6 +63,24 @@
 		<result column="approval_auth_date3" property="approval_auth_date3" />
 	</resultMap>
 	
+	<resultMap id="payResult" type="dto.ApvPayment_Dto">
+		<result column="pay_id" property="pay_id" />
+		<result column="approval_id" property="approval_id" />
+		<result column="pay_date" property="pay_date" />
+		<result column="pay_title" property="pay_title" />
+		<result column="pay_cash" property="pay_cash" />
+		<result column="pay_bank" property="pay_bank" />
+		<result column="pay_deposit" property="pay_deposit" />
+		<result column="pay_dpowner" property="pay_dpowner" />
+		<result column="pay_comment" property="pay_comment" />
+	</resultMap>
+	
+	<resultMap id="depositResult" type="dto.MemDeposit">
+		<result column="depo_member_id" property="depo_member_id" />
+		<result column="depo_bank_id" property="depo_bank_id" />
+		<result column="depo_number" property="depo_number" />
+	</resultMap>
+	
 	
 	<select id="selectAllCate" resultMap="apvCateResult">
 		SELECT * FROM approval_cate
@@ -73,7 +91,7 @@
 	</select>
 	
 	<insert id="insertApv" parameterType="dto.Approval_Dto">
-		insert into approval values(#{approval_id}, #{approval_cate}, #{approval_member_id}, #{approval_mem1}, #{approval_mem2, jdbcType=VARCHAR}, #{approval_mem3, jdbcType=VARCHAR}, 0, null, null, #{approval_title}, #{approval_content}, #{approval_filepath, jdbcType=VARCHAR}, #{approval_filename, jdbcType=VARCHAR}, #{approval_return, jdbcType=VARCHAR}, sysdate, to_date(#{approval_enddate, jdbcType=DATE}, 'yyyy-mm-dd hh24:mi:ss'), #{approval_cc, jdbcType=VARCHAR}, null, null, null, to_date(#{approval_startdate, jdbcType=DATE}, 'yyyy-mm-dd hh24:mi:ss'))
+		insert into approval values(#{approval_id}, #{approval_cate}, #{approval_member_id}, #{approval_mem1}, #{approval_mem2, jdbcType=VARCHAR}, #{approval_mem3, jdbcType=VARCHAR}, 0, null, null, #{approval_title}, #{approval_content}, #{approval_filepath, jdbcType=VARCHAR}, #{approval_filename, jdbcType=VARCHAR}, #{approval_return, jdbcType=VARCHAR}, sysdate, #{approval_enddate, jdbcType=DATE}, #{approval_cc, jdbcType=VARCHAR}, null, null, null, #{approval_startdate, jdbcType=DATE})
 	</insert>
 	
 	<select id="selectMyAllApv" parameterType="int" resultMap="apvResult">
@@ -97,7 +115,7 @@ and me.member_rank = myrank.rank_id(+)
 and a.approval_cate = c.apv_cate_id(+)
 and a.approval_member_id = me.member_id
 and me.member_department = mydept.department_id(+)
-and (approval_cc = '1_wholeVacat' or approval_cc = '2_halfVacat' or approval_cc is null or approval_cc like 'wantToDel%')
+and (approval_cc = '1_wholeVacat' or approval_cc = '2_halfVacat_AM' or approval_cc = '2_halfVacat_PM' or approval_cc is null or approval_cc like 'wantToDel%')
 and a.approval_member_id = #{member_id} order by approval_indate desc
 	</select>
 	
@@ -151,7 +169,7 @@ and me.member_rank = myrank.rank_id(+)
 and a.approval_cate = c.apv_cate_id(+)
 and a.approval_member_id = me.member_id
 and me.member_department = mydept.department_id(+)
-and (approval_cc = '1_wholeVacat' or approval_cc = '2_halfVacat' or approval_cc is null or approval_cc like 'wantToDel%')
+and (approval_cc = '1_wholeVacat' or approval_cc = '2_halfVacat_AM' or approval_cc = '2_halfVacat_PM' or approval_cc is null or approval_cc like 'wantToDel%')
 and approval_mem1 = #{member_id} and (approval_auth1 = 0 or approval_auth1 is null) order by approval_indate desc
 	</select>
 	<select id="selectNotAuthApv2" parameterType="int" resultMap="apvResult">
@@ -175,7 +193,7 @@ and me.member_rank = myrank.rank_id(+)
 and a.approval_cate = c.apv_cate_id(+)
 and a.approval_member_id = me.member_id
 and me.member_department = mydept.department_id(+)
-and (approval_cc = '1_wholeVacat' or approval_cc = '2_halfVacat' or approval_cc is null or approval_cc like 'wantToDel%')
+and (approval_cc = '1_wholeVacat' or approval_cc = '2_halfVacat_AM' or approval_cc = '2_halfVacat_PM' or approval_cc is null or approval_cc like 'wantToDel%')
 and approval_mem2 = #{member_id} and (approval_auth2 = 0 or approval_auth2 is null) order by approval_indate desc
 	</select>
 	<select id="selectNotAuthApv3" parameterType="int" resultMap="apvResult">
@@ -199,29 +217,64 @@ and me.member_rank = myrank.rank_id(+)
 and a.approval_cate = c.apv_cate_id(+)
 and a.approval_member_id = me.member_id
 and me.member_department = mydept.department_id(+)
-and (approval_cc = '1_wholeVacat' or approval_cc = '2_halfVacat' or approval_cc is null or approval_cc like 'wantToDel%')
+and (approval_cc = '1_wholeVacat' or approval_cc = '2_halfVacat_AM' or approval_cc = '2_halfVacat_PM' or approval_cc is null or approval_cc like 'wantToDel%')
 and approval_mem3 = #{member_id} and (approval_auth3 = 0 or approval_auth3 is null) order by approval_indate desc
 	</select>
 	
 	<update id="updateApv1" parameterType="map">
 		update approval set approval_auth1 = #{what},
-		<if test="why != null">
-		<if test="what == 2">
-			approval_return = #{why},
-			approval_auth2 = 4,
-			approval_auth3 = 4,
-		</if>
-		</if>
+		<choose>
+			<when test="what == 1">
+				<choose>
+					<when test="end == 1">
+					</when>
+					<otherwise>
+						approval_auth2 = 0,
+					</otherwise>
+				</choose>
+			</when>
+			<when test="what == 2">
+				approval_return = #{why},
+				<choose>
+					<when test="end == 1">
+					</when>
+					<when test="end == 2">
+						approval_auth2 = 4,
+					</when>
+					<when test="end == 3">
+						approval_auth2 = 4,
+						approval_auth3 = 4,
+					</when>
+				</choose>
+			</when>
+		</choose>
 		approval_auth_date1 = sysdate where approval_id = #{approval_id}
 	</update>
 	<update id="updateApv2" parameterType="map">
 		update approval set approval_auth2 = #{what},
-		<if test="why != null">
-		<if test="what == 2">
-			approval_return = #{why},
-			approval_auth3 = 4,
-		</if>
-		</if>
+		<choose>
+			<when test="what == 1">
+				<choose>
+					<when test="end == 2">
+					</when>
+					<when test="end == 3">
+						approval_auth3 = 0,
+					</when>
+				</choose>
+			</when>
+			<when test="what == 2">
+				<choose>
+					<when test="end == 2">
+					</when>
+					<when test="end == 3">
+						approval_return = #{why},
+						approval_auth3 = 4,
+					</when>
+				</choose>
+			</when>
+			<when test="what == 3">
+			</when>
+		</choose>
 		approval_auth_date2 = sysdate where approval_id = #{approval_id}
 	</update>
 	<update id="updateApv3" parameterType="map">
@@ -252,7 +305,7 @@ and me.member_rank = myrank.rank_id(+)
 and a.approval_cate = c.apv_cate_id(+)
 and a.approval_member_id = me.member_id
 and me.member_department = mydept.department_id(+)
-and (approval_cc = '1_wholeVacat' or approval_cc = '2_halfVacat' or approval_cc is null or approval_cc like 'wantToDel%')
+and (approval_cc = '1_wholeVacat' or approval_cc = '2_halfVacat_AM' or approval_cc = '2_halfVacat_PM' or approval_cc is null or approval_cc like 'wantToDel%')
 and approval_mem1 = #{member_id} and (approval_auth1 != 0 and approval_auth1 is not null) order by approval_indate desc
 	</select>
 	<select id="selectYesAuthApv2" parameterType="int" resultMap="apvResult">
@@ -276,7 +329,7 @@ and me.member_rank = myrank.rank_id(+)
 and a.approval_cate = c.apv_cate_id(+)
 and a.approval_member_id = me.member_id
 and me.member_department = mydept.department_id(+)
-and (approval_cc = '1_wholeVacat' or approval_cc = '2_halfVacat' or approval_cc is null or approval_cc like 'wantToDel%')
+and (approval_cc = '1_wholeVacat' or approval_cc = '2_halfVacat_AM' or approval_cc = '2_halfVacat_PM' or approval_cc is null or approval_cc like 'wantToDel%')
 and approval_mem2 = #{member_id} and (approval_auth2 != 0 and approval_auth2 is not null) order by approval_indate desc
 	</select>
 	<select id="selectYesAuthApv3" parameterType="int" resultMap="apvResult">
@@ -300,7 +353,7 @@ and me.member_rank = myrank.rank_id(+)
 and a.approval_cate = c.apv_cate_id(+)
 and a.approval_member_id = me.member_id
 and me.member_department = mydept.department_id(+)
-and (approval_cc = '1_wholeVacat' or approval_cc = '2_halfVacat' or approval_cc is null or approval_cc like 'wantToDel%')
+and (approval_cc = '1_wholeVacat' or approval_cc = '2_halfVacat_AM' or approval_cc = '2_halfVacat_PM' or approval_cc is null or approval_cc like 'wantToDel%')
 and approval_mem3 = #{member_id} and (approval_auth3 != 0 and approval_auth3 is not null) order by approval_indate desc
 	</select>
 	
@@ -327,7 +380,8 @@ and a.approval_member_id = me.member_id
 and me.member_department = mydept.department_id(+)
 and approval_cc is not null
 and approval_cc != '1_wholeVacat' 
-and approval_cc != '2_halfVacat'
+and approval_cc != '2_halfVacat_AM'
+and approval_cc != '2_halfVacat_PM'
 and approval_cc not like 'wantToDel%'
 and approval_member_id = #{member_id} order by approval_indate desc
 	</select>
@@ -415,5 +469,20 @@ and approval_cc like 'wantToDel%'
 	<select id="selectMember_vacation" resultType="double">
 		select member_vacation from member where member_id = #{member_id}
 	</select>
+	
+	
+	<insert id="insertApv_pay" parameterType="dto.ApvPayment_Dto">
+		insert into apv_payment values(apv_payment_seq.nextval, #{approval_id}, #{pay_date}, #{pay_title}, #{pay_cash}, #{pay_bank}, #{pay_deposit}, #{pay_dpowner}, #{pay_comment})
+	</insert>
+	
+	<select id="selectAllPayApv" parameterType="int" resultMap="payResult">
+		select * from apv_payment where approval_id = #{approval_id}
+	</select>
+	
+	<select id="selectDeposit" parameterType="int" resultMap="depositResult">
+		select * from member_deposit where depo_member_id = #{approval_id}
+	</select>
+	
+	
 	
 </mapper>

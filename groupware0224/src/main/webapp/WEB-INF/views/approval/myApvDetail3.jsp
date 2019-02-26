@@ -28,12 +28,10 @@ margin: 50px;
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
-  
-  <script src='${pageContext.request.contextPath}/resources/fullcalendar/lib/moment.min.js'></script>
 
 </head>
 <body id="body" class="body">
-${ apvDto}
+
 <div class="container">
 
 
@@ -90,7 +88,7 @@ ${ apvDto}
 		
 		</tr>
 		
-				<tr>
+		<tr>
 		
 		<td>제출</td>
 		<td id="authName1">${ apvDto.apv_auth_name1 }</td>
@@ -148,33 +146,27 @@ ${ apvDto}
 	<th>제출일자</th>
 	<td colspan="3"><fmt:formatDate value="${ apvDto.approval_indate }"  pattern="yyyy-MM-dd HH:mm:ss"/></td>
 	</tr>
-
-	<fmt:parseNumber value="${ apvDto.approval_enddate.time - (1000*60*60*24)}" var="pendtime"></fmt:parseNumber>
-	<jsp:useBean id="dateValue" class="java.util.Date"/>
-	<jsp:setProperty name="dateValue" property="time" value="${pendtime}"/>
-
+	
 	<tr>
-	<th>요청기간</th>
-	<c:choose>
-	
-	<c:when test="${ fn:contains(apvDto.approval_cc, '1_wholeVacat') }">
-	<td colspan="3">[연차]&nbsp;<fmt:formatDate value="${ apvDto.approval_startdate }"  pattern="yyyy-MM-dd"/>&nbsp;~&nbsp;<fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd"/></td>
-	</c:when>
-	<c:when test="${ fn:contains(apvDto.approval_cc, '2_halfVacat_AM') }">
-	<td colspan="3">[반차 AM] &nbsp;<fmt:formatDate value="${ apvDto.approval_startdate }"  pattern="yyyy-MM-dd"/> 09:00&nbsp;~&nbsp;<fmt:formatDate value="${ apvDto.approval_enddate }"  pattern="yyyy-MM-dd"/> 13:00</td>
-	</c:when>
-	<c:when test="${ fn:contains(apvDto.approval_cc, '2_halfVacat_PM') }">
-	<td colspan="3">[반차 PM]&nbsp;<fmt:formatDate value="${ apvDto.approval_startdate }"  pattern="yyyy-MM-dd"/> 14:00&nbsp;~&nbsp;<fmt:formatDate value="${ apvDto.approval_enddate }"  pattern="yyyy-MM-dd"/> 18:00</td>
-	</c:when>
-	
-	</c:choose>
+	<th>결재구분</th>
+	<td colspan="3">${ apvDto.apv_cate_name }</td>
 	</tr>
 	
+	<tr>
+	<th>제출부서</th>
+	<td colspan="3">
+		<c:choose>
+			
+			<c:when test="${ apvDto.department_name == null }">발령대기</c:when>
+			<c:otherwise>${ apvDto.department_name }</c:otherwise>
+				
+		</c:choose>
+	</td>
+	</tr>
 	
 	<tr>
-	<th>제출자</th>
-	<td colspan="3"><c:choose><c:when test="${ apvDto.department_name == null }">발령대기</c:when>
-			<c:otherwise>${ apvDto.department_name }</c:otherwise></c:choose>&nbsp;&nbsp;${ apvDto.member_name }&nbsp;&nbsp;${ apvDto.rank_name }</td>
+	<th>기안담당</th>
+	<td colspan="3">${ apvDto.member_name }&nbsp;&nbsp;${ apvDto.rank_name }</td>
 	</tr>
 	
 	<tr>
@@ -183,11 +175,58 @@ ${ apvDto}
 	</tr>
 	
 	<tr>
-	<td colspan="4">${ apvDto.approval_content }</td>
+	<td colspan="4"></td>
 	</tr>
 	
 	</table>
+	
+	<table border="1">
+	<tr>
+	<th>년월일</th>
+	<th>내용</th>
+	<th>금액</th>
+	<th>지급은행</th>
+	<th>계좌번호</th>
+	<th>예금주</th>
+	<th>비고</th>
+	</tr>
+	
+	<tbody>
+	
+	<c:forEach var="item" items="${ payList }" >
+	
+	<tr>
+	
+	<td><fmt:formatDate value="${ item.pay_date }"  pattern="yyyy-MM-dd"/></td>
+	<td>
+		<c:forEach var="i" begin="2" end="6">
+		<c:if test="${ i == item.pay_title }">${ titleMap[i] }</c:if>
+		</c:forEach>
+	</td>
+	<td num="${ item.pay_cash }" class="payCash">${ item.pay_cash }</td>
+	<td>
+		<c:forEach var="i" begin="2" end="6">
+		<c:if test="${ i == item.pay_bank }">${ bankMap[i] }</c:if>
+		</c:forEach>
+	</td>
+	<td>${ item.pay_deposit }</td>
+	<td>${ item.pay_dpowner }</td>
+	<td>${ item.pay_comment }</td>
+	
+	</tr>
+	
+	</c:forEach>
+	
+	</tbody>
+	</table>
+	
+	<div>총 금액 <span id="totalPay"></span></div>
+	
+	${ apvDto.approval_content }
+	
 	</div>
+	
+	
 	<div>
 	
 	<!-- 파일 다운로드 -->
@@ -222,12 +261,10 @@ ${ apvDto}
 		<p style="color: red;">작성자의 삭제요청에 따른 삭제 대기 결재입니다.</p>
 		<p id="delReason"></p>
 	</c:when>
-	<c:when test="${ fn:contains(apvDto.approval_cc, 'Vacat') }">
+	<c:when test="${ not empty apvDto.approval_cc }">
+	<th>임시저장 태그</th>
+	<td>${ apvDto.approval_cc }</td>
 	</c:when>
-	<c:otherwise>
-		<th>임시저장 태그</th>
-		<td>${ apvDto.approval_cc }</td>
-	</c:otherwise>
 	</c:choose>
 	</table>
 	
@@ -255,6 +292,7 @@ ${ apvDto}
 	</div>
 </c:when>
 
+
 <%-- 삭제 요청 버튼 --%>
 <c:when test="${ apvDto.approval_member_id == sessionScope.member.member_id }">
 	<div class="float-right">
@@ -263,6 +301,12 @@ ${ apvDto}
 </c:when>
 </c:choose>
 
+
+<c:if test="${ apvDto.approval_member_id == sessionScope.member.member_id && ( apvDto.approval_auth1 == 2 || apvDto.approval_auth2 == 2 || apvDto.approval_auth3 == 2 ) }">
+<div class="float-right">
+	<button onclick="reWrite()">재상신</button>
+</div>
+</c:if>
 
 <c:if test="${ not empty auth }">
 	<div class="float-right" id="authDiv">
@@ -343,6 +387,26 @@ $(document).ready(function(){
 	}
 })
 
+ 
+
+var arr = $('.payCash');
+console.log(arr);
+var result = 0;
+for(var e = 0 ; e < arr.length ; e++){
+	console.log(e);
+	console.log(arr[e]);
+	console.log(arr[e].innerHTML);
+	result += parseInt(arr[e].innerHTML);
+}
+
+console.log(result);
+
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+$('#totalPay').text(numberWithCommas(result));
+
 var where;
 if(${ apvDto.approval_mem1 == sessionScope.member.member_id }){
 	where = 1;
@@ -419,6 +483,7 @@ function reWrite(){
 	
 	$('<form></form>').attr('id','reWriteGo').attr('action','${ pageContext.request.contextPath }/approval/reWrite').attr('method','POST').appendTo('#body');
 	$('<input>').attr('type', 'hidden').attr('value','${ apvDto.approval_id }').attr('name','approval_id').appendTo('#reWriteGo');
+	$('<input>').attr('type', 'hidden').attr('value','${ apvDto.approval_cate }').attr('name','reApproval').appendTo('#reWriteGo');
 	$('#reWriteGo').submit();
 	
 }

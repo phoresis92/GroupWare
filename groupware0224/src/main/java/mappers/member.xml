@@ -103,19 +103,19 @@
 	</select>	
 	
 	<select id="selectAllMemJoin" resultMap="memberResult">
-		select * from member m , department d, rank k where m.member_department = d.department_id(+) and m.member_rank = k.rank_id(+)
+		select * from member m , department d, rank k where m.member_department = d.department_id(+) and m.member_rank = k.rank_id(+) and member_id != 99999
 	</select>
 
 	<select id="selectByDeptId" parameterType="int" resultMap="memberResult">
-		select * from member m , department d, rank k where m.member_department = d.department_id(+) and m.member_rank = k.rank_id(+) and member_department = #{department_id}
+		select * from member m , department d, rank k where m.member_department = d.department_id(+) and m.member_rank = k.rank_id(+) and member_department = #{department_id} and member_id != 99999
 	</select>
 
 	<select id="selectByName" parameterType="String" resultMap="memberResult">
-		select * from member m , department d, rank k where m.member_department = d.department_id(+) and m.member_rank = k.rank_id(+) and member_name like #{member_name}
+		select * from member m , department d, rank k where m.member_department = d.department_id(+) and m.member_rank = k.rank_id(+) and member_name like #{member_name} and member_id != 99999 
 	</select>
 
 	<select id="selectById" parameterType="int" resultMap="memberResult">
-		select * from member m , department d, rank k where m.member_department = d.department_id(+) and m.member_rank = k.rank_id(+) and member_id = #{member_id}
+		select * from member m , department d, rank k where m.member_department = d.department_id(+) and m.member_rank = k.rank_id(+) and member_id = #{member_id} and member_id != 99999
 	</select>
 
 </mapper>

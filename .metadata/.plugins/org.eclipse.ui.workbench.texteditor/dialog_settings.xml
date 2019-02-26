@@ -2,27 +2,27 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="pid" key="selection"/>
+		<item value="leftVacat" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="leftVacat"/>
+			<item value="/apv_Vacat"/>
+			<item value="authId1"/>
+			<item value="Vacat"/>
+			<item value="fn"/>
+			<item value="notAuth"/>
+			<item value="add"/>
+			<item value="addAll"/>
+			<item value="searchby"/>
+			<item value="search"/>
+			<item value="sear"/>
+			<item value="not Auth"/>
+			<item value="deleteApv"/>
+			<item value="temp"/>
 			<item value="pid"/>
-			<item value="calId"/>
-			<item value="cate_num"/>
-			<item value="selfCate"/>
-			<item value="showInput"/>
-			<item value="showInput()"/>
-			<item value="param"/>
-			<item value="System"/>
-			<item value="Simple"/>
-			<item value="startdate"/>
-			<item value="start"/>
-			<item value="YY"/>
-			<item value="format"/>
-			<item value="JSON"/>
-			<item value="parse"/>
 		</list>
 		<list key="replacehistory">
 		</list>
