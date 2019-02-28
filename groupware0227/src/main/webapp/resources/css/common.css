@@ -1,0 +1,22 @@
+body { 
+	background: url('../img/background.jpg') no-repeat 50% 50% fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	 background-size: cover;
+}
+
+.joinbox{
+	margin-top:100px;
+	margin-bottom:100px;
+}
+.loginbox{
+	margin-top:250px;
+	margin-bottom:250px;
+}
+
+.text_border{
+    text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
+}
+
+a.nav-link {color: #000 !important; text-shadow: -1px 0 #fff, 0 1px #fff, 1px 0 #fff, 0 -1px #fff;}

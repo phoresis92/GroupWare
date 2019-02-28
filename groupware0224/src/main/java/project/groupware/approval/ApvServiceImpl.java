@@ -170,4 +170,10 @@ public class ApvServiceImpl implements ApvService {
 		return dao.selectDeposit(approval_id);
 	}
 
+	@Override
+	public int dropApv_pay(ApvPayment_Dto pay) {
+		dao = sqlSession.getMapper(ApvDao.class);
+		return dao.deleteApv_pay(pay);
+	}
+
 }

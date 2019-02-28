@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -251,6 +253,7 @@ public class Approval_Controller {
 		if(dto.getApproval_cate() == 1) {
 			return "/approval/myApvDetail1";
 		}else if(dto.getApproval_cate() == 2) {
+			
 			return "/approval/myApvDetail2";
 		}else if(dto.getApproval_cate() == 3) {
 			
@@ -536,7 +539,10 @@ public class Approval_Controller {
 	
 	
 	@RequestMapping(value="/approval/reWrite", method=RequestMethod.POST)
-	public String reWrite(@RequestParam(value="approval_id") int approval_id, @RequestParam(value="reApproval") int reApproval, Model model) {
+	public String reWrite(@RequestParam(value="approval_id") int approval_id, Model model, HttpServletRequest req) {
+		
+		HttpSession session = req.getSession();
+		Member m = (Member) session.getAttribute("member");
 		
 		Approval_Dto apv =  apvService.getApvDetail(approval_id);
 		
@@ -545,11 +551,59 @@ public class Approval_Controller {
 		System.out.println("this is reWrite"+apv);
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 d일");
+		SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy");
 		
 		model.addAttribute("now",sdf.format(new Date()));
 		
-		System.out.println(reApproval);
+		if(apv.getApproval_auth1() == 2 || apv.getApproval_auth2() == 2 || apv.getApproval_auth3() == 2) {
+			model.addAttribute("isReturn", 1); //재상신의 경우 저장 불가
+		}else {
+			model.addAttribute("isReturn", 0);
+		}
+		
+		if(apv.getApproval_cate() == 1) {
 			return "/approval/writeForm1";
+		}else if(apv.getApproval_cate() == 2) {
+			
+			
+			Date en = apv.getApproval_enddate();
+			long te = en.getTime() - ( 24*60*60*1000);
+			en = new Date(te);
+			
+			model.addAttribute("stdate", sdf2.format(apv.getApproval_startdate()));
+			model.addAttribute("endate", sdf2.format(en));
+			
+			System.out.println(sdf2.format(apv.getApproval_startdate()));
+			System.out.println(sdf2.format(apv.getApproval_enddate()));
+			
+			
+			return "/approval/writeForm2";
+		}else if(apv.getApproval_cate() == 3) {
+			
+			MemDeposit depo = apvService.getDeposit(m.getMember_id());
+			model.addAttribute("deposit", depo);
+			
+			ArrayList<ApvPayment_Dto> payList =  apvService.getAllPayApv(approval_id);
+			
+			
+			JSONArray jArr = new JSONArray();
+			for(ApvPayment_Dto pay : payList) {
+				JSONObject jObj = new JSONObject();
+				jObj.put("pay_date", sdf2.format(pay.getPay_date()));
+				jObj.put("pay_title", pay.getPay_title());
+				jObj.put("pay_cash", pay.getPay_cash());
+				jObj.put("pay_bank", pay.getPay_bank());
+				jObj.put("pay_deposit", pay.getPay_deposit());
+				jObj.put("pay_dpowner", pay.getPay_dpowner());
+				jObj.put("pay_comment", pay.getPay_comment());
+				jArr.add(jObj);
+			}
+			model.addAttribute("payList", jArr);
+			
+			return "/approval/writeForm3";
+		}
+		
+		return "/approval";
 	}
 	
 	@RequestMapping(value="/approval/deleteTemp", method=RequestMethod.POST)
@@ -675,7 +729,10 @@ public class Approval_Controller {
 		
 		System.out.println(dto);
 		
-		int createResult = apvService.createApv(dto);
+		int createResult = 0;
+		if(ck) {
+		createResult = apvService.createApv(dto);
+		}
 		
 		System.out.println("insert result : "+ createResult);
 		
@@ -683,8 +740,11 @@ public class Approval_Controller {
 		for(int i = 0 ; i < maxCount ; i++) {
 			ApvPayment_Dto pay = new ApvPayment_Dto();
 			
+			if(ck) {
 			pay.setApproval_id(seq);
-			
+			}else {
+				pay.setApproval_id(dto.getApproval_id());
+			}
 			pay.setPay_date(new Date(req.getParameter("pay_date"+i)));
 			pay.setPay_title(Integer.parseInt(req.getParameter("pay_title"+i).substring(1)));
 			pay.setPay_cash(Integer.parseInt(req.getParameter("pay_cash"+i)));
@@ -693,6 +753,11 @@ public class Approval_Controller {
 			pay.setPay_dpowner(req.getParameter("pay_dpowner"+i));
 			pay.setPay_comment(req.getParameter("pay_comment"+i));
 			
+			int modiResult = 0;
+			if(i == 0) {
+				modiResult = apvService.dropApv_pay(pay);
+				System.out.println("pay modify : "+ modiResult);
+			}
 			createResult = apvService.createApv_pay(pay);
 			
 			System.out.println("pay insert : "+ createResult);
@@ -704,11 +769,6 @@ public class Approval_Controller {
 		System.out.println(list);
 		
 
-		
-		
-		
-		
-		
 		
 		return "/member/main";
 	}; // payment_approval end

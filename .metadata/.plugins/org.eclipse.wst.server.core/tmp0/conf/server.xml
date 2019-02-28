@@ -43,7 +43,7 @@
              Note: The pattern used is equivalent to using pattern="common" -->
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs" pattern="%h %l %u %t &quot;%r&quot; %s %b" prefix="localhost_access_log" suffix=".txt"/>
 
-      <Context docBase="C:\Users\hushe\dev\eclipse-jee-2018-12-R-win32-x86_64\gware\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\ROOT" path="" reloadable="false"/><Context docBase="C:\Users\hushe\dev\eclipse-jee-2018-12-R-win32-x86_64\gware\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\groupware0224" path="/groupware0224" reloadable="true" source="org.eclipse.jst.jee.server:groupware0224"/></Host>
+      <Context docBase="C:\Users\hushe\dev\eclipse-jee-2018-12-R-win32-x86_64\gware\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\ROOT" path="" reloadable="false"/><Context docBase="C:\Users\hushe\dev\eclipse-jee-2018-12-R-win32-x86_64\gware\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\groupware0227" path="/groupware0227" reloadable="true" source="org.eclipse.jst.jee.server:groupware0227"/></Host>
     </Engine>
   </Service>
 </Server>

@@ -483,6 +483,8 @@ and approval_cc like 'wantToDel%'
 		select * from member_deposit where depo_member_id = #{approval_id}
 	</select>
 	
-	
+	<delete id="deleteApv_pay" parameterType="dto.ApvPayment_Dto">
+		delete apv_payment where approval_id = #{approval_id}
+	</delete>
 	
 </mapper>

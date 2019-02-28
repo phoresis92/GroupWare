@@ -61,4 +61,6 @@ public interface ApvDao {
 	
 	public MemDeposit selectDeposit(int approval_id);
 	
+	public int deleteApv_pay(ApvPayment_Dto pay);
+	
 }

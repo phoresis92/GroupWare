@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.groupware.commuting.Dao"> <!-- Dao implements한 클래스 이름지정 -->
+
+	<resultMap id="commutingResult" type="project.groupware.commuting.Commuting"> <!-- id:검색된결과를 반환, type:Bean/DTO/VO -->
+		<result column="commuting_id" property="commuting_id" /> <!-- column:컬럼이름, property:멤버변수 -->
+		<result column="commuting_member_id" property="commuting_member_id" />
+		<result column="commuting_arrive" property="commuting_arrive" />
+		<result column="commuting_leave" property="commuting_leave" />
+	</resultMap>
+
+	<insert id="insert" parameterType="project.groupware.commuting.Commuting"> <!-- id:interface method 이름, parameterType:객체 -->
+		INSERT INTO commuting(commuting_id, commuting_member_id, commuting_arrive)
+		 VALUES(seq_commuting_id.nextval, #{commuting_member_id}, sysdate)
+	</insert>
+	
+	<select id="selectAll" resultMap="commutingResult">
+		SELECT * FROM commuting ORDER BY rank_id, commuting_arrive DESC
+	</select>
+	
+	<select id="selectValue" parameterType="map" resultMap="commutingResult">
+	select commuting_id, commuting_member_id, commuting_arrive, commuting_leave from commuting
+where ((commuting_arrive between #{date1} and #{date2}
+and commuting_arrive != #{date2})
+or(commuting_leave between #{date1} and #{date2}
+and commuting_leave != #{date2}))
+and commuting_member_id = #{member_id}
+	</select>
+	
+	
+	<update id="updateArrive" parameterType="project.groupware.commuting.Commuting">
+		UPDATE commuting SET commuting_arrive = sysdate WHERE commuting_id = #{commuting_id}
+	</update>
+		
+	<update id="updateLeave" parameterType="project.groupware.commuting.Commuting">
+		UPDATE commuting SET commuting_leave = sysdate WHERE commuting_id = #{commuting_id}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		DELETE commuting WHERE commuting_id = #{commuting_id}
+	</delete>
+
+</mapper>
+

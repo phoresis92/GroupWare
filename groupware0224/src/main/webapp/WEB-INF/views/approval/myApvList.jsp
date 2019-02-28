@@ -31,10 +31,23 @@ function detail(j){
 <body id="body">
 
 
-	<button>일반결제문서</button>
-	<button>지출결제문서</button>
-	<button>근태/휴가결제문서</button>
+	<input type="checkbox" value="1" checked="checked"> 일반결제문서
+	<input type="checkbox" value="2" checked="checked"> 휴가결제문서 
+	<input type="checkbox" value="3" checked="checked"> 지출결제문서 <br>
+	<input type="radio" name="length" value="" checked="checked"> 전체
+	<input type="radio" name="length" value="" > 당일
+	<input type="radio" name="length" value="" > 1주일
+	<input type="radio" name="length" value="" > 1개월
+	<input type="radio" name="length" value="" > 3개월
+	<input type="radio" name="length" value="" > 6개월 <br>
 	
+	<select>
+		<option>제출자</option>
+		<option>제목</option>
+		<option>문서번호</option>
+	</select>
+	<input type="text" placeholder="검색어 입력">
+	<button>검색</button> 
 	<table>
 	
 	<tr>
@@ -43,7 +56,7 @@ function detail(j){
 	<th>제목</th>
 	<th>문서분류</th>
 	<th>상태</th>
-	<th>기안일</th>
+	<th>제출일</th>
 	</tr>
 	
 	<c:if test="${ pageInfo.totalCount != 0 }">

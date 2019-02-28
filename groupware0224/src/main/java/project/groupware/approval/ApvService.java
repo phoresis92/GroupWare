@@ -57,4 +57,6 @@ public interface ApvService {
 	
 	public MemDeposit getDeposit(int approval_id);
 	
+	public int dropApv_pay(ApvPayment_Dto pay);
+	
 }
