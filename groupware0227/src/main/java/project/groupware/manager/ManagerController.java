@@ -413,15 +413,31 @@ public class ManagerController {
 	}
 	
 	@RequestMapping("/manager/commuting")
-	public ModelAndView commutingForManager (@RequestParam(value="year", required=false) String yearS, @RequestParam(value="month", required=false) String monthS) {
+	public ModelAndView commutingForManager (@RequestParam(value="year", required=false) String yearS, @RequestParam(value="month", required=false) String monthS, @RequestParam(value="day", required=false) String dayS, @RequestParam(value="dPick", required=false) String dPick) {
 		ModelAndView mav = new ModelAndView("/manager/commutingForManager");
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		
-		
 		mav.addObject("now",sdf.format(new Date()));
 		
-		return getCalendar(mav, yearS, monthS);
+		
+		 ArrayList<Department> deptList = deptService.getAll(); //department
+			mav.addObject("deptList",deptList);
+			
+			ArrayList<Member> memList = memService.getAllMemJoin();
+			mav.addObject("memList",memList);
+			
+			ArrayList<Rank> rankList = rankService.getAll();
+			mav.addObject("rankList", rankList);
+		
+			mav = getCalendar(mav, yearS, monthS);
+			
+			if(dayS != null) {
+				mav.addObject("day",Integer.parseInt(dayS));
+				mav.addObject("month",Integer.parseInt(monthS));
+				mav.addObject("dPick",dPick);
+			}
+		
+		return mav;
 	}
 	
 	public ModelAndView getCalendar(ModelAndView mav, String yearS, String monthS) {
@@ -474,6 +490,7 @@ public class ManagerController {
 		mav.addObject("calendar", list);
 		mav.addObject("year", year);
 		mav.addObject("month", month+1);
+		mav.addObject("lastDay",lastDay);
 		
 		return mav;
 	}

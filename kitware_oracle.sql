@@ -284,8 +284,11 @@ where calendar_id = 135
 create table commuting(
 commuting_id number primary key,
 commuting_member_id number(20) not null,
-commuting_arrive date default sysdate,
-commuting_leave date default sysdate,
+commuting_arrive date default null,
+commuting_leave date default null,
+commuting_comment varchar2(500),
+commuting_status varchar2(100),
+commuting_status_date date default null,
 constraint commuting_member_id_fk foreign key (commuting_member_id)
 references member(member_id) on delete cascade
 );

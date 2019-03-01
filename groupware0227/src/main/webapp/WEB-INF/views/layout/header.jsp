@@ -6,8 +6,6 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script type="text/javascript">
-setInterval('email()', 60000)
-setInterval('logout()', 1000)
 
 function email(){
 	if($("#header_member_id").val() == "") {

@@ -1,6 +1,7 @@
 package project.groupware.commuting;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import javax.annotation.Resource;
@@ -15,10 +16,17 @@ public class ServiceImpl implements Service {
 	private SqlSession sqlSession; // mybatis에서 사용
 	private Dao dao;
 	
+	
 	@Override
-	public void addCommuting(Commuting commuting) {
+	public Commuting checkExist(String member_id) {
 		dao = sqlSession.getMapper(Dao.class);
-		dao.insert(commuting);
+		return dao.selectExist(member_id);
+	}
+	
+	@Override
+	public int addCommuting(HashMap<String, Object> map) {
+		dao = sqlSession.getMapper(Dao.class);
+		return dao.insertCommuting(map);
 	}
 
 	@Override
@@ -35,15 +43,15 @@ public class ServiceImpl implements Service {
 	}
 
 	@Override
-	public void editArrive(Commuting commuting) {
+	public int editArrive(int commuting_id) {
 		dao = sqlSession.getMapper(Dao.class);
-		dao.updateArrive(commuting);
+		return dao.updateArrive(commuting_id);
 	}
 
 	@Override
-	public void editLeave(Commuting commuting) {
+	public int editLeave(int commuting_id) {
 		dao = sqlSession.getMapper(Dao.class);
-		dao.updateLeave(commuting);
+		return dao.updateLeave(commuting_id);
 	}
 
 	@Override
@@ -51,5 +59,33 @@ public class ServiceImpl implements Service {
 		dao = sqlSession.getMapper(Dao.class);
 		dao.delete(commuting_id);
 	}
+
+	@Override
+	public int getSeqComm() {
+		dao = sqlSession.getMapper(Dao.class);
+		return dao.selectSeqComm();
+	}
+
+	@Override
+	public Commuting getByCommId(String Commuting_id) {
+		dao = sqlSession.getMapper(Dao.class);
+		return dao.selectByCommId(Commuting_id);
+	}
+
+	@Override
+	public int editComment(HashMap<String, Object> map) {
+		dao = sqlSession.getMapper(Dao.class);
+		return dao.updateComment(map);
+	}
+
+	@Override
+	public int addVacatToComm(HashMap<String, Object> map) {
+		dao = sqlSession.getMapper(Dao.class);
+		return dao.insertVacatToComm(map);
+	}
+
+
+
+
 
 }

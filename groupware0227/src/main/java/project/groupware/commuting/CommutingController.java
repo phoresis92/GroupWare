@@ -28,15 +28,26 @@ public class CommutingController {
 	private Service commuting_service;
 	
 	@RequestMapping("/commuting/commuting")
-	public ModelAndView a (@RequestParam(value="year", required=false) String yearS, @RequestParam(value="month", required=false) String monthS) {
+	public ModelAndView a (@RequestParam(value="year", required=false) String yearS, @RequestParam(value="month", required=false) String monthS, @RequestParam(value="day", required=false) String dayS, @RequestParam(value="dPick", required=false) String dPick) {
 		ModelAndView mav = new ModelAndView("/commuting/commuting");
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("d");
 		
 		
 		mav.addObject("now",sdf.format(new Date()));
+
 		
-		return getCalendar(mav, yearS, monthS);
+		mav = getCalendar(mav, yearS, monthS);
+
+		if(dayS != null) {
+			mav.addObject("day",Integer.parseInt(dayS));
+			mav.addObject("month",Integer.parseInt(monthS));
+			mav.addObject("dPick",dPick);
+		}
+		
+		
+		
+		return mav;
 	}
 	
 	@RequestMapping("/commuting/current_time")
@@ -49,53 +60,106 @@ public class CommutingController {
 		return mav;
 	}
 	
-	@RequestMapping("/commuting/arrive")
-	public ModelAndView arrive (Commuting commuting) {
-		ModelAndView mav = new ModelAndView("json/singleValueString");
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Calendar cal = Calendar.getInstance();
-		map.put("comm", commuting);
-		map.put("date", sdf.format(cal.getTime()));
-		ArrayList<Commuting> list = commuting_service.getValue(map);
-		if (list.size() == 0) {
-			commuting_service.addCommuting(commuting);
-			mav.addObject("value", "출근완료");
-		} else {
-			mav.addObject("value", "이미 출근 했습니다.");
+	@ResponseBody
+	@RequestMapping(value="/commuting/arrive", method=RequestMethod.POST, produces = "application/text; charset=utf8")
+	public String arrive (HttpServletRequest req) {
+		
+		HttpSession session = req.getSession();
+		
+		int member_id = ((Member) session.getAttribute("member")).getMember_id();
+		
+		
+		Commuting comm = commuting_service.checkExist(member_id+"");
+		System.out.println("comm result : "+comm);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		
+		if(comm == null) {
+			int seq = commuting_service.getSeqComm();
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("member_id", member_id);
+			map.put("seq", seq);
+			System.out.println("add comm result : "+commuting_service.addCommuting(map));
+			
+			Commuting resultComm = commuting_service.getByCommId(seq+"");
+			
+			JSONObject obj = new JSONObject();
+			obj.put("commuting_id", resultComm.getCommuting_id());
+			obj.put("commuting_member_id", resultComm.getCommuting_member_id());
+			obj.put("commuting_arrive", sdf.format(resultComm.getCommuting_arrive()));
+			try {
+				obj.put("commuting_leave", sdf.format(resultComm.getCommuting_leave()));
+			} catch (Exception e) {
+				obj.put("commuting_leave", resultComm.getCommuting_leave());
+			}
+			obj.put("commuting_status", resultComm.getCommuting_status());
+			
+			return obj.toJSONString();
+			
+		}else if(comm.getCommuting_arrive() == null){
+			System.out.println("editArrive : "+commuting_service.editArrive(comm.getCommuting_id()));
+			
+			Commuting resultComm = commuting_service.getByCommId(comm.getCommuting_id()+"");
+			
+			JSONObject obj = new JSONObject();
+			obj.put("commuting_id", resultComm.getCommuting_id());
+			obj.put("commuting_member_id", resultComm.getCommuting_member_id());
+			obj.put("commuting_arrive", sdf.format(resultComm.getCommuting_arrive()));
+			try {
+				obj.put("commuting_leave", sdf.format(resultComm.getCommuting_leave()));
+			} catch (Exception e) {
+				obj.put("commuting_leave", resultComm.getCommuting_leave());
+			}
+			obj.put("commuting_status", resultComm.getCommuting_status());
+			
+			return obj.toJSONString();
+			
+		}else {
+			return "이미 출근처리 되었습니다.";
 		}
-		return mav;		
+		
 	}
 	
-	@RequestMapping("/commuting/leave")
-	public ModelAndView leave (HttpServletRequest req, Commuting commuting) {
-		ModelAndView mav = new ModelAndView("json/singleValueString");
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Calendar cal = Calendar.getInstance();
-		map.put("comm", commuting);
-		map.put("date", sdf.format(cal.getTime()));
-		ArrayList<Commuting> list = commuting_service.getValue(map);
-		if (list.size() == 0) {
-			mav.addObject("value", "아직 출근하지 않았습니다.");
-		} else {
-			map.put("leave", true);
-			list = commuting_service.getValue(map);
-			if (list.size() == 0) {
-				mav.addObject("value", "이미 퇴근 했습니다.");
-			} else {
-				commuting_service.editLeave(list.get(0));
-				mav.addObject("value", "퇴근완료");				
-			}
+	@ResponseBody
+	@RequestMapping(value="/commuting/leave", method=RequestMethod.POST, produces = "application/text; charset=utf8")
+	public String leave (HttpServletRequest req) {
+		
+		HttpSession session = req.getSession();
+		
+		int member_id = ((Member) session.getAttribute("member")).getMember_id();
+		
+		
+		Commuting comm = commuting_service.checkExist(member_id+"");
+		System.out.println("comm result : "+comm);
+		
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		
+		if(comm != null && comm.getCommuting_arrive() != null) {
+			
+			System.out.println("editLeave : "+commuting_service.editLeave(comm.getCommuting_id()));
+			
+			Commuting resultComm = commuting_service.getByCommId(comm.getCommuting_id()+"");
+			
+			JSONObject obj = new JSONObject();
+			obj.put("commuting_id", resultComm.getCommuting_id());
+			obj.put("commuting_member_id", resultComm.getCommuting_member_id());
+			obj.put("commuting_arrive", sdf.format(resultComm.getCommuting_arrive()));
+			obj.put("commuting_leave", sdf.format(resultComm.getCommuting_leave()));
+			obj.put("commuting_status", resultComm.getCommuting_status());
+			
+			return obj.toJSONString();
+			
+		}else {
+			return "출근처리 먼저 해주세요.";
 		}
-		return mav;
+		
 	}
 	
 	@ResponseBody
 	@RequestMapping(value="/commuting/view", method=RequestMethod.POST, produces = "application/text; charset=utf8")
-	public String view (@RequestParam(value="year") int year, @RequestParam(value="month") int month, HttpServletRequest req) {
+	public String view (@RequestParam(value="year") int year, @RequestParam(value="month") int month, @RequestParam(value="member_id", required=false) String member_id,  HttpServletRequest req) {
 
-		
 		System.out.println("year"+year);
 		System.out.println("month"+month);
 		HttpSession session = req.getSession();
@@ -109,21 +173,23 @@ public class CommutingController {
 			date2 = (year+1) + "-01-01";
 		}
 		
-		System.out.println("date1"+date1);
-		System.out.println("date2"+date2);
 		
-		
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!Member_id : "+member_id);
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("member_id",m.getMember_id());
+		if(member_id != null) {
+			map.put("member_id",member_id);
+		}else {
+			map.put("member_id",m.getMember_id());
+		}
 		map.put("date1",date1);
 		map.put("date2",date2);
 		
-		System.out.println("member_id"+m.getMember_id());
+		System.out.println(map.get("member_id"));
 		
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("ddHH:mm:ss");
 		ArrayList<Commuting> list = commuting_service.getValue(map);
-		
+		System.out.println(list);
 		JSONArray arr = new JSONArray();
 		for(Commuting comm : list) {
 			JSONObject obj = new JSONObject();
@@ -139,12 +205,20 @@ public class CommutingController {
 			} catch (Exception e) {
 				obj.put("commuting_leave", null);
 			}
+			obj.put("commuting_comment", comm.getCommuting_comment());
+			obj.put("commuting_status", comm.getCommuting_status());
+			try {
+				obj.put("commuting_status_date", sdf.format(comm.getCommuting_status_date()));
+			}catch(Exception e) {
+				obj.put("commuting_status_date", null);
+			}
 			arr.add(obj);
 			System.out.println(obj);
 		}
 		System.out.println(arr);
 		return arr.toJSONString();
 	}
+	
 	
 	public ModelAndView getCalendar(ModelAndView mav, String yearS, String monthS) {
 
@@ -163,9 +237,6 @@ public class CommutingController {
 			
 			month = Integer.parseInt(monthS);
 			month = month%12;
-			if(month < 0) {
-				
-			}
 		}catch(Exception e) {
 			month = cal.get(Calendar.MONTH);
 		}
@@ -200,4 +271,21 @@ public class CommutingController {
 		return mav;
 	}
 
+	
+	@ResponseBody
+	@RequestMapping(value="/commuting/updateComment", method=RequestMethod.POST, produces = "application/text; charset=utf8")
+	public String updateComment (@RequestParam(value="commuting_id") int commuting_id, @RequestParam(value="commuting_comment") String commuting_comment) {
+
+		System.out.println("commuting_id"+commuting_id);
+		System.out.println("commuting_comment"+commuting_comment);
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("commuting_id", commuting_id);
+		map.put("commuting_comment", commuting_comment);
+
+		int result = commuting_service.editComment(map);
+
+		return result+"";
+	}
+	
 }

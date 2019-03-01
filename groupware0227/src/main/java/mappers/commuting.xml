@@ -11,26 +11,39 @@
 		<result column="commuting_leave" property="commuting_leave" />
 	</resultMap>
 
-	<insert id="insert" parameterType="project.groupware.commuting.Commuting"> <!-- id:interface method 이름, parameterType:객체 -->
-		INSERT INTO commuting(commuting_id, commuting_member_id, commuting_arrive)
-		 VALUES(seq_commuting_id.nextval, #{commuting_member_id}, sysdate)
+
+
+	<select id="selectSeqComm" resultType="int">
+		select seq_commuting_id.nextval from dual
+	</select>
+
+	<select id="selectExist" parameterType="String" resultMap="commutingResult">
+select commuting_id, commuting_member_id, commuting_arrive, commuting_leave, commuting_status, commuting_status_date from commuting 
+where commuting_member_id = #{member_id}
+and (to_char(commuting_arrive, 'YYYY-MM-DD') = to_char(sysdate, 'YYYY-MM-DD') or to_char(commuting_status_date, 'YYYY-MM-DD') = to_char(sysdate, 'YYYY-MM-DD') )
+	</select>
+
+	<insert id="insertCommuting" parameterType="map"> <!-- id:interface method 이름, parameterType:객체 -->
+		INSERT INTO commuting(commuting_id, commuting_member_id, commuting_arrive, commuting_status_date)
+		 VALUES(#{seq}, #{member_id}, sysdate, sysdate)
 	</insert>
-	
-	<select id="selectAll" resultMap="commutingResult">
-		SELECT * FROM commuting ORDER BY rank_id, commuting_arrive DESC
+
+	<select id="selectByCommId" parameterType="String" resultMap="commutingResult">
+		select commuting_id, commuting_member_id, commuting_arrive, commuting_leave, commuting_status_date, commuting_status from commuting 
+		where commuting_id = #{commuting_id}
 	</select>
 	
 	<select id="selectValue" parameterType="map" resultMap="commutingResult">
-	select commuting_id, commuting_member_id, commuting_arrive, commuting_leave from commuting
+	select commuting_id, commuting_member_id, commuting_arrive, commuting_leave, commuting_comment, commuting_status, commuting_status_date from commuting
 where ((commuting_arrive between #{date1} and #{date2}
 and commuting_arrive != #{date2})
-or(commuting_leave between #{date1} and #{date2}
-and commuting_leave != #{date2}))
+or(commuting_status_date between #{date1} and #{date2}
+and commuting_status_date != #{date2}))
 and commuting_member_id = #{member_id}
 	</select>
 	
 	
-	<update id="updateArrive" parameterType="project.groupware.commuting.Commuting">
+	<update id="updateArrive" parameterType="int">
 		UPDATE commuting SET commuting_arrive = sysdate WHERE commuting_id = #{commuting_id}
 	</update>
 		
@@ -41,6 +54,15 @@ and commuting_member_id = #{member_id}
 	<delete id="delete" parameterType="int">
 		DELETE commuting WHERE commuting_id = #{commuting_id}
 	</delete>
+
+	<update id="updateComment" parameterType="map">
+		update commuting set commuting_comment = #{commuting_comment} where commuting_id = #{commuting_id}
+	</update>
+	
+	<insert id="insertVacatToComm" parameterType="map">
+		insert into commuting (commuting_id, commuting_member_id, commuting_comment, commuting_status, commuting_status_date)
+		values(seq_commuting_id.nextval, #{commuting_member_id}, #{commuting_comment}, #{commuting_status}, #{commuting_status_date})
+	</insert>
 
 </mapper>
 

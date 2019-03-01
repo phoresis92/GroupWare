@@ -16,7 +16,37 @@
 	background-color: #fdfdfd;
 }
 </style>
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  
+  <!-- summernote -->
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
+
 <script type="text/javascript">
+
+$( function() {
+    $( "#halfPick" ).datepicker({
+    	defaultDate: new Date(),
+        changeMonth: true,
+        changeYear: true,
+    	beforeShow: function (textbox, instance) {
+		       var txtBoxOffset = $(this).offset();
+		       var top = txtBoxOffset.top;
+		       var left = txtBoxOffset.left;
+		       var textBoxWidth = $(this).outerWidth();
+		               setTimeout(function () {
+		                   instance.dpDiv.css({
+		                       top: top, //you can adjust this value accordingly  
+		                       left: left//show at the end of textBox
+		               });
+		           }, 0);
+
+		   }
+    });
+  } );
+
 $(function(){
 	$(".board").hover(function(){
 		$(this).css("background", "#dddddd");	
@@ -59,34 +89,95 @@ function time() {
 }
 $(function(){
 	$("#arrive").click(function(){
-		var commuting_member_id = $("#commuting_member_id").val();
-		var param = "commuting_member_id="+commuting_member_id;
 		$.ajax({
 			type:"POST",
-			url:"../commuting/arrive",
-			data:param,
+			url:"${pageContext.request.contextPath}/commuting/arrive",
 			success:function(data){
-				var obj = eval('('+data+')');			
-				alert(obj.value);				
-			}
+				console.log(data);
+				try{
+					var json = eval('('+data+')');			
+					console.log(json)
+					$('#row_${ now }').val(json.commuting_id);
+					$('#arrive_${ now }').text(json.commuting_arrive);
+					$('#stat_${ now }').text('근무중');
+					alert('${sessionScope.member.member_name}님 '+json.commuting_arrive+' 출근처리 하셨습니다.');
+					
+					var arrive = new Date("2019-02-01 "+json.commuting_arrive);
+					var ontime = new Date("2019-02-01 09:00:00");
+					var gap = arrive.getTime() - ontime.getTime();
+					
+					if(gap/1000/60 >0){
+						if(Math.floor(gap/1000/60/60)>0){
+							var hour = Math.floor(gap/1000/60/60);
+							$('#delay_${ now }').text(hour+"시간"+Math.floor((gap-(hour*1000*60*60))/1000/60)+"분");
+						}else{
+							$('#delay_${ now }').text(Math.ceil(gap/1000/60)+"분");
+						} 
+					}
+					
+					$('#reason_${ now }').text(json.commuting_comment);
+					if($('#arrive_${ now }').text() != '' || $('#leave_${ now }').text() != ''){
+						$('#reasonBtn_${ now }').html("<button onclick='goModal(${ now });'>입력</button>");
+					}
+					
+				}catch(Exception){
+					alert(data);
+				}
+			}//success end
 		});
-	});	
+	});//arrive click end
+	
 	$("#leave").click(function(){
-		var commuting_member_id = $("#commuting_member_id").val();
-		var param = "commuting_member_id="+commuting_member_id;
+
+		if($('#arrive_${now}').text() == ''){
+			alert('출근처리 먼저 해주세요.');
+			return;
+		}
+		
+		if(confirm('정말 퇴근처리 하시겠습니까?')){
 		$.ajax({
 			type:"POST",
-			url:"../commuting/leave",
-			data:param,
+			url:"${pageContext.request.contextPath}/commuting/leave",
 			success:function(data){
-				var obj = eval('('+data+')');			
-				alert(obj.value);				
-			}
+				console.log(data);
+				try{
+					var json = eval('('+data+')');			
+					console.log(json)
+					$('#leave_${ now }').text(json.commuting_leave);
+					$('#stat_${ now }').text(json.commuting_status);
+					alert('${sessionScope.member.member_name}님 '+json.commuting_leave+' 퇴근처리 하셨습니다.');
+					
+					//==================================================================================
+					
+					var work_arrive = new Date("2019-02-01 "+json.commuting_arrive);
+					var work_leave = new Date("2019-02-01 "+json.commuting_leave);
+					var gap2 = work_leave.getTime() - work_arrive.getTime();
+					
+					if(gap2/1000/60 >0){
+						if(Math.floor(gap2/1000/60/60)>0){
+							var hour = Math.floor(gap2/1000/60/60);
+							$('#over_${ now }').text(hour+"시간"+Math.floor((gap2-(hour*1000*60*60))/1000/60)+"분");
+						}else{
+							$('#over_${ now }').text(Math.ceil(gap2/1000/60)+"분"); 
+						}
+					}
+					
+					//==================================================================================
+					
+				}catch(Exception){
+					alert(data);
+				}				
+			}//success end
 		});
-	});
+		}else{
+			return;
+		}
+	});//leave click end
 	
 		
 });
+
+//============================================================================================================get Member commuting
 	$(document).ready(function(){
 		
 		var param = "year=${ year }&month=${ month }";
@@ -98,29 +189,44 @@ $(function(){
 				var arr = JSON.parse(data);
 				console.log(arr);
 				for(var i = 0; i < arr.length; i++){
-					var arrive = arr[i].commuting_arrive;
 					
-					var num = parseInt(arrive.substring(0,2));
-					$('#arrive_'+num+'').text(arrive.slice(2));
+					
+					console.log(arr[i].commuting_status);
+					var num = parseInt(arr[i].commuting_status_date.substring(0,2));
+					$('#reason_'+num+'').val(arr[i].commuting_comment);
+					$('#row_'+num+'').val(arr[i].commuting_id);
+					
+					
+					
 					try{
+						$('#arrive_'+num+'').text(arr[i].commuting_arrive.slice(2));
 						$('#leave_'+num+'').text(arr[i].commuting_leave.slice(2));
 					}catch(Exception){	}
 					 
-					var arrive = new Date("2019-02-01 "+arrive.slice(2));
-					var ontime = new Date("2019-02-01 09:00:00");
-					var gap = arrive.getTime() - ontime.getTime();
-					
-					if(gap/1000/60 >0){
-						if(Math.floor(gap/1000/60/60)>0){
-							var hour = Math.floor(gap/1000/60/60);
-							$('#delay_'+num+'').text(hour+"시간"+Math.floor((gap-(hour*1000*60*60))/1000/60)+"분");
-						}else{
-							$('#delay_'+num+'').text(Math.ceil(gap/1000/60)+"분");
-						} 
+					if($('#arrive_'+num+'').text() != '' && $('#leave_'+num+'').text() == ''){
+						$('#stat_'+num+'').text('근무중');
+					}else{
+						$('#stat_'+num+'').text(arr[i].commuting_status);
 					}
 					
-					var work_arrive = new Date("2019-02-01 "+arr[i].commuting_arrive.slice(2));
 					try{
+						var arrive = new Date("2019-02-01 "+arr[i].commuting_arrive.slice(2));
+						var ontime = new Date("2019-02-01 09:00:00");
+						var gap = arrive.getTime() - ontime.getTime();
+					
+					
+						if(gap/1000/60 >0){
+							if(Math.floor(gap/1000/60/60)>0){
+								var hour = Math.floor(gap/1000/60/60);
+								$('#delay_'+num+'').text(hour+"시간"+Math.floor((gap-(hour*1000*60*60))/1000/60)+"분");
+							}else{
+								$('#delay_'+num+'').text(Math.ceil(gap/1000/60)+"분");
+							} 
+						}
+					}catch(Exception){}
+					
+					try{
+						var work_arrive = new Date("2019-02-01 "+arr[i].commuting_arrive.slice(2));
 						var work_leave = new Date("2019-02-01 "+arr[i].commuting_leave.slice(2));
 						var gap2 = work_leave.getTime() - work_arrive.getTime();
 						
@@ -130,16 +236,42 @@ $(function(){
 								$('#over_'+num+'').text(hour+"시간"+Math.floor((gap2-(hour*1000*60*60))/1000/60)+"분");
 							}else{
 								$('#over_'+num+'').text(Math.ceil(gap2/1000/60)+"분"); 
-							} 
+							} 1
 						}
 					}catch(Exception){
 						
-					}
+					}//catch end
 					
-				}
+					$('#reason_'+num+'').html(arr[i].commuting_comment);
+					if($('#arrive_'+num+'').text() != '' || $('#leave_'+num+'').text() != ''){
+						$('#reasonBtn_'+num+'').html("<button onclick='goModal("+num+");'>입력</button>");
+					}
+				}//for end
 				
 			}
-		});
+		}); // ajax end
+		
+		
+		$('#row_${day}').css('background','#FF6347');
+		
+		
+		$('#summernote').summernote({
+			  lang: 'ko-KR',
+		      height: 200,
+		      popover: {
+		    	  image:[],
+		    	  link:[],
+		    	  air:[]
+		      },
+		      toolbar: [
+		    	    // [groupName, [list of button]]
+		    	    ['style', ['bold', 'italic', 'underline', 'clear']],
+		    	    ['fontsize', ['fontsize']],
+		    	    ['color', ['color']],
+		    	    ['para', ['ul', 'ol', 'paragraph']],
+		    	  ]
+		  });
+		
 		
 	}) // ready end
 
@@ -186,10 +318,71 @@ function today(){
 	$('#selectDayForm').submit();
 }
 
+function datePick(){
+	
+	var dPick = $('#halfPick').val();
+	console.log(dPick);
+	
+	var arr = dPick.split('/');
+	console.log(arr[0])
+	console.log(arr[1])
+	console.log(arr[2])
+	
+	$('<input></input>').attr('type','hidden').attr('name', 'month').attr('value',arr[0]).appendTo('#selectDayForm');
+	$('<input></input>').attr('type','hidden').attr('name', 'day').attr('value',arr[1]).appendTo('#selectDayForm');
+	$('<input></input>').attr('type','hidden').attr('name', 'year').attr('value',arr[2]).appendTo('#selectDayForm');
+	$('<input></input>').attr('type','hidden').attr('name', 'dPick').attr('value',dPick).appendTo('#selectDayForm');
+	
+	$('#selectDayForm').submit();
+}
+
+
+//=====================모달 처리
+
+function goModal(i){
+	console.log(i);
+	console.log('${ year }년 ${ month }월 '+ i +'일');
+	$('#modalDate').text('${ year }년 ${ month }월 '+ i +'일');
+	$('#arTime').text($('#arrive_'+i+'').text());
+	$('#lvTime').text($('#leave_'+i+'').text());
+	console.log($('#arrive_'+i+'').text());
+	console.log($('#leave_'+i+'').text());
+	console.log($('#row_'+i+'').val());
+	$('#rowNum').val(i);
+	$('#summernote').summernote('code', $('#reason_'+i+'').val());
+	
+	$('#dayModal').modal();
+}
+
+function commentBtn(){
+	
+	var rowNum = $('#rowNum').val();
+	
+	var param = "commuting_id="+$('#row_'+rowNum+'').val()+"&commuting_comment="+$('#summernote').val();
+	$.ajax({
+		type:"POST",
+		url:"${pageContext.request.contextPath}/commuting/updateComment",
+		data:param,
+		success:function(data){
+			
+			console.log(parseInt(data));
+			if(data == 1){
+				$('#reason_'+rowNum+'').html($('#summernote').val());
+				$('#reason_'+rowNum+'').val($('#summernote').val());
+			}else{
+				alert('시스템 오류로 실패하였습니다.')
+			}
+			
+		}
+	}); // ajax end
+	
+	
+}
+
 </script>
 
 </head>
-<body>
+<body id="body">
 
 <form id="selectDayForm" action="${ pageContext.request.contextPath }/commuting/commuting"></form>
 
@@ -202,23 +395,17 @@ function today(){
 </div>
 </div>
 <div class="container-fulid">
-<button type="button" id="btn_view">출근 기록 보기</button>
-<div id="commuting_view"></div>
-<div class="container-fulid">
-	<div>
-		${ year }년 ${ month }월
-	</div>
 	<div class="clearfix">
+	<div class="float-left">
+		<h2>${ year }년 ${ month }월</h2>
+	</div>	
 	<div class="float-right ">
-		<button onclick="previousMonth()">이전달</button>
-		<button onclick="nextMonth()">다음달</button>
-	</div>
-	<div class="float-right ">
+		<input type="text" id="halfPick" name="halfPick" onchange="datePick()" value="${ dPick }">
 		<button onclick="previousYear()">이전해</button>
-		<button onclick="nextYear()">다음해</button>
-	</div>
-	<div class="float-right ">
+		<button onclick="previousMonth()">이전달</button>
 		<button onclick="today()">오늘</button>
+		<button onclick="nextMonth()">다음달</button>
+		<button onclick="nextYear()">다음해</button>
 	</div>
 	</div>
 	<div class="row board text-center" style="background-color: #dddddd">
@@ -227,20 +414,69 @@ function today(){
 		<div class="col-sm"><strong>퇴근시간</strong></div>
 		<div class="col-sm"><strong>지각시간</strong></div>
 		<div class="col-sm"><strong>근무시간</strong></div>
-		<div class="col-sm"><strong>사유</strong></div>
+		<div class="col-sm"><strong>상태</strong></div>
+		<div class="col-sm"><strong>근태사유</strong></div>
+		<div style="width:5%"><strong></strong></div>
 	</div>
 	
 	<c:forEach items="${calendar}" var="calendar" varStatus="status">
-		<div class="row board text-center">
+		<div class="row board text-center" id="row_${status.count}" onclick="console.log(this.value)">
 			<div class="col-sm" id="day_${status.count}">${calendar.day}(${calendar.days})</div>								
-			<div class="col-sm" id="arrive_${status.count}"><fmt:formatDate value="${value.commuting_arrive}" pattern="hh24:mm:ss"/></div>
-			<div class="col-sm" id="leave_${status.count}"><fmt:formatDate value="${value.commuting_leave}" pattern="hh24:mm:ss"/></div>
+			<div class="col-sm" id="arrive_${status.count}"></div>
+			<div class="col-sm" id="leave_${status.count}"></div>
 			<div class="col-sm" id="delay_${status.count}"></div>							
 			<div class="col-sm" id="over_${status.count}"></div>
-			<div class="col-sm" id="reason_${status.count}"><fmt:formatDate value="${value.commuting_arrive}" pattern="yyyy-MM-dd"/></div>
+			<div class="col-sm" id="stat_${status.count}"></div>
+			<div class="col-sm" id="reason_${status.count}"></div>
+			<div style="width:5%" id="reasonBtn_${status.count}"></div>
 		</div>
 	</c:forEach>						
 </div>
-</div>
+
+
+					<!-- 사유보기 ================================================================================================================================== -->
+					<div class="modal fade" id="dayModal" role="dialog">
+    					<div class="modal-dialog">
+							<div class="modal-content">
+								<!-- MODAL HEADER -->
+								<div class="modal-header">
+									<h4 class="modal-title">근태 사유</h4>
+									<button type="button" class="close float-right" data-dismiss="modal">&times;</button>
+								</div>
+								
+								<!-- MODAL BODY -->
+								<div class="modal-body" id="modalBody">
+								<!-- hidden value -->
+								<input type="hidden" id="rowNum">
+								<div class="form-group row">
+									<div class="form-group" style="padding-left: 40px;">
+										<div class="row text-center"> 
+											<div align= "center" ><h4 id="modalDate"></h4></div>
+										</div>
+										<div class="row">
+										<div class="col-6" style="padding-left: 40px;">
+										<span><label >출근시간</label></span>
+											&nbsp;&nbsp;&nbsp;<label id="arTime"></label>
+										</div>
+										<div class="col-6" style="padding-left: 40px;">
+										<span><label >퇴근시간</label></span>
+											&nbsp;&nbsp;&nbsp;<label  id="lvTime"></label>
+										</div>
+										</div>
+									</div>
+										<div id="pcontent" class="col-lg-12">
+											<textarea id="summernote" name="summernote" ></textarea>
+										</div>
+								</div>
+								
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal" onclick="commentBtn()">제출하기</button>
+									<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
 </body>
 </html>
