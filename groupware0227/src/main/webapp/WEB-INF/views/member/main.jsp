@@ -144,14 +144,289 @@
                     </div>
                   </div>
                 </div>
+                
+                <!-- fullcalendar ref -->
+<link rel='stylesheet' href='${pageContext.request.contextPath}/resources/fullcalendar/fullcalendar.css' />
+<%-- <script src='${pageContext.request.contextPath}/resources/fullcalendar/lib/jquery.min.js'></script> --%>
+<script src='${pageContext.request.contextPath}/resources/fullcalendar/lib/moment.min.js'></script>
+<script src='${pageContext.request.contextPath}/resources/fullcalendar/fullcalendar.js'></script>
+<script src='${pageContext.request.contextPath}/resources/fullcalendar/lang/ko.js'></script>
+                
                 <!-- Card Body -->
                 <div class="card-body">
                   <div class="chart-area">
-                    
+                   		<!-- ======================================================================================================================================================================메인캘린더 -->
+                   		
+                   		
+                   		<!-- The calendar container -->
+						<div id="calendar"></div>
+                   		
+                   		
+                   		<!-- ======================================================================================================================================================================메인캘린더 -->
                   </div>
                 </div>
               </div>
             </div>
+            
+       		<!-- ======================================================================================================================================================================메인캘린더 -->
+
+			<script type="text/javascript">
+			
+			$(document).ready(function(){
+				
+				 // We will refer to $calendar in future code
+			    var $calendar = $("#calendar").fullCalendar({ //start of options
+			        //weekends : false, // do not show saturday/sunday
+			        header: {
+			          left: 'prevYear,nextYear',
+			          center: 'title',
+			          right: 'today,month,agendaDay,agendaWeek prev,next'
+			        },
+			        // Make possible to respond to clicks and selections
+			        selectable: true,
+			        // allow "more" link when too many events
+			        eventLimit: true,
+			        navLinks: true,
+			        // Make events editable, globally
+			        editable: true,
+			        resizeable: false,
+			        //defaultView: 'listWeek',
+			        
+			      //Drop =================================
+			        eventDrop: function(event, delta, revertFunc) {
+			        	
+			        	
+			        		if (event.member_id == ${sessionScope.member.member_id} || (${sessionScope.member.member_status == 9}&& event.member_id == 99999)) {
+			        			
+			        			if(confirm("정말 변경하시겠습니까?")){
+			                      
+			        				
+			        				var allDayCheck = 0;
+			        				if(event.allDay){
+			        					allDayCheck = 1;
+			        				}
+			        				
+			        	        	var cateNum = 0;
+			        	        	var cate_name;
+			        		        if(typeof(event.calendar_cate) == 'string'){
+			        		        	cate_name = event.calendar_cate;
+			        		        }else{
+			        		        	cateNum = parseInt(event.calendar_cate);
+			        		        }
+			        				
+			        				var st = moment(event.start).format('YYYY-MM-DD hh:mm:ss');
+			        				var en = moment(event.end).format('YYYY-MM-DD hh:mm:ss');
+			        				var stitle = event.title;
+			        				var scontent = event.content;
+			        				var calCate = cateNum;
+			                      	var cateSelf = cate_name;
+			                      	var colorFix = event.color;
+			                      	var calId = event.id;
+			                      	
+			        				
+			          		    var param = "calendar_start="+st+"&calendar_end="+en+"&calendar_title="+stitle.trim()+"&calendar_content="+scontent+"&calendar_cate="+calCate+"&calendar_allDay="+allDayCheck+"&calendar_cateSelf="+cateSelf+"&calendar_color="+colorFix+"&calendar_id="+calId+"&calendar_member_id=${ who }";
+			        	      	
+			                      $.ajax({
+			                          type: 'POST',
+			                          url: "${pageContext.request.contextPath}/calendar/modiEvent",
+			                          data: param,
+			                          success: function(data) {
+			            					console.log(data);
+			                              // Call the "updateEvent" method
+			                              $calendar.fullCalendar("updateEvent", event);
+			                              
+			                              return;
+			                          }
+			                        });
+			        			}else{
+			            		      revertFunc();
+			            			  return;   
+			                    }
+			                      
+			                    
+			        	    }else{
+			        	    	
+			        			  //alert("본인의 이벤트만 변경할 수 있습니다.")
+			        		      revertFunc();
+			        			  return;        	    	
+			        	    	
+			        	    }
+			        },
+			        
+			        eventResize: function(event, delta, revertFunc) {
+			        	
+			        
+			        	console.log(event.member_id)
+			    		if (event.member_id == ${sessionScope.member.member_id} || (${sessionScope.member.member_status == 9}&& event.member_id == 99999)) {
+			    			
+			    			if(confirm("정말 변경하시겠습니까?")){
+			                  
+			    				
+			    				var allDayCheck = 0;
+			    				if(event.allDay){
+			    					allDayCheck = 1;
+			    				}
+			    				
+			    	        	var cateNum = 0;
+			    	        	var cate_name;
+			    		        if(typeof(event.calendar_cate) == 'string'){
+			    		        	cate_name = event.calendar_cate;
+			    		        }else{
+			    		        	cateNum = parseInt(event.calendar_cate);
+			    		        }
+			    				
+			    				var st = moment(event.start).format('YYYY-MM-DD hh:mm:ss');
+			    				var en = moment(event.end).format('YYYY-MM-DD hh:mm:ss');
+			    				var stitle = event.title;
+			    				var scontent = event.content;
+			    				var calCate = cateNum;
+			                  	var cateSelf = cate_name;
+			                  	var colorFix = event.color;
+			                  	var calId = event.id;
+			    				
+			      		    var param = "calendar_start="+st+"&calendar_end="+en+"&calendar_title="+stitle.trim()+"&calendar_content="+scontent+"&calendar_cate="+calCate+"&calendar_allDay="+allDayCheck+"&calendar_cateSelf="+cateSelf+"&calendar_color="+colorFix+"&calendar_id="+calId+"&calendar_member_id=${ who }";
+			    	      	// +"&calendar_member_id=${ sessionScope.id }"
+			    	      	console.log(param);
+			    	      	
+			                  $.ajax({
+			                      type: 'POST',
+			                      url: "${pageContext.request.contextPath}/calendar/modiEvent",
+			                      data: param,
+			                      success: function(data) {
+			        					console.log(data);
+			                          // Call the "updateEvent" method
+			                          $calendar.fullCalendar("updateEvent", event);
+			                          
+			                          return;
+			                      }
+			                    });
+			    			}else{
+			        		      revertFunc();
+			        			  return;   
+			                }
+			                  
+			                
+			    	    }else{
+			    	    	
+			    			  //alert("본인의 이벤트만 변경할 수 있습니다.")
+			    		      revertFunc();
+			    			  return;        	    	
+			    	    	
+			    	    }
+			        },
+			        //This is the callback that will be triggered when a selection is made
+			        eventRender: function(event, element, view) {
+			              },
+			        select: function(start, end, jsEvent, view) {
+			          // Ask for a title. If empty it will default to "New event"
+			         
+			          $('#start_date').val(moment(start).format('YYYY-MM-DD'));
+			          $('#start_time').val(moment("2013-02-08 09:30 ").format('hh:mm:ss'));
+			          $('#end_date').val(moment(end).subtract(1, 'days').format('YYYY-MM-DD'));
+			          $('#end_time').val(moment(end).format('hh:mm:ss'));
+			          
+			          $("#myModal").modal();
+			 
+			        }, // End select callback
+			        // Callback triggered when we click on an event
+			        eventClick: function(event, jsEvent, view) {
+			        	console.log(event.member_id)
+			        	if(event.member_id == 99999 && ${sessionScope.member.member_status != 9}){
+			        		return;
+			        	}
+			        	
+			        	var cl = ${cateList};
+			        	
+			        	var cate_name;
+			        	
+				        for(var o = 0 ; o < cl.length ; o++){
+				        	if(cl[o].cal_cate_id == event.calendar_cate){
+					       		cate_name = cl[o].cal_cate_name;
+				        	}
+				        }
+				        
+				        if(event.calendar_cate == 0){
+				        	cate_name = event.calendar_cateSelf;
+				        }
+				        
+				        	var cateNum = 0;
+				        	
+				        if(typeof(event.calendar_cate) == 'string'){
+				        	cate_name = event.calendar_cate;
+				        }else{
+				        	cateNum = parseInt(event.calendar_cate);
+				        }
+				        	
+			        	$("#pid").val(event.id);
+			        	$('#colorProp').val(event.color);
+			        	$('#cate_num').val(cateNum);
+			        	
+			        	if(event.allDay){
+				        	$('#isallDay').val('1');
+				        	$('#pend').text(moment(event.end).subtract(1, 'days').format('YYYY-MM-DD  HH:mm:ss'));
+			        	}else{
+				        	$('#isallDay').val('0');
+				        	$('#pend').text(moment(event.end).format('YYYY-MM-DD  HH:mm:ss'));
+			        	}
+			        	
+				    	$("#pselect").text(cate_name);
+			        	$("#psubject").text(event.title);
+			        	$("#pcontent").html(event.content);
+			        	$('#pstart').text(moment(event.start).format('YYYY-MM-DD  HH:mm:ss'));
+			        	
+			        	$("#dayModal").modal();	
+
+			        	
+			        }, // End callback eventClick
+			        events: events_array
+			      } //End of options
+			    
+			  );// calendar end
+				
+				
+				var member_id = '${sessionScope.member.member_id}';
+				$.ajax({
+					  type: 'POST',
+					  url: "${pageContext.request.contextPath}/calendar/getCalList",
+					  data: "member_id="+member_id,
+					  success: function(data) {	 
+							var list = JSON.parse(data);
+							//console.log(list);
+							for(var i = 0 ; i<list.length; i++){
+								var start = new Date(list[i].start);
+								var end = new Date(list[i].end);
+								
+								var row = printCal(list[i]);
+								
+								if((end-start)%86400000 == 0){
+									row.allDay = true
+								}
+								
+								console.log(list[i].id)
+								temp.push(list[i].id);
+								
+								$('#calendar').fullCalendar('addEventSource', [{
+							        id: list[i].id,
+							        title: list[i].title,
+							        start: list[i].start,
+							        end: list[i].end,
+							        content: list[i].content,
+							        calendar_cate: list[i].calendar_cate, 
+							        calendar_cateSelf: list[i].calendar_cateSelf, 
+							        member_id: list[i].member_id,
+							        color: list[i].color,
+							        allDay: list[i].allDay
+							    }]);
+								
+							} //for end
+					  }
+				})//ajax end
+				
+			})
+			</script>
+
+       		<!-- ======================================================================================================================================================================메인캘린더 -->
+            
 
             <!-- Pie Chart -->
             <div class="col-xl-4 col-lg-5">

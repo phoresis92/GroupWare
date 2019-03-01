@@ -185,7 +185,25 @@ public class Calendar_Controller {
 		
 		return jobj.toJSONString();
 		
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/calendar/getCateList", method=RequestMethod.POST, produces = "application/text; charset=utf8")
+	public String getCateList() {
+	
+		ArrayList<Calendar_Cate> cateList = cal_Service.getCalCate();
+		  
+		  JSONArray arr = new JSONArray();
+		  for(Calendar_Cate cate : cateList) {
+			  JSONObject jobj = new JSONObject();
+			  
+			  jobj.put("cal_cate_id", cate.getCal_cate_id());
+			  jobj.put("cal_cate_name", cate.getCal_cate_name());
+			  jobj.put("cal_cate_color", cate.getCal_cate_color());
+			  arr.add(jobj);
+		  }
 		
+		return arr.toJSONString();
 	}
 
 }

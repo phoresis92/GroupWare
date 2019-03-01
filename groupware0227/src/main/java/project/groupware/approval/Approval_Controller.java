@@ -240,7 +240,68 @@ public class Approval_Controller {
 		}catch(Exception e) {
 			
 		}
+		
+		
+		//====================================================================================================================== 캘린더 테스트
+		
+		
+		
+		  ArrayList<Calendar_Cate> cateList = cal_Service.getCalCate();
+		  
+		  JSONArray arr = new JSONArray();
+		  for(Calendar_Cate cate : cateList) {
+			  JSONObject jobj = new JSONObject();
+			  
+			  jobj.put("cal_cate_id", cate.getCal_cate_id());
+			  jobj.put("cal_cate_name", cate.getCal_cate_name());
+			  jobj.put("cal_cate_color", cate.getCal_cate_color());
+			  arr.add(jobj);
+		  }
+		  model.addAttribute("cateList", arr);
+		  
+		  int id = ((Member)session.getAttribute("member")).getMember_id();
+		  
+		  model.addAttribute("who", id);
+		
+		  //=======================================================================
+		  
+		  ArrayList<Calendar_Dto> calList = cal_Service.getAllCal(id);
+		  
+		  JSONArray jArr = new JSONArray();
+		  for(Calendar_Dto dto : calList) {
+			  JSONObject jobj = new JSONObject();
+			  
+			  jobj.put("id", dto.getCalendar_id());
+			  jobj.put("calendar_cate", dto.getCalendar_cate());
+			  jobj.put("calendar_cateSelf", dto.getCalendar_cateSelf());
+			  jobj.put("member_id", dto.getCalendar_member_id());
+			  jobj.put("start", dto.getCalendar_start());
+			  jobj.put("end", dto.getCalendar_end());
+			  jobj.put("title", dto.getCalendar_title());
+			  jobj.put("content", dto.getCalendar_content());
+			  jobj.put("color", dto.getCalendar_color());
+			  boolean ad = false;
+			  if(dto.getCalendar_allDay() == 1) {
+				  ad = true;
+			  }else {
+				  ad = false;
+			  }
+			  jobj.put("allDay", ad);
+			  
+			  jArr.add(jobj);
+		  }
+		
+		model.addAttribute("list",jArr.toJSONString());
+		
+		
+		
+		
+		//====================================================================================================================== 캘린더 테스트
+		
+		
+		
 		return "/approval/myApvList";
+		
 		
 	} // myApvList end
 	
