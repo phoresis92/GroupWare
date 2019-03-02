@@ -162,7 +162,6 @@
 	    	if($(opener.document).find('#authRank'+i+'').text().trim() != ''){
 	    	$('#rank_'+i+'').text($(opener.document).find('#authRank'+i+'').text());
 	    	$('#name_'+i+'').text($(opener.document).find('#authName'+i+'').text());
-	    	$('#dept_'+i+'').text($(opener.document).find('#authDept'+i+'').text());
 	    	$('#dept_'+i+'').text($(opener.document).find('#authDept'+i+'').val());
 	    	$('#memId_'+i+'').text($(opener.document).find('#apv_mem'+i+'').text());
 	    	
@@ -389,8 +388,8 @@
 			 
 			$(opener.document).find('#authName'+i).text($('#name_'+i).text());
 			$(opener.document).find('#authRank'+i).text($('#rank_'+i).text());
-			$(opener.document).find('#authDept'+i).text($('#dept_'+i).text());
-			$(opener.document).find('#authId'+i).text($('#memId_'+i).text());
+			$(opener.document).find('#authDept'+i).val($('#dept_'+i).text());
+			$(opener.document).find('#authId'+i).val($('#memId_'+i).text());
 			$(opener.document).find('#apv_mem'+i).text($('#memId_'+i).text());
 			
 		 }

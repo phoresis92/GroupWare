@@ -236,13 +236,68 @@ var doubleSubmitFlag = true;
 
 
 function sendApv(){
+	
+	if('${mem1}' != null){
+		$('#authId1').val(${mem1});
+	}
+	if('${mem2}' != null){
+		$('#authId2').val(${mem1});
+	}
+	if('${mem3}' != null){
+		$('#authId3').val(${mem1});
+	}
+	
+	for(var i = 1 ; i <=3 ; i++){
+		
+		$('#authId'+i+'').val($('#apv_mem'+i+'').text());
+		
+	}
+	
+	if($('#authId1').val() == ''){
+		alert('결재라인을 선택해주세요')
+		return;
+	}
+	if(($('#approval_title').val()).trim() == ''){
+		alert('제목을 입력해주세요')
+		return;
+	}
+	if(($('#summernote').val()).trim() == ''){
+		alert('내용을 입력해주세요')
+		return;
+	}
+	
+	getLength();
+	if(Number($('#length').text()) > Number($('#leftVacat').text())){
+		alert('사용 가능한 연차 수를 확인하세요.');
+		return;
+	}
+	
+	if($('#leftVacat').text() == 0){
+		alert('사용할 연차 수가 없습니다.');
+		return;
+	}
+	
+	
+	if($('#whatV').val() == '1_wholeVacat'){ // 연차휴가
+		if($('#to').val() == '' || $('#to').val() == null){
+			alert('요청기간을 선택하세요.')
+			return;
+		}else if($('#from').val() == '' || $('#from').val() == null){
+			alert('요청기간을 선택하세요.')
+			return;
+		}
+	}else{ // 반차
+		if($('#halfPick').val() == '' || $('#halfPick').val() == null){
+			alert('요청기간을 선택하세요.')
+			return;
+		}
+	}
+	
+	
 	if(confirm('제출 이후에는 삭제하실 수 없습니다.\n정말 제출 하시겠습니까?')){
 		if(doubleSubmitFlag){
 			
-			if(Number($('#length').text()) > Number($('#leftVacat').text())){
-				alert('사용 가능한 연차 수를 확인하세요.');
-				return;
-			}
+
 			console.log($('#length').text())
 			$('#countVacat').val($('#length').text());
 			
@@ -277,17 +332,12 @@ function sendApv(){
 			$('#authId1').val($('#apv_mem1').text());
 			$('#authId2').val($('#apv_mem2').text());
 			$('#authId3').val($('#apv_mem3').text());
-			if($('#authId1').val() == ''){
-				alert('결재라인을 선택해주세요')
-				return;
-			}
-			if(($('#approval_title').val()).trim() == ''){
-				alert('제목을 입력해주세요')
-				return;
-			}
-			if(($('#summernote').val()).trim() == ''){
-				alert('내용을 입력해주세요')
-				return;
+
+			
+			if('${ apvReWrite.approval_cate }' == '' || '${ apvReWrite.approval_cate }' == null){
+				$('#apvCateGo').val(1);
+			}else{
+				$('<input></input>').attr('type','hidden').attr('value',${ apvReWrite.approval_id }).attr('name','approval_id').appendTo('#sendApv');
 			}
 		
 			
@@ -355,12 +405,6 @@ function timeChk(){
 	<input type="hidden" id="authDept2" name="authDept2" value="${ apvReWrite.department_name2 }">
 	<input type="hidden" id="authDept3" name="authDept3" value="${ apvReWrite.department_name3 }">
 	
-	${ apvReWrite }
-	
-	
-	${ mem1 }
-	${ mem2 }
-	${ mem3 }  
     
     <!-- 감싸는테이블 -->
     <table width="100%">
@@ -431,29 +475,29 @@ function timeChk(){
 	<tr><td colspan="2" align="left">
 	
 <div id="wholeVacat">
-요청기간 :
-<label for="from">시작일</label>
-<input class="btn btn-outline-primary  btn-sm" size= 10 type="text" id="from" name="from" onchange="getLength()">
-<label for="to">종료일</label>
-<input class="btn btn-outline-primary  btn-sm" size= 10 type="text" id="to" name="to" onchange="getLength()">
-<span>(&nbsp;총&nbsp;<span id="length"></span>일&nbsp;)</span>
+	요청기간 :
+	<label for="from">시작일</label>
+	<input class="btn btn-outline-primary  btn-sm" size= 10 type="text" id="from" name="from" onchange="getLength()">
+	<label for="to">종료일</label>
+	<input class="btn btn-outline-primary  btn-sm" size= 10 type="text" id="to" name="to" onchange="getLength()">
+	<span>(&nbsp;총&nbsp;<span id="length"></span>일&nbsp;)</span>
 </div>
 
 <div style="display:none;">
-<input type="time" id="AM_start" onchange="timeChk()" value="09:00">
-<input type="time" id="AM_end" onchange="timeChk()" value="13:00">
-<input type="time" id="PM_start" onchange="timeChk()" value="14:00">
-<input type="time" id="PM_end" onchange="timeChk()" value="18:00">
-
-<input type="time" id="whole_start" onchange="timeChk()" value="00:00">
-<input type="time" id="whole_end" onchange="timeChk()" value="23:00">
+	<input type="time" id="AM_start" onchange="timeChk()" value="09:00">
+	<input type="time" id="AM_end" onchange="timeChk()" value="13:00">
+	<input type="time" id="PM_start" onchange="timeChk()" value="14:00">
+	<input type="time" id="PM_end" onchange="timeChk()" value="18:00">
+	
+	<input type="time" id="whole_start" onchange="timeChk()" value="00:00">
+	<input type="time" id="whole_end" onchange="timeChk()" value="23:00">
 </div>
 
 <div id="halfVacat" style="display: none;">
-요청기간 :
-<input class="btn btn-outline-primary  btn-sm" size=10 type="text" id="halfPick" name="halfPick" >
-<input type="radio" name="AMPM" value="AM" checked="checked">오전
-<input type="radio" name="AMPM" value="PM">오후
+	요청기간 :
+	<input class="btn btn-outline-primary  btn-sm" size=10 type="text" id="halfPick" name="halfPick" >
+	<input type="radio" name="AMPM" value="AM" checked="checked">오전
+	<input type="radio" name="AMPM" value="PM">오후
 </div>
 	
 	<td></tr>
@@ -465,16 +509,18 @@ function timeChk(){
 
 
 <script type="text/javascript">
+	if('${ apvReWrite.approval_cc }' != ''){
 		console.log(('${ apvReWrite.approval_cc }').search("1_wholeVacat"))
-	if(('${ apvReWrite.approval_cc }').search("1_wholeVacat") != -1){
-		$('#from').val('${ stdate }');
-		$('#to').val('${ endate }');
-		getLength();
-	}else{
-		$('#whatV').val('2_halfVacat');
-		$('#halfPick').val('${ stdate }');
-		$('#wholeVacat').css('display','none');
-		$('#halfVacat').css('display','block');
+		if(('${ apvReWrite.approval_cc }').search("1_wholeVacat") != -1){
+			$('#from').val('${ stdate }');
+			$('#to').val('${ endate }');
+			getLength();
+		}else{
+			$('#whatV').val('2_halfVacat');
+			$('#halfPick').val('${ stdate }');
+			$('#wholeVacat').css('display','none');
+			$('#halfVacat').css('display','block');
+		}
 	}
 </script>
 
@@ -507,10 +553,10 @@ function timeChk(){
                  
 </form> 
 		<div class="container" align="center">
-		<input class="btn btn-outline-primary"" type="button" value="뒤로가기" onclick="history.back(-1);">
-		<button class="btn btn-outline-primary"" onclick="sendApv()">제출하기</button>
+		<input class="btn btn-outline-primary" type="button" value="뒤로가기" onclick="history.back(-1);">
+		<button class="btn btn-outline-primary" onclick="sendApv()">제출하기</button>
 			<c:if test="${ isReturn != 1 }">
-				<button class="btn btn-outline-primary"" data-toggle="modal" data-target="#comment" >저장하기</button>
+				<button class="btn btn-outline-primary" onclick="tempchk()" >저장하기</button>
 			</c:if>
 			<div><br></div>
 	</div>
@@ -552,21 +598,8 @@ function timeChk(){
 	</div>
 
 <script type="text/javascript">
-function tempStore(){
 
-	for(var i = 1 ; i <=3 ; i++){
-		
-		$('#authId'+i+'').val($('#authId'+i+'').text());
-		
-	}
-		$('#authId1').val(${mem1});
-		$('#authId2').val(${mem2});
-		$('#authId3').val(${mem3});
-	
-	if(${ not empty apvReWrite.approval_id }){
-	$('<input></input>').attr('type','hidden').attr('value',${ apvReWrite.approval_id }).attr('name','approval_id').appendTo('#sendApv');
-	}
-	
+function tempchk(){
 	if(($('#approval_title').val()).trim() == ''){
 		alert('제목을 입력해주세요')
 		return;
@@ -581,6 +614,54 @@ function tempStore(){
 		alert('사용 가능한 연차 수를 확인하세요.');
 		return;
 	}
+	
+	if($('#leftVacat').text() == 0){
+		alert('사용할 연차 수가 없습니다.');
+		return;
+	}
+	
+	if($('#whatV').val() == '1_wholeVacat'){ // 연차휴가
+		if($('#to').val() == '' || $('#to').val() == null){
+			alert('요청기간을 선택하세요.')
+			return;
+		}else if($('#from').val() == '' || $('#from').val() == null){
+			alert('요청기간을 선택하세요.')
+			return;
+		}
+	}else{ // 반차
+		if($('#halfPick').val() == '' || $('#halfPick').val() == null){
+			alert('요청기간을 선택하세요.')
+			return;
+		}
+	}
+	
+	$('#comment').modal();
+	
+}
+
+function tempStore(){
+
+	if('${mem1}' != null){
+		$('#authId1').val(${mem1});
+	}
+	if('${mem2}' != null){
+		$('#authId2').val(${mem1});
+	}
+	if('${mem3}' != null){
+		$('#authId3').val(${mem1});
+	}
+	
+	for(var i = 1 ; i <=3 ; i++){
+		
+		$('#authId'+i+'').val($('#apv_mem'+i+'').text());
+		
+	}
+	
+	if(${ not empty apvReWrite.approval_id }){
+	$('<input></input>').attr('type','hidden').attr('value',${ apvReWrite.approval_id }).attr('name','approval_id').appendTo('#sendApv');
+	}
+	
+
 	console.log($('#length').text())
 	$('#countVacat').val($('#length').text());
 	

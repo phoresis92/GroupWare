@@ -432,10 +432,10 @@ function commentBtn(){
                 <div class="card-body text-center">
                   <hr>
                   
-                  <div style="height:650px; overflow:auto;" align=left>
+                  <div style="height:650px; overflow:auto; overflow-x:hidden; overflow-y:auto;" align=left>
                   
                   
-	<div class="row board text-center" style="background-color: #dddddd">
+	<div class="row board text-center" style="background-color: #dddddd;" >
 		<div class="col-sm"><strong>날짜</strong></div>
 		<div class="col-sm"><strong>출근시간</strong></div>
 		<div class="col-sm"><strong>퇴근시간</strong></div>

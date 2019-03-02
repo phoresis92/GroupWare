@@ -96,35 +96,34 @@ var doubleSubmitFlag = true;
 
 
 function sendApv(){
+
+	$('#authId1').val($('#apv_mem1').text());
+	$('#authId2').val($('#apv_mem2').text());
+	$('#authId3').val($('#apv_mem3').text());
+	
+	if($('#authId1').val() == ''){
+		alert('결재라인을 선택해주세요')
+		console.log($('#authId1').val());
+		return;
+	}
+	if(($('#approval_title').val()).trim() == ''){
+		alert('제목을 입력해주세요')
+		return;
+	}
+	if(($('#summernote').val()).trim() == ''){
+		alert('내용을 입력해주세요')
+		return;
+	}
+	
 	if(confirm('제출 이후에는 삭제하실 수 없습니다.\n정말 제출 하시겠습니까?')){
 		if(doubleSubmitFlag){
 			
 			$('#approval_cc').val('');
 			
-			for(var i = 1 ; i <=3 ; i++){
-		
-				$('#authId'+i+'').val($('#authId'+i+'').text())
-				
-			}
-			
-			
-			
 			$('#authId1').val($('#apv_mem1').text());
 			$('#authId2').val($('#apv_mem2').text());
 			$('#authId3').val($('#apv_mem3').text());
-			if($('#authId1').val() == ''){
-				alert('결재라인을 선택해주세요')
-				console.log($('#authId1').val());
-				return;
-			}
-			if(($('#approval_title').val()).trim() == ''){
-				alert('제목을 입력해주세요')
-				return;
-			}
-			if(($('#summernote').val()).trim() == ''){
-				alert('내용을 입력해주세요')
-				return;
-			}
+
 		
 			//console.log($(':radio[name="formList"]:checked').val());
 			
@@ -150,7 +149,6 @@ function sendApv(){
 
 </head>
 <body>
-
 
 <div class="container">
 <div class="container-fluid">
@@ -194,12 +192,6 @@ function sendApv(){
 	<input type="hidden" id="authDept2" name="authDept2" value="${ apvReWrite.department_name2 }">
 	<input type="hidden" id="authDept3" name="authDept3" value="${ apvReWrite.department_name3 }">
 	
-	${ apvReWrite }
-	
-	
-	${ mem1 }
-	${ mem2 }
-	${ mem3 }  
     <table>
 	<tr><td width="50%">
 	<div class="float-center">
@@ -291,10 +283,10 @@ function sendApv(){
 	
 </form>       
 		<div class="container" align="center">
-		<input class="btn btn-outline-primary"" type="button" value="뒤로가기" onclick="history.back(-1);">
-		<button class="btn btn-outline-primary"" onclick="sendApv()">제출하기</button>
+		<input class="btn btn-outline-primary" type="button" value="뒤로가기" onclick="history.back(-1);">
+		<button class="btn btn-outline-primary" onclick="sendApv()">제출하기</button>
 			<c:if test="${ isReturn != 1 }">
-				<button class="btn btn-outline-primary"" data-toggle="modal" data-target="#comment" >저장하기</button>
+				<button class="btn btn-outline-primary" onclick="tempchk()" >저장하기</button>
 			</c:if>
 			<div><br></div>
 	</div>
@@ -353,20 +345,15 @@ function sendApv(){
 		window.open('${pageContext.request.contextPath}/approval/pikAuthMem','결제자선택','width=1100, height=500 ,resizable = no, scrollbars = no');
 	}
 	
-	function tempStore(){
-
-		for(var i = 1 ; i <=3 ; i++){
-			
-			$('#authId'+i+'').val($('#authId'+i+'').text());
-			
-		}
-			$('#authId1').val(${mem1});
-			$('#authId2').val(${mem2});
-			$('#authId3').val(${mem3});
+	function tempchk(){
 		
-		if(${ not empty apvReWrite.approval_id }){
-		$('<input></input>').attr('type','hidden').attr('value',${ apvReWrite.approval_id }).attr('name','approval_id').appendTo('#sendApv');
-		}
+		console.log($('#authId1').val());
+		console.log($('#authId2').val());
+		console.log($('#authId3').val());
+		console.log($('#approval_title').val());
+		console.log($('#summernote').val());
+		console.log($('#apvCateGo').val());
+		console.log($('#apv_comment').val());
 		
 		if(($('#approval_title').val()).trim() == ''){
 			alert('제목을 입력해주세요')
@@ -376,6 +363,34 @@ function sendApv(){
 			alert('내용을 입력해주세요')
 			return;
 		}
+		
+		$('#comment').modal();
+	}
+	
+	function tempStore(){
+
+		if('${mem1}' != null){
+			$('#authId1').val(${mem1});
+		}
+		if('${mem2}' != null){
+			$('#authId2').val(${mem1});
+		}
+		if('${mem3}' != null){
+			$('#authId3').val(${mem1});
+		}
+		
+		for(var i = 1 ; i <=3 ; i++){
+			
+			$('#authId'+i+'').val($('#apv_mem'+i+'').text());
+			
+		}
+
+		
+		if(${ not empty apvReWrite.approval_id }){
+		$('<input></input>').attr('type','hidden').attr('value',${ apvReWrite.approval_id }).attr('name','approval_id').appendTo('#sendApv');
+		}
+		
+
 	
 		console.log($(':radio[name="formList"]:checked').val());
 		

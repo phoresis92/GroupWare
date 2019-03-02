@@ -26,7 +26,7 @@ height: 60px;
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
  -->
 </head>
-<body>
+<body id="body">
 <div class="container">
 	<div class="container-fluid text-center">
 
@@ -291,7 +291,7 @@ height: 60px;
 <%-- 관리자 삭제 버튼 --%>
 <c:when test="${ auth == 3 }">
 	
-		<button class="btn btn-outline-primary"" onclick="deleteApv()" >삭제요청</button>
+		<button class="btn btn-outline-primary"" onclick="deleteApv()" >삭제</button>
 	
 </c:when>
 
@@ -300,7 +300,7 @@ height: 60px;
 
 <c:when test="${ apvDto.approval_member_id == sessionScope.member.member_id }">
 	<div class="float-right">
-		<button class="btn btn-outline-primary"" data-toggle="modal" data-target="#wantToDel" >삭제</button>
+		<button class="btn btn-outline-primary"" data-toggle="modal" data-target="#wantToDel" >삭제요청</button>
 	</div>
 </c:when>
 </c:choose>

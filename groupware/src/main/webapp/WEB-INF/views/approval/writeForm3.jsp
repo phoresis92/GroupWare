@@ -279,38 +279,79 @@ function sendFile(file, el) {
 var doubleSubmitFlag = true;
 
 
+
+
 function sendApv(){
+	
+	
+	if('${mem1}' != null){
+		$('#authId1').val(${mem1});
+	}
+	if('${mem2}' != null){
+		$('#authId2').val(${mem1});
+	}
+	if('${mem3}' != null){
+		$('#authId3').val(${mem1});
+	}
+	
+	for(var i = 1 ; i <=3 ; i++){
+		
+		$('#authId'+i+'').val($('#apv_mem'+i+'').text())
+		
+	}
+	
+	if($('#authId1').val() == ''){
+		alert('결재라인을 선택해주세요')
+		console.log($('#authId1').val());
+		return;
+	}
+	if(($('#approval_title').val()).trim() == ''){
+		alert('제목을 입력해주세요')
+		return;
+	}
+	if(($('#summernote').val()).trim() == ''){
+		alert('내용을 입력해주세요')
+		return;
+	}
+	
+	
+	var arr = $('#tbody > tr');
+	for(var i = 0 ; i < arr.length ; i++){
+		var num = (arr[i].id).slice(3);
+		
+		if($('#datepk'+num+'').val().trim() == ''){
+			alert('지출항목의 년월일을 입력해주세요');
+			return;
+		}else if($('#titleSel'+num+'').val().trim() == 't1'){
+			alert('지출항목의 내용을 선택하세요');
+			return;
+		}else if($('#cashAmount'+num+'').val().trim() == ''){
+			alert('지출항목의 금액을 입력하세요');
+			return;
+		}else if($('#bankSel'+num+'').val().trim() == 'b1'){
+			alert('지출항목의 지급은행을 선택하세요');
+			return;
+		}else if($('#depoNum'+num+'').val().trim() == ''){
+			alert('지출항목의 계좌번호를 입력하세요');
+			return;
+		}else if($('#depoOwn'+num+'').val().trim() == ''){
+			alert('지출항목의 예금주를 입력하세요');
+			return;
+		}
+	}
+	
+	
+	
+	
+	
 	if(confirm('제출 이후에는 삭제하실 수 없습니다.\n정말 제출 하시겠습니까?')){
 		if(doubleSubmitFlag){
-			$('#approval_cc').val('');
+			$('#approval_cc').val(null);
 			
-			for(var i = 1 ; i <=3 ; i++){
-				$('#authId'+i+'').val($('#authId'+i+'').text())
-			}
-			
-			
-			
-			$('#authId1').val(${mem1});
-			$('#authId2').val(${mem2});
-			$('#authId3').val(${mem3});
-			if($('#authId1').val() == ''){
-				alert('결재라인을 선택해주세요')
-				console.log($('#authId1').val());
-				return;
-			}
-			if(($('#approval_title').val()).trim() == ''){
-				alert('제목을 입력해주세요')
-				return;
-			}
-			if(($('#summernote').val()).trim() == ''){
-				alert('내용을 입력해주세요')
-				return;
-			}
 			
 			//=========================================================================================
 				
 				
-				var arr = $('#tbody > tr');
 				
 				
 				for(var i = 0 ; i < arr.length ; i++){
@@ -334,25 +375,6 @@ function sendApv(){
 					console.log($('#depoOwn'+num+'').val());
 					console.log($('#comment'+num+'').val());
 					
-					if($('#datepk'+num+'').val().trim() == ''){
-						alert('지출항목의 년월일을 입력해주세요');
-						return;
-					}else if($('#titleSel'+num+'').val().trim() == 't1'){
-						alert('지출항목의 내용을 선택하세요');
-						return;
-					}else if($('#cashAmount'+num+'').val().trim() == ''){
-						alert('지출항목의 금액을 입력하세요');
-						return;
-					}else if($('#bankSel'+num+'').val().trim() == 'b1'){
-						alert('지출항목의 지급은행을 선택하세요');
-						return;
-					}else if($('#depoNum'+num+'').val().trim() == ''){
-						alert('지출항목의 계좌번호를 입력하세요');
-						return;
-					}else if($('#depoOwn'+num+'').val().trim() == ''){
-						alert('지출항목의 예금주를 입력하세요');
-						return;
-					}
 					
 					/* $('<input></input>').attr('name','list['+i+'].pay_date').attr('value',$('#datepk'+num+'').val()).appendTo('#sendApv');
 					$('<input></input>').attr('name','list['+i+'].pay_title').attr('value',$('#titleSel'+num+'').val()).appendTo('#sendApv');
@@ -370,18 +392,18 @@ function sendApv(){
 					$('<input></input>').attr('name','pay_dpowner').attr('value',$('#depoOwn'+num+'').val()).appendTo('#sendApv');
 					$('<input></input>').attr('name','pay_comment').attr('value',$('#comment'+num+'').val()).appendTo('#sendApv'); */
 
-					$('<input></input>').attr('name','pay_date'+i).attr('value',$('#datepk'+num+'').val()).appendTo('#sendApv');
-					$('<input></input>').attr('name','pay_title'+i).attr('value',$('#titleSel'+num+'').val()).appendTo('#sendApv');
-					$('<input></input>').attr('name','pay_cash'+i).attr('value',$('#cashAmount'+num+'').val()).appendTo('#sendApv');
-					$('<input></input>').attr('name','pay_bank'+i).attr('value',$('#bankSel'+num+'').val()).appendTo('#sendApv');
-					$('<input></input>').attr('name','pay_deposit'+i).attr('value',$('#depoNum'+num+'').val()).appendTo('#sendApv');
-					$('<input></input>').attr('name','pay_dpowner'+i).attr('value',$('#depoOwn'+num+'').val()).appendTo('#sendApv');
-					$('<input></input>').attr('name','pay_comment'+i).attr('value',$('#comment'+num+'').val()).appendTo('#sendApv');
+					$('<input></input>').attr('type','hidden').attr('name','pay_date'+i).attr('value',$('#datepk'+num+'').val()).appendTo('#sendApv');
+					$('<input></input>').attr('type','hidden').attr('name','pay_title'+i).attr('value',$('#titleSel'+num+'').val()).appendTo('#sendApv');
+					$('<input></input>').attr('type','hidden').attr('name','pay_cash'+i).attr('value',$('#cashAmount'+num+'').val()).appendTo('#sendApv');
+					$('<input></input>').attr('type','hidden').attr('name','pay_bank'+i).attr('value',$('#bankSel'+num+'').val()).appendTo('#sendApv');
+					$('<input></input>').attr('type','hidden').attr('name','pay_deposit'+i).attr('value',$('#depoNum'+num+'').val()).appendTo('#sendApv');
+					$('<input></input>').attr('type','hidden').attr('name','pay_dpowner'+i).attr('value',$('#depoOwn'+num+'').val()).appendTo('#sendApv');
+					$('<input></input>').attr('type','hidden').attr('name','pay_comment'+i).attr('value',$('#comment'+num+'').val()).appendTo('#sendApv');
 
-					$('<input></input>').attr('name','maxCount').attr('value',arr.length).appendTo('#sendApv'); 
 					
 					
 				}// for end
+					$('<input></input>').attr('type','hidden').attr('name','maxCount').attr('value',arr.length).appendTo('#sendApv'); 
 				
 				/* .attr('type','hidden') */
 				
@@ -395,6 +417,13 @@ function sendApv(){
 				$('<input></input>').attr('type','hidden').attr('value',${ apvReWrite.approval_id }).attr('name','approval_id').appendTo('#sendApv');
 			}
 			
+			console.log($('#authId1').val());
+			console.log($('#authId2').val());
+			console.log($('#authId3').val());
+			console.log($('#approval_title').val());
+			console.log($('#summernote').val());
+			console.log($('#apvCateGo').val());
+			console.log($('#apv_comment').val());			
 			
 		$('#sendApv').submit();
 			doubleSubmitFlag = false;
@@ -454,12 +483,6 @@ function sendApv(){
 	<input type="hidden" id="authDept2" name="authDept2" value="${ apvReWrite.department_name2 }">
 	<input type="hidden" id="authDept3" name="authDept3" value="${ apvReWrite.department_name3 }">
 	
-	${ apvReWrite }
-	
-	
-	${ mem1 }
-	${ mem2 }
-	${ mem3 }  
 	
                 
                 
@@ -551,7 +574,7 @@ function sendApv(){
 <table class="table" border=1>
 
 		<tr>
-			<th>선택</th>
+			<th style="width:7%;" >선택</th>
 			<th>년월일</th>
 			<th>내용</th>
 			<th>금액</th>
@@ -566,13 +589,13 @@ function sendApv(){
 			<c:forEach var="item" items="${ payList }" varStatus="stat">
 			<tr id="Row${ stat.count }">
 				<td id="chkbox${ stat.count }">
-					<input size="10" id="cb${ stat.count }" type="checkbox">
+					<input style="width:100%;" id="cb${ stat.count }" type="checkbox">
 				</td>
 				<td id="date${ stat.count }">
-					<input class="btn btn-outline-primary  btn-sm" id="datepk${ stat.count }" class="datepick" value="${ item.pay_date }">
+					<input style="width:100%;" id="datepk${ stat.count }" class="datepick" value="${ item.pay_date }">
 				</td>
 				<td id="title${ stat.count }">
-					<select class="btn btn-outline-primary  btn-sm" id="titleSel${ stat.count }" value="t${ item.pay_title }">
+					<select style="width:100%;" id="titleSel${ stat.count }" value="t${ item.pay_title }">
 						<option value="t1">선택</option>
 						<option value="t2">교통비</option>
 						<option value="t3">사무비품</option>
@@ -582,10 +605,10 @@ function sendApv(){
 					</select>
 				</td>
 				<td id="amount${ stat.count }">
-					<input id="cashAmount${ stat.count }" class="calAmount" onkeydown="return onlyNumber(event)" onkeyup="removeChar(event)" value="${ item.pay_cash }">
+					<input style="width:100%;" id="cashAmount${ stat.count }" class="calAmount" onkeydown="return onlyNumber(event)" onkeyup="removeChar(event)" value="${ item.pay_cash }">
 				</td>
 				<td id="bank${ stat.count }">
-					<select class="btn btn-outline-primary  btn-sm" class="bSelect" id="bankSel${ stat.count }" value="b${ item.pay_bank }">
+					<select style="width:100%;" class="bSelect" id="bankSel${ stat.count }" value="b${ item.pay_bank }">
 						<option value="b1">은행선택</option>
 						<option value="b2">우리</option>
 						<option value="b3">신한</option>
@@ -593,13 +616,13 @@ function sendApv(){
 					</select>
 				</td>
 				<td id="depoN${ stat.count }">
-					<input value="${deposit.depo_number}" id="depoNum${ stat.count }" onkeydown="return onlyNumber(event)" onkeyup="removeChar(event)" value="${ item.pay_deposit }">
+					<input style="width:100%;" value="${deposit.depo_number}" id="depoNum${ stat.count }" onkeydown="return onlyNumber(event)" onkeyup="removeChar(event)" value="${ item.pay_deposit }">
 				</td>
 				<td id="depoO${ stat.count }">
-					<input value="${sessionScope.member.member_name}" id="depoOwn${ stat.count }" value="${ item.pay_dpowner }">
+					<input style="width:100%;" value="${sessionScope.member.member_name}" id="depoOwn${ stat.count }" value="${ item.pay_dpowner }">
 				</td>
 				<td id="cc${ stat.count }">
-					<input id="comment${ stat.count }" value="${ item.pay_comment }">
+					<input style="width:100%;" id="comment${ stat.count }" value="${ item.pay_comment }">
 				</td>
 			</tr>
 			
@@ -704,12 +727,7 @@ function sendApv(){
 	
 	function tempStore(){
 
-		for(var i = 1 ; i <=3 ; i++){
-			
-			$('#authId'+i+'').val($('#authId'+i+'').text())
-			
-		}
-		
+
 		if(${ not empty apvReWrite.approval_id }){
 		$('<input></input>').attr('type','hidden').attr('value',${ apvReWrite.approval_id }).attr('name','approval_id').appendTo('#sendApv');
 		}
@@ -731,9 +749,21 @@ function sendApv(){
 		
 		$('#approval_cc').val($('#apv_comment').val());
 		
-		$('#authId1').val(${mem1});
-		$('#authId2').val(${mem2});
-		$('#authId3').val(${mem3});
+		if('${mem1}' != null){
+			$('#authId1').val(${mem1});
+		}
+		if('${mem2}' != null){
+			$('#authId2').val(${mem1});
+		}
+		if('${mem3}' != null){
+			$('#authId3').val(${mem1});
+		}
+		
+		for(var i = 1 ; i <=3 ; i++){
+			
+			$('#authId'+i+'').val($('#apv_mem'+i+'').text())
+			
+		}
 		
 		//=========================================================================================
 		
@@ -747,22 +777,24 @@ function sendApv(){
 			var num = (arr[i].id).slice(3);
 			
 
-			$('<input></input>').attr('name','pay_date'+i).attr('value',$('#datepk'+num+'').val()).appendTo('#sendApv');
-			$('<input></input>').attr('name','pay_title'+i).attr('value',$('#titleSel'+num+'').val()).appendTo('#sendApv');
-			$('<input></input>').attr('name','pay_cash'+i).attr('value',$('#cashAmount'+num+'').val()).appendTo('#sendApv');
-			$('<input></input>').attr('name','pay_bank'+i).attr('value',$('#bankSel'+num+'').val()).appendTo('#sendApv');
-			$('<input></input>').attr('name','pay_deposit'+i).attr('value',$('#depoNum'+num+'').val()).appendTo('#sendApv');
-			$('<input></input>').attr('name','pay_dpowner'+i).attr('value',$('#depoOwn'+num+'').val()).appendTo('#sendApv');
-			$('<input></input>').attr('name','pay_comment'+i).attr('value',$('#comment'+num+'').val()).appendTo('#sendApv');
+			$('<input></input>').attr('type','hidden').attr('name','pay_date'+i).attr('value',$('#datepk'+num+'').val()).appendTo('#sendApv');
+			$('<input></input>').attr('type','hidden').attr('name','pay_title'+i).attr('value',$('#titleSel'+num+'').val()).appendTo('#sendApv');
+			$('<input></input>').attr('type','hidden').attr('name','pay_cash'+i).attr('value',$('#cashAmount'+num+'').val()).appendTo('#sendApv');
+			$('<input></input>').attr('type','hidden').attr('name','pay_bank'+i).attr('value',$('#bankSel'+num+'').val()).appendTo('#sendApv');
+			$('<input></input>').attr('type','hidden').attr('name','pay_deposit'+i).attr('value',$('#depoNum'+num+'').val()).appendTo('#sendApv');
+			$('<input></input>').attr('type','hidden').attr('name','pay_dpowner'+i).attr('value',$('#depoOwn'+num+'').val()).appendTo('#sendApv');
+			$('<input></input>').attr('type','hidden').attr('name','pay_comment'+i).attr('value',$('#comment'+num+'').val()).appendTo('#sendApv');
 
-			$('<input></input>').attr('name','maxCount').attr('value',arr.length).appendTo('#sendApv'); 
 			
 			
 		}// for end
+			$('<input></input>').attr('type','hidden').attr('name','maxCount').attr('value',arr.length).appendTo('#sendApv'); 
+			$('<input></input>').attr('type','hidden').attr('name','temp').attr('value','temp').appendTo('#sendApv'); 
 		
 		
 	//=========================================================================================
 
+		
 		
 		if($('#apv_comment').val().trim() != ''){
 			$('#sendApv').submit();

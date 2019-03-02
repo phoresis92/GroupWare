@@ -28,7 +28,7 @@
 <!--    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
  --> 
 </head>
-<body>
+<body id="body">
 
 
 <div class="container">
@@ -268,7 +268,7 @@
 		<%-- 관리자 삭제 버튼 --%>
 		<c:when test="${ auth == 3 }">
 			
-				<button class="btn btn-outline-primary"  onclick="deleteApv()">삭제요청</button>
+				<button class="btn btn-outline-primary"  onclick="deleteApv()">삭제</button>
 			
 		</c:when>
 
@@ -277,7 +277,7 @@
 		<c:when
 			test="${ apvDto.approval_member_id == sessionScope.member.member_id }">
 			<div class="float-right">
-				<button class="btn btn-outline-primary"  data-toggle="modal" data-target="#wantToDel">삭제</button>
+				<button class="btn btn-outline-primary"  data-toggle="modal" data-target="#wantToDel">삭제요청</button>
 			</div>
 		</c:when>
 	</c:choose>

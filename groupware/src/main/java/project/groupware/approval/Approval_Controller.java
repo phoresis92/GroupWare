@@ -145,6 +145,8 @@ public class Approval_Controller {
 			if(ck) { //처음 들어온 임시저장
 				int result = apvService.createApv(dto);
 				System.out.println("insert result : "+result);
+				
+				return "redirect:/approval/tempApvList?page=1";
 			}else { //재수정 임시저장
 				
 				System.out.println(dto);
@@ -152,11 +154,12 @@ public class Approval_Controller {
 				int result = apvService.saveReWrite(dto);
 				System.out.println("insert result : "+result);
 				
+				return "redirect:/approval/tempApvList?page=1";
 			}
 			
 		}
 		
-		return "redirect:/approval";
+		return "redirect:/approval/myApvList?page=1";
 	}
 	
 	public String mkFileName(MultipartFile f, int num, int idx ) {
@@ -586,6 +589,9 @@ public class Approval_Controller {
 			model.addAttribute("endate", sdf2.format(en));
 			
 			System.out.println(sdf2.format(apv.getApproval_startdate()));
+			System.out.println(sdf2.format(en));
+			
+			System.out.println(sdf2.format(apv.getApproval_startdate()));
 			System.out.println(sdf2.format(apv.getApproval_enddate()));
 			
 			
@@ -626,10 +632,10 @@ public class Approval_Controller {
 		System.out.println("result : "+result);
 		
 		if(auth == 3) {//관리자 결재 삭제 후 
-			return "/approval/writeForm1";
+			return "redirect:/manager/apvDelList?page=1";
 		}
 		
-		return "/approval/writeForm1";
+		return "redirect:/approval/tempApvList?page=1";
 		
 	}
 	
@@ -645,7 +651,7 @@ public class Approval_Controller {
 		
 		System.out.println("result : "+result);
 		
-		return "/approval/writeForm1";
+		return "redirect:/approval/myApvList?page=1";
 	}
 	
 	
@@ -701,7 +707,7 @@ public class Approval_Controller {
 	}
 	
 	@RequestMapping(value="/apv_payment/approval", method=RequestMethod.POST)
-	public String payment_approval(Approval_Dto dto, @RequestParam(value="maxCount") int maxCount, HttpServletRequest req) {
+	public String payment_approval(Approval_Dto dto, @RequestParam(value="maxCount") int maxCount, HttpServletRequest req, @RequestParam(value="temp", required=false) String temp) {
 		
 		HttpSession session = req.getSession();
 		dto.setApproval_member_id(((Member) session.getAttribute("member")).getMember_id());
@@ -741,12 +747,14 @@ public class Approval_Controller {
 		
 		System.out.println(dto);
 		
-		int createResult = 0;
 		if(ck) {
-		createResult = apvService.createApv(dto);
+			int createResult = apvService.createApv(dto);
+			System.out.println("insert result : "+ createResult);
+		}else {
+			int rewriteResult = apvService.saveReWrite(dto);
+			System.out.println(rewriteResult);
 		}
 		
-		System.out.println("insert result : "+ createResult);
 		
 		ArrayList<ApvPayment_Dto> list = new ArrayList<ApvPayment_Dto>();
 		for(int i = 0 ; i < maxCount ; i++) {
@@ -770,7 +778,7 @@ public class Approval_Controller {
 				modiResult = apvService.dropApv_pay(pay);
 				System.out.println("pay modify : "+ modiResult);
 			}
-			createResult = apvService.createApv_pay(pay);
+			int createResult = apvService.createApv_pay(pay);
 			
 			System.out.println("pay insert : "+ createResult);
 			
@@ -779,10 +787,14 @@ public class Approval_Controller {
 		
 		
 		System.out.println(list);
+		System.out.println(temp);
+		if(temp != null) {
+			return "redirect:/approval/tempApvList?page=1";
+		}
 		
 
 		
-		return "/member/main";
+		return "redirect:/approval/myApvList?page=1";
 	}; // payment_approval end
 	
 	//======================================================================================================================================================================== Apv List 

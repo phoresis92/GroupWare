@@ -18,11 +18,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
-
-  <!-- 모달이나 좌측메뉴가 겹침 -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
- 
-
 
 <!-- fullcalendar ref -->
 <link rel='stylesheet' href='${pageContext.request.contextPath}/resources/fullcalendar/fullcalendar.css' />
@@ -37,9 +33,6 @@
 
 <!-- jscolor -->
 <script src="${pageContext.request.contextPath}/resources/jscolor.js"></script>
-
-  <!-- 헤드 네비게이션 효과 -->
-  <link href="${pageContext.request.contextPath}/resources/css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
 
@@ -386,15 +379,16 @@ function chk(){
         	
         	if(event.allDay){
 	        	$('#isallDay').val('1');
+	        	$('#pend').text(moment(event.end).subtract(1, 'days').format('YYYY-MM-DD  HH:mm:ss'));
         	}else{
 	        	$('#isallDay').val('0');
+	        	$('#pend').text(moment(event.end).format('YYYY-MM-DD  HH:mm:ss'));
         	}
         	
 	    	$("#pselect").text(cate_name);
         	$("#psubject").text(event.title);
         	$("#pcontent").html(event.content);
-        	$('#pstart').text(moment(event.start).format('YYYY-MM-DD  hh:mm:ss'));
-        	$('#pend').text(moment(event.end).format('YYYY-MM-DD  hh:mm:ss'));
+        	$('#pstart').text(moment(event.start).format('YYYY-MM-DD  HH:mm:ss'));
         	
         	$("#dayModal").modal();	
         	
@@ -741,8 +735,8 @@ function chk(){
 	      	var allDayCheck = 0;
 	      	if(allDay){
 	      		st = start;
-	      		//en = moment(end).add(1, 'days').format('YYYY-MM-DD');
-	      		en = end;
+	      		en = moment(end).add(1, 'days').format('YYYY-MM-DD');
+	      		//en = end;
 	      		allDayCheck = 1;
 	      	}else{
 		      	st = start+" "+start_time;
@@ -917,25 +911,26 @@ function chk(){
 <body>
 
 	<div class="container-fluid">
-	<h2>일정관리</h2>
-		<div class="row">
-			<div>
-						<br><br><br>		
-				<div align= "center">
-						<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#myModal">일정 등록하기</button>
-					</div>
+		<div>
+		
+			<c:choose>
+				<c:when test="${ who != 99999 }">
+					<h1>내일정 관리</h1>
+				</c:when>
+				<c:otherwise>
+					<h1>회사일정 관리</h1>
+				</c:otherwise>
+			</c:choose>
+				
 				<c:if test="${ who != 99999 }">	
-				<div><br><br><br>
-					<input id="myCal" type="checkbox" value="myCal" checked="checked" onchange="chk()">내 일정보기<br>
+				<div>
 					<input id="campCal" type="checkbox" value="campCal" onchange="chk()">회사일정 같이보기
 				</div>
 				</c:if>
-			</div>
+		
 			<!-- The calendar container -->
-			<div class="col-9" align="center">
-			
-				<div align="center" id="calendar"></div>
-			</div>
+				<div id="calendar"></div>
+				<!-- <input class="jscolor {hash:true}" value="ab2567"> -->
 		</div>
 	</div>
 	
@@ -1145,7 +1140,7 @@ function chk(){
 												</c:choose>
 												
 											</c:forEach>
-											<option value="0" onchange="showInput()">직접 입력</option>
+											<!-- <option value="0" onchange="showInput()">직접 입력</option> -->
 											</select>
 											
 												<div id="modselfCate" style="display: none;">
