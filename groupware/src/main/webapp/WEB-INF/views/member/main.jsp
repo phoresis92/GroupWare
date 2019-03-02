@@ -21,7 +21,7 @@
   <link href="${pageContext.request.contextPath}/resources/css/sb-admin-2.min.css" rel="stylesheet">
   
   <style>
-  #timecheck{
+  .timecheck{
   margin-top: 24px;
   }
   .map_wrap {position:relative;overflow:hidden;width:100%;height:350px;}
@@ -92,33 +92,93 @@ $(function(){
 	});
 });
 
-$(function(){
+
+$(document).ready(function(){
+	
+	$.ajax({
+		type:"POST",
+		url:"${pageContext.request.contextPath}/commuting/getNowStatus",
+		success:function(data){
+			try{
+				var obj = JSON.parse(data);		
+			}catch(Exception){
+				return;
+			}
+			
+			if(obj.commuting_arrive != null){
+				$('#arrTime').val('arrive');
+				$('#arrTime').empty();
+				$('#arrTime').css('color','yellow').css('font-size','20px').text(obj.commuting_arrive);
+			}
+			if(obj.commuting_leave != null){
+				$('#leavTime').empty();
+				$('#leavTime').css('color','DarkBlue').css('font-size','20px').text(obj.commuting_leave);
+			}
+			
+			return;
+		}// success end
+	});// ajax end
+	
 	$("#arrive").click(function(){
-		var commuting_member_id = $("#commuting_member_id").val();
-		var param = "commuting_member_id="+commuting_member_id;
 		$.ajax({
 			type:"POST",
-			url:"../commuting/arrive",
-			data:param,
+			async: false,
+			url:"${pageContext.request.contextPath}/commuting/arrive",
 			success:function(data){
-				var obj = eval('('+data+')');			
-				alert(obj.value);				
+				console.log(data);
+				try{
+					var obj = JSON.parse(data);		
+				}catch(Exception){
+					alert(data);
+					return;
+				}
+				
+				$('#arrTime').val('arrive');
+				$('#arrTime').empty();
+				$('#arrTime').css('color','yellow').css('font-size','20px').text(obj.commuting_arrive);
+				alert('${sessionScope.member.member_name}님 '+obj.commuting_arrive+' 출근처리 되었습니다.');
+				
+				return;
+				
 			}
 		});
-	});	
-	$("#leave").click(function(){
-		var commuting_member_id = $("#commuting_member_id").val();
-		var param = "commuting_member_id="+commuting_member_id;
-		$.ajax({
-			type:"POST",
-			url:"../commuting/leave",
-			data:param,
-			success:function(data){
-				var obj = eval('('+data+')');			
-				alert(obj.value);				
-			}
-		});
-	});
+	});	//arrive end
+	
+$("#leave").click(function(){
+		
+		if($('#arrTime').val() != 'arrive'){
+			alert('출근처리 먼저 해주세요.');
+			return;
+		}
+
+		if(confirm('정말 퇴근처리 하시겠습니까?')){
+		
+	 		$.ajax({
+				type:"POST",
+				url:"${pageContext.request.contextPath}/commuting/leave",
+				success:function(data){
+					console.log(data);
+					try{
+						var obj = JSON.parse(data);		
+					}catch(Exception){
+						alert(data);
+						return;
+					}
+					
+					alert('${sessionScope.member.member_name}님 '+obj.commuting_leave+' 퇴근처리 되었습니다.');
+					$('#leavTime').empty();
+					$('#leavTime').css('color','DarkBlue').css('font-size','20px').text(obj.commuting_leave);
+					
+				}
+			});//ajax end 
+	 		
+		}
+	}); // leave end
+	
+})//ready end
+
+$(function(){
+	
 	$("#btn_view").click(function(){
 		var commuting_member_id = $("#commuting_member_id").val();
 		var param = "commuting_member_id="+commuting_member_id;
@@ -150,8 +210,12 @@ $(function(){
 				
 			}
 		});
-	});
-});
+	}); // btn_view end
+	
+});//ready end
+
+
+
 
 
 </script>
@@ -164,6 +228,7 @@ $(function(){
 
              <!-- ======================================================================================================================================================================메인캘린더 -->
 
+
          <script type="text/javascript">
          
          var events_array = [];
@@ -175,7 +240,7 @@ $(function(){
              // We will refer to $calendar in future code
              var $calendar = $("#calendar").fullCalendar({ //start of options
                  //weekends : false, // do not show saturday/sunday
-                 header: false,
+                 header: {right: 'today,listWeek,month,agendaDay,agendaWeek prev,next'},
                  // Make possible to respond to clicks and selections
                  selectable: false,
                  // allow "more" link when too many events
@@ -185,6 +250,7 @@ $(function(){
                  editable: false,
                  resizeable: false,
                  defaultView: 'listWeek',
+                 
                  
                //Drop =================================
                  eventDrop: function(event, delta, revertFunc) {
@@ -238,7 +304,8 @@ $(function(){
                              calendar_cateSelf: list[i].calendar_cateSelf, 
                              member_id: list[i].member_id,
                              color: list[i].color,
-                             allDay: list[i].allDay
+                             allDay: list[i].allDay,
+                             textColor: '#FFF'
                          }]);
                         
                      } //for end
@@ -541,7 +608,7 @@ $(function(){
                 <!-- Card Body -->
          <div class="card-body">
                                
-                 <div id="timecheck">
+                 <div class="timecheck">
                   <div class="card bg-primary text-white shadow">
                     <div class="card-body">
                       <div align="center" id="current_time"></div>
@@ -552,23 +619,22 @@ $(function(){
                  
                  <input type="hidden" id="commuting_member_id" value="${sessionScope.member.member_id}"/>
                    
-                   <div id="timecheck">
-                      <button id="arrive" style="width:100%;" class="card bg-info text-white shadow">
-                    <div class="card-body">
+                   <div class="timecheck">
+                      <div id="arrive" style="width:100%;" class="card bg-info text-white shadow">
+                    <div class="card-body" align="center" style="cursor:pointer;" id="arrTime">
                      출근체크
-                      <div class="text-white-50 small">9시 이전에 체크해주세요!</div>
+                      <div class="text-white-50 small" align="center" >9시 이전에 체크해주세요!</div>
                     </div>
-                    
-                  </button>
+                  </div>
                 </div>
                 
-                         <div id="timecheck">
-                  <button  id="leave" style="width:100%;" class="card bg-warning text-white shadow">
-                   <div class="card-body">
+               	<div class="timecheck">
+                  <div  id="leave" style="width:100%;" class="card bg-warning text-white shadow">
+                   <div class="card-body" align="center" style="cursor:pointer;" id="leavTime">
                       퇴근체크
                       <div class="text-white-50 small" align="center">6시 이후에 체크해주세요!</div>
                     </div>
-                  </button>
+                  </div>
                 </div>
                 
                    
@@ -624,7 +690,7 @@ $(function(){
                 <!-- Card Body -->
          <div class="card-body">
                                
-                 <div id="timecheck">
+                 <div class="timecheck">
                   <div class="card bg-primary text-white shadow">
                     <div class="card-body">
                       <div align="center" id="current_time"></div>
@@ -633,9 +699,8 @@ $(function(){
                   </div>
                 </div>
                  
-                 <input type="hidden" id="commuting_member_id" value="${sessionScope.member.member_id}"/>
                    
-                   <div id="timecheck">
+                   <div class="timecheck">
                       <button id="arrive" style="width:100%;" class="card bg-info text-white shadow">
                     <div class="card-body">
                      출근체크
@@ -645,7 +710,7 @@ $(function(){
                   </button>
                 </div>
                 
-                         <div id="timecheck">
+                         <div class="timecheck">
                   <button  id="leave" style="width:100%;" class="card bg-warning text-white shadow">
                    <div class="card-body">
                       퇴근체크

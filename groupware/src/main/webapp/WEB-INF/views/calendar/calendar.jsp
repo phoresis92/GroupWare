@@ -126,7 +126,8 @@ function chk(){
 					        calendar_cateSelf: list[i].calendar_cateSelf, 
 					        member_id: list[i].member_id,
 					        color: list[i].color,
-					        allDay: list[i].allDay
+					        allDay: list[i].allDay,
+					        textColor: '#FFF'
 					    }]);
 						
 					} //for end
@@ -816,7 +817,8 @@ function chk(){
 						start: moment(obj.start),
 						end: moment(obj.end),
 						color: obj.color,
-						calendar_cate: obj.calendar_cate
+						calendar_cate: obj.calendar_cate,
+						textColor: '#FFF'
 				};
 			}else{
 				var event = {
@@ -827,7 +829,8 @@ function chk(){
 						start: moment(obj.start),
 						end: moment(obj.end),
 						color: obj.color,
-						calendar_cate: obj.calendar_cateSelf
+						calendar_cate: obj.calendar_cateSelf,
+						textColor: '#FFF'
 				};
 			}
 	}else{
@@ -841,7 +844,8 @@ function chk(){
 						end: moment(obj.end).format(),
 						color: obj.color,
 						calendar_cate: obj.calendar_cate,
-			        allDay: true
+			        allDay: true,
+			        textColor: '#FFF'
 			    };
 			  }else{
 			    var event = {
@@ -853,7 +857,8 @@ function chk(){
 						end: moment(obj.end).format(),
 						color: obj.color,
 						calendar_cate: obj.calendar_cateSelf,
-			        allDay: true
+			        allDay: true,
+			        textColor: '#FFF'
 			    };
 			  }
 			}

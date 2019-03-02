@@ -105,7 +105,7 @@ $(function(){
 					$('#row_${ now }').val(json.commuting_id);
 					$('#arrive_${ now }').text(json.commuting_arrive);
 					$('#stat_${ now }').text('근무중');
-					alert('${sessionScope.member.member_name}님 '+json.commuting_arrive+' 출근처리 하셨습니다.');
+					alert('${sessionScope.member.member_name}님 '+json.commuting_arrive+' 출근처리 되었습니다.');
 					
 					var arrive = new Date("2019-02-01 "+json.commuting_arrive);
 					var ontime = new Date("2019-02-01 09:00:00");
@@ -150,7 +150,7 @@ $(function(){
 					console.log(json)
 					$('#leave_${ now }').text(json.commuting_leave);
 					$('#stat_${ now }').text(json.commuting_status);
-					alert('${sessionScope.member.member_name}님 '+json.commuting_leave+' 퇴근처리 하셨습니다.');
+					alert('${sessionScope.member.member_name}님 '+json.commuting_leave+' 퇴근처리 되었습니다.');
 					
 					//==================================================================================
 					

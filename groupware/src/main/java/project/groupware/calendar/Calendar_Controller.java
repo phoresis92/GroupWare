@@ -67,6 +67,7 @@ public class Calendar_Controller {
 			  jobj.put("title", dto.getCalendar_title());
 			  jobj.put("content", dto.getCalendar_content());
 			  jobj.put("color", dto.getCalendar_color());
+			  jobj.put("textColor", "#FFF");
 			  boolean ad = false;
 			  if(dto.getCalendar_allDay() == 1) {
 				  ad = true;

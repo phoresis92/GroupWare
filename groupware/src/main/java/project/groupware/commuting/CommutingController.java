@@ -37,7 +37,7 @@ public class CommutingController {
 		mav.addObject("now",sdf.format(new Date()));
 
 		
-		mav = getCalendar(mav, yearS, monthS);
+		mav = getCalendar(mav, yearS, monthS); 
 
 		if(dayS != null) {
 			mav.addObject("day",Integer.parseInt(dayS));
@@ -144,8 +144,19 @@ public class CommutingController {
 			JSONObject obj = new JSONObject();
 			obj.put("commuting_id", resultComm.getCommuting_id());
 			obj.put("commuting_member_id", resultComm.getCommuting_member_id());
-			obj.put("commuting_arrive", sdf.format(resultComm.getCommuting_arrive()));
-			obj.put("commuting_leave", sdf.format(resultComm.getCommuting_leave()));
+			
+			try {
+				obj.put("commuting_arrive", sdf.format(resultComm.getCommuting_arrive()));
+			} catch (Exception e) {
+				obj.put("commuting_arrive", resultComm.getCommuting_arrive());
+			}
+			
+			try {
+				obj.put("commuting_leave", sdf.format(resultComm.getCommuting_leave()));
+			} catch (Exception e) {
+				obj.put("commuting_leave", resultComm.getCommuting_leave());
+			}
+			
 			obj.put("commuting_status", resultComm.getCommuting_status());
 			
 			return obj.toJSONString();
@@ -310,4 +321,50 @@ public class CommutingController {
 		}		
 		return mav;
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="/commuting/getNowStatus", method=RequestMethod.POST, produces = "application/text; charset=utf8")
+	public String getNowStatus (HttpServletRequest req) {
+		
+		HttpSession session = req.getSession();
+		
+		int member_id = ((Member) session.getAttribute("member")).getMember_id();
+		
+		
+		Commuting resultComm = commuting_service.checkExist(member_id+"");
+		System.out.println("comm result : "+resultComm);
+		
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		
+		if(resultComm != null && resultComm.getCommuting_arrive() != null) {
+			
+			
+			JSONObject obj = new JSONObject();
+			obj.put("commuting_id", resultComm.getCommuting_id());
+			obj.put("commuting_member_id", resultComm.getCommuting_member_id());
+			
+			try {
+				obj.put("commuting_arrive", sdf.format(resultComm.getCommuting_arrive()));
+			} catch (Exception e) {
+				obj.put("commuting_arrive", resultComm.getCommuting_arrive());
+			}
+			
+			try {
+				obj.put("commuting_leave", sdf.format(resultComm.getCommuting_leave()));
+			} catch (Exception e) {
+				obj.put("commuting_leave", resultComm.getCommuting_leave());
+			}
+			
+			obj.put("commuting_status", resultComm.getCommuting_status());
+			
+			return obj.toJSONString();
+			
+		}else {
+			return "출근처리 먼저 해주세요.";
+		}
+		
+	}
+	
 }

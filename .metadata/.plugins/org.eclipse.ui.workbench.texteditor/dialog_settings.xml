@@ -2,27 +2,27 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="myApvList" key="selection"/>
+		<item value="timecheck" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="myApvList"/>
-			<item value="var cl"/>
-			<item value="cl.length"/>
-			<item value="ajax"/>
-			<item value="temp"/>
-			<item value="printCal"/>
-			<item value="print"/>
-			<item value="cl"/>
-			<item value="commentBtn"/>
-			<item value="now"/>
-			<item value="Response"/>
-			<item value="getCalendar"/>
-			<item value="setIn"/>
-			<item value="HH"/>
-			<item value="@ResponseBody"/>
+			<item value="timecheck"/>
+			<item value="leave"/>
+			<item value="dele"/>
+			<item value="del"/>
+			<item value="삭제요청"/>
+			<item value="삭제"/>
+			<item value="delete"/>
+			<item value="deleteApv"/>
+			<item value="apv_mem"/>
+			<item value="stdate"/>
+			<item value="whatV"/>
+			<item value="authDept"/>
+			<item value="authId"/>
+			<item value="auth"/>
+			<item value="memId_"/>
 		</list>
 		<list key="replacehistory">
 		</list>
@@ -31,7 +31,7 @@
 		<item value="288" key="DIALOG_WIDTH"/>
 		<item value="1|맑은 고딕|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕" key="DIALOG_FONT_NAME"/>
 		<item value="391" key="DIALOG_HEIGHT"/>
-		<item value="1126" key="DIALOG_X_ORIGIN"/>
-		<item value="293" key="DIALOG_Y_ORIGIN"/>
+		<item value="965" key="DIALOG_X_ORIGIN"/>
+		<item value="358" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>
