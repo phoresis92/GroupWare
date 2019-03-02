@@ -150,7 +150,7 @@
 <%-- <script src='${pageContext.request.contextPath}/resources/fullcalendar/lib/jquery.min.js'></script> --%>
 <script src='${pageContext.request.contextPath}/resources/fullcalendar/lib/moment.min.js'></script>
 <script src='${pageContext.request.contextPath}/resources/fullcalendar/fullcalendar.js'></script>
-<script src='${pageContext.request.contextPath}/resources/fullcalendar/lang/ko.js'></script>
+<script src='${pageContext.request.contextPath}/resources/fullcalendar/lang/ko.js'></script> 
                 
                 <!-- Card Body -->
                 <div class="card-body">

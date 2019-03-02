@@ -205,5 +205,19 @@ public class Calendar_Controller {
 		
 		return arr.toJSONString();
 	}
+	
+	@ResponseBody
+	@RequestMapping(value="/calendar/calCount", method=RequestMethod.POST, produces = "application/text; charset=utf8")
+	public String getCalCount(HttpServletRequest req) {
+	
+		HttpSession session = req.getSession();
+		Member m = (Member) session.getAttribute("member");
+		
+		int count = cal_Service.getCalCount(m.getMember_id());
+		
+		System.out.println("getCalCount : "+count);
+		
+		return count+"";
+	}
 
 }

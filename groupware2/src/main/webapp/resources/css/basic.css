@@ -1,0 +1,42 @@
+.boxleft{
+	float:left;
+}
+
+.boxright{
+	float:right;
+}
+
+.commonbox{
+	margin:0 auto;	
+	_text-align:left;
+	background-color:#c4cad64f;
+	padding:20px;
+	border:1px solid lightgray;
+}
+
+.focus label {font-size:11px;}
+.focus input, .focus select {padding-top: 1.7em !important; padding-bottom: 0.5em !important;}
+
+.textbox {position: relative;} 
+.textbox label {
+	position: absolute;
+	top: 1px; /* input 요소의 border-top 설정값 만큼 */
+	left: 1px; /* input 요소의 border-left 설정값 만큼 */
+	padding: 1.1em .5em; /* input 요소의 padding 값 만큼 */
+	color: #999;
+	cursor: text;
+} 
+.textbox input[type="text"], .textbox input[type="password"], .textbox input[type="number"], .textbox select, .textbox input[type="button"], .textbox button{
+	width: 100%; /* 원하는 너비 설정 */ 
+	height: auto; /* 높이값 초기화 */ 
+	line-height : normal; /* line-height 초기화 */ 
+	padding: 1.1em .5em; /* 원하는 여백 설정, 상하단 여백으로 높이를 조절 */ 
+	font-family: inherit; /* 폰트 상속 */ 
+	outline-style: none; /* 포커스시 발생하는 효과 제거를 원한다면 */
+	-moz-appearance: none; 
+	appearance: none;
+}
+
+.textbox input[type="text"], .textbox input[type="password"], .textbox input[type="number"], .textbox input[type="button"], .textbox button{
+	-webkit-appearance: none; /* 브라우저별 기본 스타일링 제거 */ 
+}

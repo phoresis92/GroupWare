@@ -65,5 +65,11 @@ public class Cal_ServiceImpl implements Calendar_Service {
 		return cal_Dao.selectVacatNum(map);
 	}
 
+	@Override
+	public int getCalCount(int member_id) {
+		cal_Dao=sqlSession.getMapper(Calendar_Dao.class);
+		return cal_Dao.selectCalCount(member_id);
+	}
+
 
 }

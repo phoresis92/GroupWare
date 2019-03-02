@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.groupware.email.Dao"> <!-- Dao implements한 클래스 이름지정 -->
+
+	<resultMap id="EmailResult" type="project.groupware.email.Email"> <!-- id:검색된결과를 반환, type:Bean/DTO/VO -->
+		<result column="email_id" property="email_id" />
+		<result column="sender_id" property="sender_id" />
+		<result column="sender_pw" property="sender_pw" />
+		<result column="sender" property="sender" />
+		<result column="receiver_id" property="receiver_id" />
+		<result column="receiver" property="receiver" />
+		<result column="title" property="title" />
+		<result column="content" property="content" />
+		<result column="send_date" property="send_date" />
+		<result column="email_path" property="email_path" />
+		<result column="email_status" property="email_status" />
+		<result column="type" property="type" />
+	</resultMap>
+	
+	<resultMap id="EmailAccountResult" type="project.groupware.email.Email"> <!-- id:검색된결과를 반환, type:Bean/DTO/VO -->
+		<result column="member_id" property="member_id" />
+		<result column="email_account" property="email_account" />
+		<result column="email_pw" property="email_pw" />
+	</resultMap>
+
+	<insert id="insert" parameterType="project.groupware.email.Email"> <!-- id:interface method 이름, parameterType:객체 -->
+		INSERT INTO email 
+		VALUES(seq_email_id.nextval, #{sender_id}, #{sender}, #{receiver_id},#{receiver}, #{title},
+		#{content}, sysdate, #{email_path, jdbcType=VARCHAR}, 1, 0)
+	</insert>
+	
+	<insert id="insertExternal_mail" parameterType="project.groupware.email.Email"> <!-- id:interface method 이름, parameterType:객체 -->
+		INSERT INTO email 
+		VALUES(seq_email_id.nextval, #{sender_id}, #{sender}, #{receiver_id},#{receiver}, #{title},
+		#{content}, #{send_date}, #{email_path, jdbcType=VARCHAR}, 0,1)
+	</insert>
+	
+	<insert id="insertAccount" parameterType="project.groupware.email.Email">
+		INSERT INTO email_account VALUES(#{member_id}, #{email_account}, #{email_pw})
+	</insert>
+	
+	<select id="selectAll" resultMap="EmailResult">
+		SELECT * FROM email
+	</select>
+	
+	<select id="selectId" parameterType="project.groupware.email.Email" resultMap="EmailAccountResult">
+		SELECT member_id FROM email_account WHERE member_id = #{member_id}
+	</select>
+	
+	<select id="selectAccount" parameterType="String" resultMap="EmailAccountResult">
+		SELECT * FROM email_account WHERE member_id = #{member_id}
+	</select>
+	
+	<select id="selectAccountId" parameterType="String" resultMap="EmailAccountResult">
+		SELECT * FROM email_account WHERE email_account = #{email_account}
+	</select>
+	
+	<select id="selectEmail" parameterType="int" resultMap="EmailResult">
+		SELECT * FROM email WHERE email_id = #{email_id}
+	</select>
+	
+	<select id="selectSend" parameterType="Map" resultMap="EmailResult">
+		SELECT * 
+		FROM email 
+		WHERE sender_id = #{account} 
+		AND type = 0 
+		AND email_status In (1) 
+		<if test="condition!=null and condition!=''">			
+			<foreach item="opt" collection="option" index="index" separator=" OR " open="AND (" close=") ">
+				${opt} LIKE '%'||#{condition}||'%'
+			</foreach>
+        </if>
+		ORDER BY email_id DESC
+	</select>
+	
+	<select id="selectReceive" parameterType="Map" resultMap="EmailResult">
+		SELECT * 
+		FROM email 
+		WHERE receiver_id = #{account} 
+		AND type = 1 
+		AND email_status IN (0,1) 
+		<if test="condition!=null and condition!=''">			
+			<foreach item="opt" collection="option" index="index" separator=" OR " open="AND (" close=") ">
+				${opt} LIKE '%'||#{condition}||'%'
+			</foreach>
+        </if>
+		ORDER BY email_id DESC
+	</select>
+	
+	<select id="selectExReceive" parameterType="Map" resultMap="EmailResult">
+		SELECT * 
+		FROM email 
+		WHERE receiver_id = #{account} 
+		AND type = 2 
+		AND email_status IN (0,1) 
+		<if test="condition!=null and condition!=''">			
+			<foreach item="opt" collection="option" index="index" separator=" OR " open="AND (" close=") ">
+				${opt} LIKE '%'||#{condition}||'%'
+			</foreach>
+        </if>
+		ORDER BY email_id DESC
+	</select>
+	
+	<select id="selectReceiveCount" parameterType="String" resultMap="EmailResult">
+		SELECT * 
+		FROM email 
+		WHERE receiver_id = #{receiver_id} 
+		AND type = 1 
+		AND email_status IN (0) 
+		ORDER BY email_id DESC
+	</select>
+	
+	<select id="selectRecycle" parameterType="Map" resultMap="EmailResult">
+		SELECT * 
+		FROM email 
+		WHERE (sender_id = #{account}  AND type = 0 AND email_status IN (2)) 
+		OR (receiver_id = #{account}  AND type = 1 AND email_status IN (2)) 
+		<if test="condition!=null and condition!=''">			
+			<foreach item="opt" collection="option" index="index" separator=" OR " open="AND (" close=") ">
+				${opt} LIKE '%'||#{condition}||'%'
+			</foreach>
+        </if>
+		ORDER BY email_id DESC
+	</select>
+	
+	<select id="selectExRecycle" parameterType="Map" resultMap="EmailResult">
+		SELECT * 
+		FROM email 
+		WHERE receiver_id = #{account}  AND type = 2 AND email_status IN (2) 
+		<if test="condition!=null and condition!=''">			
+			<foreach item="opt" collection="option" index="index" separator=" OR " open="AND (" close=") ">
+				${opt} LIKE '%'||#{condition}||'%'
+			</foreach>
+        </if>
+		ORDER BY email_id DESC
+	</select>
+	
+	<update id="updateEmail" parameterType="project.groupware.email.Email">
+		UPDATE email SET email_status = #{email_status} WHERE email_id = #{email_id}
+	</update>
+	
+	<update id="updateAccount" parameterType="project.groupware.email.Email">
+		UPDATE email_account SET email_account = #{email_account}, email_pw = #{email_pw} WHERE member_id = #{member_id}
+	</update>
+		
+	<delete id="delete" parameterType="int">
+		DELETE email WHERE email_id = #{email_id}
+	</delete>
+	
+	<delete id="deleteAccount" parameterType="String">
+		DELETE email_account WHERE member_id = #{member_id}
+	</delete>
+
+</mapper>
+

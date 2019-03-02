@@ -38,6 +38,7 @@
 		<item value="531" key="height"/>
 	</section>
 	<section name="MavenProjectWizardArchetypePage">
+		<item value="All Catalogs" key="catalog"/>
 		<list key="projectNameTemplate">
 			<item value="[artifactId]"/>
 			<item value="[artifactId]-TRUNK"/>
@@ -49,6 +50,7 @@
 	</section>
 	<section name="MavenProjectWizardLocationPage">
 		<list key="location">
+			<item value="C:\Users\hushe\dev\eclipse-jee-2018-12-R-win32-x86_64\gware\groupware0227\src\main\java\project\groupware\commuting\CommutingController.java"/>
 			<item value="C:\Users\hushe\dev\eclipse-jee-2018-12-R-win32-x86_64\gware\gware\src\main\java\it\kit\gware\calendar\Calendar_Controller.java"/>
 		</list>
 		<list key="projectNameTemplate">

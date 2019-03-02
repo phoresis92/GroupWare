@@ -505,7 +505,7 @@ function sendApv(){
 	<button onclick="addRow()">지출항목 추가</button>
 	<button onclick="removeRow()">지출항목 삭제</button>
 	<button onclick="resetRow()">지출항목 초기화</button>
-	<table>
+	<table class="table">
 		<tr>
 			<th>선택</th>
 			<th>년월일</th>
@@ -518,6 +518,10 @@ function sendApv(){
 		</tr>
 		
 		<tbody id="tbody">
+		
+		
+		
+		
 			<c:forEach var="item" items="${ payList }" varStatus="stat">
 			<%-- ${ item.pay_date }
 			${ item.pay_title }

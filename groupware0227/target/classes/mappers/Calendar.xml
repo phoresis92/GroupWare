@@ -55,6 +55,10 @@
 	<select id="selectVacatNum" parameterType="map" resultMap="cateResult" >
 		select cal_cate_id, cal_cate_color from calendar_cate where cal_cate_name = #{cal_cate_n}
 	</select>
+	
+	<select id="selectCalCount" parameterType="int" resultType="int">
+		select count(*) from calendar where calendar_member_id = #{member_id} and sysdate between to_date(calendar_start, 'YYYY-MM-DD HH24:MI:SS') and to_date(calendar_end, 'YYYY-MM-DD HH24:MI:SS')
+	</select>
 
 
 <!-- 	public int insertCal(Calendar_Dto calDto);

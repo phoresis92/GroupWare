@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.groupware.department.Dao"> <!-- Dao implements한 클래스 이름지정 -->
+
+	<resultMap id="departmentResult" type="project.groupware.department.Department"> <!-- id:검색된결과를 반환, type:Bean/DTO/VO -->
+		<result column="department_id" property="department_id" /> <!-- column:컬럼이름, property:멤버변수 -->
+		<result column="department_name" property="department_name" />
+	</resultMap>
+
+	<insert id="insert" parameterType="project.groupware.department.Department"> <!-- id:interface method 이름, parameterType:객체 -->
+		INSERT INTO department VALUES(#{department_id}, #{department_name})
+	</insert>
+	
+	<select id="selectAll" parameterType="int" resultMap="departmentResult">
+		SELECT department_id, department_name FROM department ORDER BY department_id
+	</select>
+	
+	<select id="selectCount" parameterType="int" resultType="int">
+		SELECT NVL(cnt, 0) as dept_count 
+		FROM department d, 
+		(SELECT member_department, COUNT(member_department) as cnt FROM member WHERE member_status IN (1,2,5) GROUP BY member_department) m 
+		WHERE member_department(+) = department_id
+		AND department_id IN 
+		<foreach collection="list" item="dept" open="(" close=")" separator=",">
+		#{dept.department_id}
+		</foreach>
+		ORDER BY department_id
+	</select>
+	
+	<select id="selectChoice" parameterType="String" resultMap="departmentResult">
+		SELECT department_id, department_name FROM department WHERE department_name LIKE #{department_name} ORDER BY department_id		
+	</select>
+	
+	<select id="selectCountChoice" parameterType="Map" resultType="int">
+		SELECT NVL(cnt, 0) as dept_count 
+		FROM department d, 
+		(SELECT member_department, COUNT(member_department) as cnt FROM member WHERE member_status IN (1,2,5) GROUP BY member_department) m 
+		WHERE member_department(+) = department_id 
+		AND department_name LIKE #{department_name}
+		AND department_id IN 
+		<foreach collection="list" item="dept" open="(" close=")" separator=",">
+		#{dept.department_id}
+		</foreach>
+		ORDER BY department_id
+	</select>
+	
+	<select id="select" parameterType="int" resultType="String">
+		SELECT department_id, department_name FROM department WHERE department_id = #{department_id}
+	</select>
+	
+	<update id="update" parameterType="project.groupware.department.Department">
+		UPDATE department SET department_name = #{department_name} WHERE department_id = #{department_id}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		DELETE department WHERE department_id = #{department_id}
+	</delete>
+
+</mapper>
+
