@@ -78,52 +78,39 @@ ALTER SYSTEM KILL SESSION '14, 6273';
 --게시판
 ======================================================================
 
-create table board_section(
-b_section_id number(3) primary key,
-b_section_name varchar2(30) not null
-);
 
-drop table section;
-
-
-
-
-create table board(
-board_id number primary key,
-board_section number(3) not null,
-board_member_id number(20) not null,
-board_title varchar2(500) not null,
-board_content varchar2(4000) not null,
-board_indate date default sysdate,
-board_hits number default 0,
-constraint board_section_fk foreign key (board_section)
-references board_section(b_section_id) on delete cascade,
-constraint board_member_id_fk foreign key (board_member_id)
-references member(member_id) on delete cascade
-);
-
-create sequence seq_board_id ;
-
-drop table board;
+  CREATE TABLE TBL_BOARD(
+  BGNO NUMBER(11,0), 
+	BRDNO NUMBER(11,0) PRIMARY KEY, 
+	BRDTITLE VARCHAR2(255 BYTE), 
+	BRDWRITER VARCHAR2(20 BYTE), 
+	BRDMEMO VARCHAR2(4000 BYTE), 
+	BRDDATE DATE, 
+	BRDHIT NUMBER, 
+	BRDDELETEFLAG CHAR(1 BYTE)
+	);
 
 
+  CREATE TABLE TBL_BOARDFILE(
+  FILENO NUMBER(11,0) PRIMARY KEY, 
+	BRDNO NUMBER(11,0), 
+	FILENAME VARCHAR2(100 BYTE), 
+	REALNAME VARCHAR2(30 BYTE), 
+	FILESIZE NUMBER
+	);
+	
+		  CREATE TABLE TBL_BOARDREPLY(
+  BRDNO NUMBER(11,0) NOT NULL ENABLE, 
+	RENO NUMBER(11,0) PRIMARY KEY, 
+	REWRITER VARCHAR2(10 BYTE) NOT NULL ENABLE, 
+	REMEMO VARCHAR2(500 BYTE), 
+	REDATE DATE, 
+	REDELETEFLAG VARCHAR2(1 BYTE) NOT NULL ENABLE, 
+	REPARENT NUMBER(11,0), 
+	REDEPTH NUMBER, 
+	REORDER NUMBER
+	);
 
-create table reply(
-reply_id number primary key,
-reply_board_id number not null,
-reply_member_id number(20) not null,
-reply_content varchar2(4000) not null,
-reply_indate date default sysdate,
-reply_modidate date,
-constraint reply_board_id_fk foreign key (reply_board_id)
-references board(board_id) on delete cascade,
-constraint reply_member_id_fk foreign key (reply_member_id)
-references member(member_id) on delete cascade
-);
-
-create sequence seq_reply_id;
-
-drop table reply;
 
 ======================================================================
 
@@ -283,7 +270,7 @@ where calendar_id = 135
 
 create table commuting(
 commuting_id number primary key,
-commuting_member_id number(20) not null,
+commuting_member_id varchar2(20) not null,
 commuting_arrive date default null,
 commuting_leave date default null,
 commuting_comment varchar2(500),
@@ -309,15 +296,15 @@ receiver varchar2(50) not null,
 title varchar2(100) not null,
 content clob not null,
 send_date date,
-email_path varchar2(4000),
-email_status number(1) default 0
+email_status number(1) default 0,
+type number(1) default 0
 );
 
 create sequence seq_email_id;
 
 create table email_account(
 member_id  varchar2(20),
-email_account varchar(50) not null,-- unique,
+email_account varchar(50) unique,-- unique,
 email_pw varchar2(20) not null,
 constraint email_account_fk foreign key (member_id)
 references member(member_id) on delete cascade
@@ -380,3 +367,8 @@ insert into department values(2, '총무부');
 insert into department values(3, '생산부');
 insert into department values(4, '홍보부');
 insert into department values(5, '관리부');
+
+
+
+
+
