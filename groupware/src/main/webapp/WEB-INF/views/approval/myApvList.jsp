@@ -17,7 +17,7 @@
 
 $(document).ready(function(){
 	
-	$('#word').focus();
+	//$('#word').focus();
 	
 	if(${ map['cate1'] == null }){
 		$('#cate1').attr('checked',false);

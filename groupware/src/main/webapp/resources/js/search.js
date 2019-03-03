@@ -86,6 +86,8 @@ $(function(){
 					$("#modal_findPw").modal();
 				}
 			});			
+		} else{
+			$("#btn_find_pw").prop("disabled", false);
 		}
 	});
 	

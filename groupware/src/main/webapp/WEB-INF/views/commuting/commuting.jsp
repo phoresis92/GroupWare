@@ -85,7 +85,7 @@ setInterval('time()', 1000);
 function time() {
 	$.ajax({
 		type:"POST",
-		url:"../commuting/current_time",
+		url:"${pageContext.request.contextPath}/commuting/current_time",
 		success:function(data){
 			var obj = eval('('+data+')');			
 			$("#current_time").html(obj.value);				
@@ -188,7 +188,7 @@ $(function(){
 		var param = "year=${ year }&month=${ month }";
 		$.ajax({
 			type:"POST",
-			url:"../commuting/view",
+			url:"${pageContext.request.contextPath}/commuting/view",
 			data:param,
 			success:function(data){
 				var arr = JSON.parse(data);

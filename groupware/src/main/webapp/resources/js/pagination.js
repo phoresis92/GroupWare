@@ -27,10 +27,10 @@ $.getPage = function(page, list) {
 	var str = '';
 	if (endPage > 0) {
 		if (page != 1) {
-			str += '<li class="page-item"><a class="page-link" href="javascript:$.getList(1);">[처음]</a></li>';
+			str += '<li class="page-item"><a class="page-link" href="javascript:$.getList(1);"><i class="fas fa-angle-double-left"></i></a></li>';
 		}	
 		if (page >=11) {
-			str += '<li class="page-item"><a class="page-link" href=""javascript:$.getList('+page-1+');">[이전]</a></li>';		
+			str += '<li class="page-item"><a class="page-link" href=""javascript:$.getList('+page-1+');"><i class="fas fa-angle-left"></i></a></li>';		
 		}
 		for (var pagenum = startPage; pagenum <= endPage; pagenum++){
 			if (pagenum == page){
@@ -41,8 +41,8 @@ $.getPage = function(page, list) {
 			}		
 		}
 		if (endPage != totalPage){
-			str += '<li class="page-item"><a class="page-link" href="javascript:$.getList('+endPage+1+');">[다음]</a></li>';
-			str += '<li class="page-item"><a class="page-link" href="javascript:$.getList('+totalPage+');">[끝]</a></li>';		
+			str += '<li class="page-item"><a class="page-link" href="javascript:$.getList('+endPage+1+');"><i class="fas fa-angle-right"></i></a></li>';
+			str += '<li class="page-item"><a class="page-link" href="javascript:$.getList('+totalPage+');"><i class="fas fa-angle-double-right"></i></a></li>';		
 		}		
 	} else {
 		str += "<h3>등록된 글이 없습니다.</h3>"

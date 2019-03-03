@@ -27,7 +27,7 @@
           <div class="card-body p-0">
             <!-- Nested Row within Card Body -->
             <div class="row">
-              <div class="col-lg-6 d" style="background-color:eaf8ff"><img id="file_img" src="${pageContext.request.contextPath}/resources/img/ALPHA.png" alt="사진"></div>
+               <div class="col-lg-6 d" style="background-color:#eaf8ff !important"><img id="file_img" src="${pageContext.request.contextPath}/resources/img/ALPHA.png" alt="사진"></div>
               <div class="col-lg-6">
                 <div class="p-5">
                   <div class="text-center">
@@ -71,7 +71,6 @@
                     <a href="${pageContext.request.contextPath}/member/join" class="btn btn-facebook btn-user btn-block">
                       Create an Account!
                     </a>
-                  </form>
 
                   <hr>
                   <div class="text-center">

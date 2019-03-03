@@ -152,9 +152,6 @@ $(function(){
 		condition = $("input[name='condition']").val();
 		$.getList();
 	});
-	$(document).on("blur", "tr a", function(){
-		$(this).attr('color', 'white');
-	});
 })
 
 // 찾기 중에 오류가 날 때 zoom 관련 css 초기화 되어 다시 설정
@@ -184,7 +181,7 @@ $.getList = function(p){
 			str = '<table class="table table-hover text-center">';
 			str += '<thead><tr class="text-center"><th>번호</th><th>직급명</th><th>직원수</th>';
 			str += '<th class="text-right">';
-			str += '<a id="a_add_rank" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modal_edit_rank">추가</a>';
+			str += '<button id="a_add_rank" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modal_edit_rank">추가</button>';
 			str += '</th></tr></thead>';
 			for(i = startNum; i < endNum; i++){
 				str += '<tr>';
@@ -192,8 +189,8 @@ $.getList = function(p){
 				str += '<td>' + arr[i].rank_name + '</td>';
 				str += '<td>' + arr[i].rank_count + '</td>';
 				str += '<td class="text-right">';
-				str += '<a id="a_edit_rank" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modal_edit_rank">수정</a>';
-				str += '<a id="a_del_rank" class="btn btn-outline-primary btn-sm">삭제</a>';
+				str += '<button id="a_edit_rank" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modal_edit_rank">수정</button>';
+				str += '<button id="a_del_rank" class="btn btn-outline-primary btn-sm">삭제</button>';
 				str += '</td>';
 				str += '</tr>';
 			}

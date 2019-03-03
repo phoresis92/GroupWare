@@ -429,26 +429,26 @@ console.log(where)
 
 if(${ auth } == 1){
 if( where == 1 ){
-	$('<button></button>').text('승인').attr('onclick','auth()').appendTo('#authDiv');
-	$('<button></button>').text('반려').attr('data-toggle','modal').attr('data-target','#returning').appendTo('#authDiv');
+	$('<button></button>').text('승인').attr('onclick','auth()').attr('class','btn btn-outline-primary').appendTo('#authDiv');
+	$('<button></button>').text('반려').attr('data-toggle','modal').attr('class','btn btn-outline-primary').attr('data-target','#returning').appendTo('#authDiv');
 }else if( where == 2 ){
 	if(${ apvDto.approval_auth1 != 2 }){
 		if(${ apvDto.approval_auth1 == 0 }){
 			console.log('예결가능')
-			$('<button></button>').text('예결').attr('onclick','preAuth()').appendTo('#authDiv');
+			$('<button></button>').text('예결').attr('onclick','preAuth()').attr('class','btn btn-outline-primary').appendTo('#authDiv');
 		}else{
-			$('<button></button>').text('승인').attr('onclick','auth()').appendTo('#authDiv');
-			$('<button></button>').text('반려').attr('data-toggle','modal').attr('data-target','#returning').appendTo('#authDiv');
+			$('<button></button>').text('승인').attr('onclick','auth()').attr('class','btn btn-outline-primary').appendTo('#authDiv');
+			$('<button></button>').text('반려').attr('data-toggle','modal').attr('class','btn btn-outline-primary').attr('data-target','#returning').appendTo('#authDiv');
 		}
 	}
 }else if( where == 3 ){
 	if(${ apvDto.approval_auth2 != 2 }){
 		if(${ apvDto.approval_auth2 == 0 }){
 			console.log('예결가능')
-			$('<button></button>').text('예결').attr('onclick','preAuth()').appendTo('#authDiv');
+			$('<button></button>').text('예결').attr('onclick','preAuth()').attr('class','btn btn-outline-primary').appendTo('#authDiv');
 		}else{
-			$('<button></button>').text('승인').attr('onclick','auth()').appendTo('#authDiv');
-			$('<button></button>').text('반려').attr('data-toggle','modal').attr('data-target','#returning').appendTo('#authDiv');
+			$('<button></button>').text('승인').attr('onclick','auth()').attr('class','btn btn-outline-primary').appendTo('#authDiv');
+			$('<button></button>').text('반려').attr('data-toggle','modal').attr('class','btn btn-outline-primary').attr('data-target','#returning').appendTo('#authDiv');
 		}
 	}
 }

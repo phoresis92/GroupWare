@@ -68,15 +68,15 @@ function fn_formSubmit(){
 			</c:forEach>
 		</tbody>
 	</table>
-	<div align="right"><a class="btn btn-outline-primary" href="boardForm?bgno=<c:out value="${searchVO.bgno}"/>">글작성</a>
+	<div align="right"><a class="btn btn-outline-primary" href="${pageContext.request.contextPath}/boardForm?bgno=<c:out value="${searchVO.bgno}"/>">글작성</a>
 	</div>
 	</div>
-	
-
-	<div align="center">
-	<jsp:include page="/WEB-INF/views/common/pagingforSubmit.jsp" />
 	
 	<form id="form1" name="form1"  method="post">
+
+	<div class="container">
+	<jsp:include page="/WEB-INF/views/common/pagingforSubmit.jsp" />
+	
 	
 	    <div class="container-fluid" align="center">
 	    
@@ -94,8 +94,8 @@ function fn_formSubmit(){
 		    
 		     </div>
 		</div>
-	</form>	
 	</div>
+	</form>	
 	
 </body>
 </html>

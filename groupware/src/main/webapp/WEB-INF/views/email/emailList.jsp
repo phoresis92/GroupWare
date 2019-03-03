@@ -34,9 +34,8 @@ $(function(){
 			url:"../email/status",
 			data:param,
 			success:function(data){
-				var obj = eval('('+data+')');
 				$.getList(page);
-				$.setCount(obj.value);
+				$.setCount(data);
 			}
 		});
 	});	
@@ -74,10 +73,9 @@ $(function(){
 			url:"../email/checkdelete",
 			data:param,
 			success:function(data){
-				var obj = eval('('+data+')');
 				alert("삭제완료");
 				$.getList(page);
-				$.setCount(obj.value);
+				$.setCount(data);
 			}
 		});
 	});	
@@ -115,9 +113,8 @@ $(function(){
 			url:"../email/checkstatus",
 			data:param,
 			success:function(data){
-				var obj = eval('('+data+')');
 				$.getList(page);
-				$.setCount(obj.value);
+				$.setCount(data);
 			}
 		});
 	});
@@ -134,11 +131,12 @@ $(function(){
 		}
 	});
 })
-
 $.setCount = function(count){
 	$("#email_count").html(count);
 	$("#menu_email_count").html(count);
+	$("#main_email_count").html(count);
 	$("#header_email_count").html(count);
+	$("#header_email_count2").html(count);
 }
 
 $.getList = function(p){	

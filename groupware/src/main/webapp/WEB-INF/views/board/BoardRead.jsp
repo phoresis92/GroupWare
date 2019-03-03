@@ -4,7 +4,6 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script src="js/jquery-2.2.3.min.js"></script>
   <!-- 헤드 네비게이션 효과 -->
   <link href="${pageContext.request.contextPath}/resources/css/sb-admin-2.min.css" rel="stylesheet">
 
@@ -175,8 +174,12 @@ function fn_replyReplySave(){
 						</c:forEach></div><br>
 				<div class="container">
 				<a class="btn btn-outline-primary" href="boardList?bgno=<c:out value="${boardInfo.bgno}"/>">돌아가기</a>
-				<a class="btn btn-outline-primary" href="boardDelete?bgno=<c:out value="${boardInfo.bgno}"/>&brdno=<c:out value="${boardInfo.brdno}"/>">삭제</a>
-				<a class="btn btn-outline-primary" href="boardForm?brdno=<c:out value="${boardInfo.brdno}"/>">수정</a>
+				<c:if test="${sessionScope.member.member_status eq '9' || sessionScope.member.member_name eq boardInfo.brdwriter}">
+					<a class="btn btn-outline-primary" href="boardDelete?bgno=<c:out value="${boardInfo.bgno}"/>&brdno=<c:out value="${boardInfo.brdno}"/>">삭제</a>
+					<c:if test="${sessionScope.member.member_name eq boardInfo.brdwriter}">
+					<a class="btn btn-outline-primary" href="boardForm?brdno=<c:out value="${boardInfo.brdno}"/>">수정</a>
+					</c:if>
+				</c:if>
 				</div>
                 </div>
               </div>
@@ -196,8 +199,12 @@ function fn_replyReplySave(){
 					<div class="card-header py-3" style="height:50px !important">
 					<strong class="m-0 font-weight-bold text-primary"><c:out value="${replylist.rewriter}"/></strong> <c:out value="${replylist.redate}"/>
 					
-					<a href="#"  onclick="fn_replyDelete('<c:out value="${replylist.reno}"/>')">삭제</a>
-					<a href="#"  onclick="fn_replyUpdate('<c:out value="${replylist.reno}"/>')">수정</a>
+					<c:if test="${sessionScope.member.member_status eq '9' || sessionScope.member.member_name eq replylist.rewriter}">
+						<a href="#"  onclick="fn_replyDelete('<c:out value="${replylist.reno}"/>')">삭제</a>
+						<c:if test="${sessionScope.member.member_name eq replylist.rewriter}">
+						<a href="#"  onclick="fn_replyUpdate('<c:out value="${replylist.reno}"/>')">수정</a>
+						</c:if>
+					</c:if>
 					<a href="#" onclick="fn_replyReply('<c:out value="${replylist.reno}"/>')">댓글</a>
 					</div>
 					

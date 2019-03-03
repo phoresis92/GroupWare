@@ -37,7 +37,7 @@ public class CommutingController {
 		mav.addObject("now",sdf.format(new Date()));
 
 		
-		mav = getCalendar(mav, yearS, monthS); 
+		mav = getCalendar(mav, yearS, monthS);
 
 		if(dayS != null) {
 			mav.addObject("day",Integer.parseInt(dayS));
@@ -144,19 +144,8 @@ public class CommutingController {
 			JSONObject obj = new JSONObject();
 			obj.put("commuting_id", resultComm.getCommuting_id());
 			obj.put("commuting_member_id", resultComm.getCommuting_member_id());
-			
-			try {
-				obj.put("commuting_arrive", sdf.format(resultComm.getCommuting_arrive()));
-			} catch (Exception e) {
-				obj.put("commuting_arrive", resultComm.getCommuting_arrive());
-			}
-			
-			try {
-				obj.put("commuting_leave", sdf.format(resultComm.getCommuting_leave()));
-			} catch (Exception e) {
-				obj.put("commuting_leave", resultComm.getCommuting_leave());
-			}
-			
+			obj.put("commuting_arrive", sdf.format(resultComm.getCommuting_arrive()));
+			obj.put("commuting_leave", sdf.format(resultComm.getCommuting_leave()));
 			obj.put("commuting_status", resultComm.getCommuting_status());
 			
 			return obj.toJSONString();
@@ -195,12 +184,15 @@ public class CommutingController {
 		map.put("date1",date1);
 		map.put("date2",date2);
 		
+		System.out.println(map.get("date1"));
+		System.out.println(map.get("date2"));
 		System.out.println(map.get("member_id"));
+		System.out.println(map);
 		
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("ddHH:mm:ss");
 		ArrayList<Commuting> list = commuting_service.getValue(map);
-		System.out.println(list);
+		System.out.println("result List : "+list);
 		JSONArray arr = new JSONArray();
 		for(Commuting comm : list) {
 			JSONObject obj = new JSONObject();
@@ -321,7 +313,6 @@ public class CommutingController {
 		}		
 		return mav;
 	}
-	
 	
 	@ResponseBody
 	@RequestMapping(value="/commuting/getNowStatus", method=RequestMethod.POST, produces = "application/text; charset=utf8")

@@ -2,6 +2,7 @@ package project.groupware.board;
 
 import java.io.IOException;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import project.groupware.common.FileUtil;
 import project.groupware.common.FileVO;
@@ -145,6 +147,17 @@ public class BoardCtr {
         } catch (IOException ex) {
             System.out.println("오류: 댓글 삭제에 문제가 발생했습니다.");
         }
+    }
+    
+    @RequestMapping(value = "/mainBoard")
+    public ModelAndView mainBoard(SearchVO searchVO, ModelMap modelMap) {
+        ModelAndView mav = new ModelAndView("json/boardValue");
+        searchVO.setBgno("2"); 
+        searchVO.pageCalculate( boardSvc.selectBoardCount(searchVO) ); // startRow, endRow
+        List<?> listview  = boardSvc.selectBoardList(searchVO);        
+        modelMap.addAttribute("listview", listview);
+        modelMap.addAttribute("searchVO", searchVO);        
+        return mav;
     }
    
 }

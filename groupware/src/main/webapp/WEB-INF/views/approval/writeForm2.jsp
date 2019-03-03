@@ -335,7 +335,7 @@ function sendApv(){
 
 			
 			if('${ apvReWrite.approval_cate }' == '' || '${ apvReWrite.approval_cate }' == null){
-				$('#apvCateGo').val(1);
+				$('#apvCateGo').val(2);
 			}else{
 				$('<input></input>').attr('type','hidden').attr('value',${ apvReWrite.approval_id }).attr('name','approval_id').appendTo('#sendApv');
 			}
@@ -377,7 +377,7 @@ function timeChk(){
 	${ sessionScope.member.member_name }
 	<c:choose>
 	
-	<c:when test="${ empty sessionScope.member.rank_name }"></c:when>
+	<c:when test="${ empty sessionScope.member.rank_name }">관리자</c:when>
 	<c:otherwise>${ sessionScope.member.rank_name }</c:otherwise>
 	
 	</c:choose></td>
@@ -385,7 +385,7 @@ function timeChk(){
 	
 	<c:choose>
 	
-	<c:when test="${ sessionScope.member.department_name == null }"></c:when>
+	<c:when test="${ sessionScope.member.department_name == null }">관리자</c:when>
 	<c:otherwise>${ sessionScope.member.department_name }</c:otherwise>
 	
 	</c:choose></td>

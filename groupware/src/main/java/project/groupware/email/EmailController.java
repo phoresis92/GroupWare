@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import project.groupware.member.Member;
@@ -83,7 +84,7 @@ public class EmailController {
 			}
 			email_service.editEmail(email);			
 		}
-		return "redirect:/email/count?member_id="+m.getMember_id();
+		return "redirect:/email/count";
 	}
 	
 	@RequestMapping("/email/write")
@@ -201,7 +202,7 @@ public class EmailController {
 				email_service.deleteEmail(email_id);
 			}			
 		}
-		return "redirect:/email/count?member_id="+m.getMember_id();
+		return "redirect:/email/count";
 	}
 	
 	@RequestMapping("/email/checkstatus")
@@ -219,7 +220,7 @@ public class EmailController {
 				email_service.editEmail(email);			
 			}
 		}
-		return "redirect:/email/count?member_id="+m.getMember_id();
+		return "redirect:/email/count";
 	}
 	
 	@RequestMapping("/email/checkrestore")
@@ -236,27 +237,34 @@ public class EmailController {
 	
 	// 외부 메일
 	@RequestMapping("/email/pop3")
-	public String setEmail(@RequestParam("member_id") String member_id) {
-		Email email = email_service.getAccount(member_id);
-		if (email != null) {
-			String id = email.getEmail_account();
-			String pw = email.getEmail_pw();
-			ArrayList<Email> list = new FetchingEmail().receive(id, pw);
-			email_service.addEmails(list);
-		}	
-		return "redirect:/email/count?member_id="+member_id;
+	public String setEmail(HttpServletRequest req) {
+		HttpSession session = req.getSession(false);
+		Member m = (Member)session.getAttribute("member");
+		if (m != null) {
+			Email email = email_service.getAccount(m.getMember_id()+"");
+			if (email != null) {
+				String id = email.getEmail_account();
+				String pw = email.getEmail_pw();
+				ArrayList<Email> list = new FetchingEmail().receive(id, pw);
+				email_service.addEmails(list);
+			}			
+		}
+		return "redirect:/email/count";
 	}
 	
-	@RequestMapping("/email/count")
-	public ModelAndView getCount(@RequestParam("member_id") String member_id) {
-		ModelAndView mav = new ModelAndView("json/singleValue");
-		Email email = email_service.getAccount(member_id);
+	@ResponseBody
+	@RequestMapping(value="/email/count", produces = "application/text; charset=utf8")
+	public String getCount(HttpServletRequest req) {
 		ArrayList<Email> list_count = new ArrayList<Email>();
-		if (email != null) {
-			String id = email.getEmail_account();
-			list_count = email_service.gettReceiveCount(id);
-		}
-		mav.addObject("value", list_count.size());		
-		return mav;
+		HttpSession session = req.getSession(false);
+		Member m = (Member)session.getAttribute("member");
+		if (m != null) {
+			Email email = email_service.getAccount(m.getMember_id()+"");
+			if (email != null) {
+				String id = email.getEmail_account();
+				list_count = email_service.gettReceiveCount(id);
+			}
+		}		
+		return list_count.size()+"";
 	}
 }

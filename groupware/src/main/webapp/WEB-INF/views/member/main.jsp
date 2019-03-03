@@ -16,12 +16,12 @@
   <!-- Custom fonts for this template-->
   <link href="${pageContext.request.contextPath}/resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <!-- Custom styles for this template-->
   <link href="${pageContext.request.contextPath}/resources/css/sb-admin-2.min.css" rel="stylesheet">
   
   <style>
-  .timecheck{
+  #timecheck{
   margin-top: 24px;
   }
   .map_wrap {position:relative;overflow:hidden;width:100%;height:350px;}
@@ -91,6 +91,24 @@ $(function(){
 		return true;
 	});
 });
+$.ajax({
+	type:'POST',
+	url: '${ pageContext.request.contextPath }/mainBoard',
+	success: function(data){
+		var arr = eval('('+data+')');
+		var length = arr.length < 5 ? arr.length : 5;
+		str = '<table class="table table-hover text-center">';
+		for(i = 0; i < length; i++){
+			str += '<tr>';
+			str += '<td class="text-left" style="max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">';
+			str +=	'<a href="${pageContext.request.contextPath}/boardRead?brdno='+arr[i].brdno+'&brddate='+arr[i].brddate+'&brdhit='+arr[i].brdhit+'">' + arr[i].title + '</a></td>';
+			str += '<td>' + arr[i].brddate.slice(5) + '</td>';
+			str += '</tr>';
+		}
+		str += "</table>";	
+		$('#manin_board').html(str);
+	}
+});
 
 
 $(document).ready(function(){
@@ -150,7 +168,6 @@ $("#leave").click(function(){
 			alert('출근처리 먼저 해주세요.');
 			return;
 		}
-
 		if(confirm('정말 퇴근처리 하시겠습니까?')){
 		
 	 		$.ajax({
@@ -176,48 +193,127 @@ $("#leave").click(function(){
 	}); // leave end
 	
 })//ready end
+</script>
 
-$(function(){
-	
-	$("#btn_view").click(function(){
-		var commuting_member_id = $("#commuting_member_id").val();
-		var param = "commuting_member_id="+commuting_member_id;
-		$.ajax({
-			type:"POST",
-			url:"../commuting/view",
-			data:param,
-			success:function(data){
-				var arr = eval('('+data+')');
-				var str = '<table class="table-bordered"><tr><td>날짜</td><td>출근시간</td><td>퇴근시간</td><td>지각여부</td></tr>'
-				for(var i = 0; i < arr.length; i++){
-					str += '<tr>';
-					str += '<td>'+arr[i].date+'</td>';
-					str += '<td>'+arr[i].arrive+'</td>';
-					str += '<td>'+arr[i].leave+'</td>';					
-					str += '<td>'+arr[i].day+'</td>';
-					str += '</tr>';
-					$("#arrive_"+arr[i].day).html(arr[i].arrive);
-					$("#leave_"+arr[i].day).html(arr[i].leave);
-					var date1 = new Date(arr[i].arrive);
-					alert(date1.getTime());
-					var date2 = new Date(arr[i].leave);
-					alert(date2.getTime());
-					var diffTime = (date2.getTime() - date1.getTime()) / (1000*60);
-					$("#over_"+arr[i].day).html(diffTime);
-				}
-				str += '</table>'
-				$("#commuting_view").html(str);
+<script type="text/javascript">
+$(document).ready(function(){	
+	var param = "year=${ year }&month=${ month }";
+	$.ajax({
+		type:"POST",
+		url:"../commuting/view",
+		data:param,
+		success:function(data){
+			var arr = JSON.parse(data);
+			console.log(arr);
+
+			google.charts.load("current", {packages:["calendar"]});
+			google.charts.setOnLoadCallback(drawChart);
+			
+			function drawChart() {
+			 var dataTable = new google.visualization.DataTable();
+			 dataTable.addColumn({ type: 'date', id: 'Date' });
+			 dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
+			 //dataTable.addColumn({ type: 'string', role:'tooltip' });
+
+			for(var i = 0; i < arr.length; i++){			
 				
+				console.log(arr[i].commuting_status);
+				var num = parseInt(arr[i].commuting_status_date.substring(0,2));
+				var status = 0;
+				try{
+					var arrive = new Date("2019-02-01 "+arr[i].commuting_arrive.slice(2));
+					var leave = new Date("2019-02-01 "+arr[i].commuting_leave.slice(2));
+					var ontime = new Date("2019-02-01 09:00:00");
+					
+					var gap1 = arrive.getTime() - ontime.getTime();
+					var gap2 = leave.getTime() - arrive.getTime();
+					if (gap1 > 0){
+						status = Math.floor(0-gap1/1000/60/60);
+					} else if (gap2 > 0){
+						status = Math.floor(gap2/1000/60/60);
+					}					
+				}catch(Exception){}				
+				
+				dataTable.addRows([
+				     [ new Date(${year}, ${month}-1, parseInt(arr[i].commuting_status_date.substring(0,2))), status],
+				   ]);
+				
+			}//for end	
+			
+			var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
+			
+			 var options = {
+			   title: "근무 현황",
+			   height: 200,
+			   calendar: {
+				   cellSize: 15,
+				      underYearSpace: 10, // Bottom padding for the year labels.
+				      yearLabel: {
+				        fontSize: 28,
+				      }
+				    }
+			 };
+			 chart.draw(dataTable, options);
 			}
-		});
-	}); // btn_view end
-	
-});//ready end
+		}
+	}); // ajax end
+}) // ready end
+</script>
+<script>
+$(document).ready(function(){
+	var pay2 = 0, pay3 = 0, pay4 = 0, pay5 = 0, pay6 = 0;
+	var type = new Array("교통비", "사무비품", "출장비", "식대", "주유비");	
+	    <c:forEach var="pay" items="${title_2}">
+	    	pay2 += ${pay.pay_cash};	    		    
+	    </c:forEach>    
+	    <c:forEach var="pay" items="${title_3}">
+	    	pay3 += ${pay.pay_cash};	    		    
+	    </c:forEach>    
+	    <c:forEach var="pay" items="${title_4}">
+	    	pay4 += ${pay.pay_cash};	    		    
+	    </c:forEach>    
+	    <c:forEach var="pay" items="${title_5}">
+	    	pay5 += ${pay.pay_cash};	    		    
+	    </c:forEach>
+	    <c:forEach var="pay" items="${title_6}">
+    	pay6 += ${pay.pay_cash};	    		    
+    </c:forEach>
+	// Set new default font family and font color to mimic Bootstrap's default styling
+	Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+	Chart.defaults.global.defaultFontColor = '#858796';
 
-
-
-
-
+	// Pie Chart Example
+	var ctx = document.getElementById("myPieChart");
+	var myPieChart = new Chart(ctx, {
+	  type: 'doughnut',
+	  data: {
+	    labels: [type[0], type[1], type[2], type[3], type[4]],
+	    datasets: [{
+	      data: [pay2, pay3, pay4, pay5, pay6],
+	      backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#e3aa17', '#e04435'],
+	      hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#a2790f', '#b0362a'],
+	      hoverBorderColor: "rgba(234, 236, 244, 1)",
+	    }],
+	  },
+	  options: {
+	    maintainAspectRatio: false,
+	    tooltips: {
+	      backgroundColor: "rgb(255,255,255)",
+	      bodyFontColor: "#858796",
+	      borderColor: '#dddfeb',
+	      borderWidth: 3,
+	      xPadding: 15,
+	      yPadding: 15,
+	      displayColors: false,
+	      caretPadding: 10,
+	    },
+	    legend: {
+	      display: false
+	    },
+	    cutoutPercentage: 80,
+	  },
+	});
+});
 </script>
 <!-- fullcalendar ref -->
 <link rel='stylesheet' href='${pageContext.request.contextPath}/resources/fullcalendar/fullcalendar.css' />
@@ -227,7 +323,6 @@ $(function(){
 
 
              <!-- ======================================================================================================================================================================메인캘린더 -->
-
 
          <script type="text/javascript">
          
@@ -240,17 +335,17 @@ $(function(){
              // We will refer to $calendar in future code
              var $calendar = $("#calendar").fullCalendar({ //start of options
                  //weekends : false, // do not show saturday/sunday
-                 header: {right: 'today,listWeek,month,agendaDay,agendaWeek prev,next'},
+                 header: false,
                  // Make possible to respond to clicks and selections
                  selectable: false,
                  // allow "more" link when too many events
                  eventLimit: true,
-                 navLinks: true,
+                 navLinks: false,
                  // Make events editable, globally
                  editable: false,
                  resizeable: false,
                  defaultView: 'listWeek',
-                 
+                 height: 245,
                  
                //Drop =================================
                  eventDrop: function(event, delta, revertFunc) {
@@ -304,8 +399,7 @@ $(function(){
                              calendar_cateSelf: list[i].calendar_cateSelf, 
                              member_id: list[i].member_id,
                              color: list[i].color,
-                             allDay: list[i].allDay,
-                             textColor: '#FFF'
+                             allDay: list[i].allDay
                          }]);
                         
                      } //for end
@@ -432,7 +526,7 @@ $(function(){
                       <div class="h5 mb-0 font-weight-bold text-gray-800">(<span id="apvCount4">0</span>)</div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                      <i class="fas fa-pen-nib fa-2x text-gray-300"></i>
                     </div>
                   </div>
                 </div>
@@ -449,7 +543,8 @@ $(function(){
                       <div class="h5 mb-0 font-weight-bold text-gray-800">(<span id="main_email_count">0</span>)</div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                      <!-- <i class="fas fa-dollar-sign fa-2x text-gray-300"></i> -->
+                      <i class="fas fa-envelope fa-2x text-gray-300"></i>
                     </div>
                   </div>
                 </div>
@@ -471,7 +566,7 @@ $(function(){
                       </div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                      <i class="fas fa-calendar-alt fa-2x text-gray-300"></i>
                     </div>
                   </div>
                 </div>
@@ -490,7 +585,7 @@ $(function(){
                       <div class="h5 mb-0 font-weight-bold text-gray-800">(<span id="mainleftVacat">0</span>일)</div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-comments fa-2x text-gray-300"></i>
+                      <i class="fas fa-paper-plane fa-2x text-gray-300"></i>
                 </div>
                   </div>
                 </div>
@@ -542,18 +637,15 @@ $(function(){
                     </a>
                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
                       <div class="dropdown-header">게시판:</div>
-                      <a class="dropdown-item" href="${pageContext.request.contextPath}/board/boardlist?bgno=2">공지사항으로</a>
-                      <a class="dropdown-item" href="${pageContext.request.contextPath}/board/boardlist">자유게시판으로</a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#">관리자 모드</a>
+                      <a class="dropdown-item" href="${pageContext.request.contextPath}/boardList?bgno=2">공지사항으로</a>
+                      <a class="dropdown-item" href="${pageContext.request.contextPath}/boardList?bgno=1">자유게시판으로</a>
+                   
                     </div>
                   </div>
                 </div>
                 <!-- Card Body -->
-         <div class="card-body">
-                               
-                 공지사항<br>을<br>뿌려줄 공간<br>입니다<br> 호다다닥<br>
-                
+         <div id="manin_board" class="card-body">
+                                             
                    
                   </div>
                 </div>
@@ -571,8 +663,7 @@ $(function(){
                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
                       <div class="dropdown-header">일정관리:</div>
                       <a class="dropdown-item" href="${pageContext.request.contextPath}/calendar">월간일정확인</a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#">관리자 모드</a>
+                     
                     </div>
                   </div>
                 </div>
@@ -600,15 +691,14 @@ $(function(){
                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
                       <div class="dropdown-header">근태 관련:</div>
                       <a class="dropdown-item" href="${pageContext.request.contextPath}/commuting/commuting">월간 근태확인</a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#">관리자 모드</a>
+                    
                     </div>
                   </div>
                 </div>
                 <!-- Card Body -->
          <div class="card-body">
                                
-                 <div class="timecheck">
+                 <div id="timecheck">
                   <div class="card bg-primary text-white shadow">
                     <div class="card-body">
                       <div align="center" id="current_time"></div>
@@ -645,7 +735,7 @@ $(function(){
             
             <div class="row">
 
-       <!-- Area Chart -->
+       <!-- 근무차트 -->
             <div class="col-xl-8 col-lg-7">
               <div class="card shadow mb-4">
                 <!-- 공지사항으로 상단바 -->
@@ -656,11 +746,15 @@ $(function(){
                     
                   </div>
                 </div>
-                <!-- 공지사항 공간 -->
+                <!-- 근무차트바디 -->
                 <div class="card-body">
                   <div class="chart-area">
                     
+                    <div id="calendar_basic"></div>
                   </div>
+                  <hr>
+                  <code>당월 근무현황을 확인해주세요.</code>
+                  
                 </div>
               </div>
             </div>
@@ -669,86 +763,91 @@ $(function(){
             
            
               
-            <!-- 3번카드 근태관리 -->
+            <!-- 지출차트 -->
             <div class="col-xl-4 col-lg-5">
               <div class="card shadow mb-4">
-                <!-- 출결버튼 상단바 -->
+                <!-- 지출차트상단바 -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">출결확인</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">지출 통계</h6>
+                
+                </div>
+                <!-- 지출차트바디 -->
+          <div class="card-body">
+                      
+                <div class="chart-pie pt-4">
+                    <canvas id="myPieChart"></canvas>
+                   
+                  </div>
+                   <div class="mt-4 text-center small">
+                    <span class="mr-2">
+                      <i class="fas fa-circle text-primary"></i> 교통비
+                    </span>
+                    <span class="mr-2">
+                      <i class="fas fa-circle text-success"></i> 사무비품
+                    </span>
+                    <span class="mr-2">
+                      <i class="fas fa-circle text-info"></i> 출장비
+                    </span>
+                     <span class="mr-2">
+                      <i class="fas fa-circle text-warning"></i> 식대
+                    </span>
+                     <span class="mr-2">
+                      <i class="fas fa-circle text-danger"></i> 주유비
+                    </span>
+                  </div>
+                  <hr> <code>당월 지출통계입니다.</code>
+                  </div>
+                                    
+                  </div>
+               
+              
+            </div>
+            
+            </div>
+            
+            <!-- 두번째줄 끈 -->
+            
+              <div class="row">
+
+          <%--   <!-- Area Chart -->
+            <div class="col-xl-8 col-lg-7">
+              <div class="card shadow mb-4">
+                <!-- 공지사항으로 상단바 -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">공지사항</h6>
                   <div class="dropdown no-arrow">
                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                      <div class="dropdown-header">근태 관련:</div>
-                      <a class="dropdown-item" href="${pageContext.request.contextPath}/commuting/commuting">월간 근태확인</a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#">관리자 모드</a>
-                    </div>
-                  </div>
-                </div>
-                <!-- Card Body -->
-         <div class="card-body">
-                               
-                 <div class="timecheck">
-                  <div class="card bg-primary text-white shadow">
-                    <div class="card-body">
-                      <div align="center" id="current_time"></div>
-                      <div class="text-white-50 small" align="center">대한민국 GMT+9</div>
-                    </div>
-                  </div>
-                </div>
-                 
-                   
-                   <div class="timecheck">
-                      <button id="arrive" style="width:100%;" class="card bg-info text-white shadow">
-                    <div class="card-body">
-                     출근체크
-                      <div class="text-white-50 small">9시 이전에 체크해주세요!</div>
-                    </div>
+                      <div class="dropdown-header">게시판 메뉴:</div>
+                      <a class="dropdown-item" href="#">공지사항으로</a>
+                      <a class="dropdown-item" href="${pageContext.request.contextPath}/boardList">자유게시판으로</a>
                     
-                  </button>
-                </div>
-                
-                         <div class="timecheck">
-                  <button  id="leave" style="width:100%;" class="card bg-warning text-white shadow">
-                   <div class="card-body">
-                      퇴근체크
-                      <div class="text-white-50 small" align="center">6시 이후에 체크해주세요!</div>
                     </div>
-                  </button>
+                  </div>
                 </div>
-                
-                   
+                <!-- 공지사항 공간 -->
+                <div class="card-body">
+                  <div class="chart-area">
+                    
                   </div>
                 </div>
               </div>
-            </div>
+            </div> --%>
             
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-
-          <!-- Content Row -->
-          <div class="row">
-            <!-- Content Column -->
-            <div class="col-lg-6 mb-4">
-
-              <!-- Project Card Example -->
+            <!-- 1번카드 공지사항  -->
+            <div class="col-xl-4 col-lg-5">
               <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">회사 위치</h6>
+                <!-- 1번 상단바 -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">공지사항</h6>
+                  
                 </div>
-                <div class="card-body">
-<div id="map" style="width:100%;height:280px;"></div>
+                <!-- Card Body -->
+         <div  class="card-body">
+                 <div id="map" style="width:100%;height:280px;"></div>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=24b4b7c7fee91787dba7c79d2b9fdffb"></script>
 <script>
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
@@ -801,75 +900,68 @@ daum.maps.event.addListener(marker, 'click', function() {
       // 마커 위에 인포윈도우를 표시합니다
       infowindow.open(map, marker);  
 });
-</script>
-              <!-- 
-                  <h4 class="small font-weight-bold">주제선정, 요구분석 <span class="float-right">15%</span></h4>
-                  <div class="progress mb-4">
-                    <div class="progress-bar bg-danger" role="progressbar" style="width: 15%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <h4 class="small font-weight-bold">상세 디자인 <span class="float-right">25%</span></h4>
-                  <div class="progress mb-4">
-                    <div class="progress-bar bg-warning" role="progressbar" style="width: 25%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <h4 class="small font-weight-bold">기능 구현 <span class="float-right">70%</span></h4>
-                  <div class="progress mb-4">
-                    <div class="progress-bar" role="progressbar" style="width: 70%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <h4 class="small font-weight-bold">CSS설정 <span class="float-right">90%</span></h4>
-                  <div class="progress mb-4">
-                    <div class="progress-bar bg-info" role="progressbar" style="width: 90%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <h4 class="small font-weight-bold">발표 <span class="float-right">3/4</span></h4>
-                  <div class="progress">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div> -->
-
-                </div>
-              </div>
-
-
-            </div>
-
-            <div class="col-lg-6 mb-4">
-
-              <!-- Illustrations -->
-              <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">무언가 들어갈 곳.</h6>
-                </div>
-                <div class="card-body">
-                  <div class="text-center">
+</script>                            
                    
                   </div>
-                  <p>이곳의 링크를 타고 그룹웨어 내 홈페이지로 빠른 링크, 넣을 만한 여러가지 기능들이 있습니다.!</p>
-                  <a target="_blank" rel="nofollow" href="https://undraw.co/">나는 링크입니다. &rarr;</a>
                 </div>
               </div>
-
-              <!-- Approach -->
+           <!-- 2번카드 일정관리  -->
+            <div class="col-xl-4 col-lg-5">
               <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">KITWARE의 SNS를 팔로우해주세요!</h6>
+                <!-- 1번 상단바 -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">KITWARE의 SNS</h6>
+                 
                 </div>
-                <div class="card-body">
-                  <p>KITWARE의 <a href="https://www.facebook.com/GoogleKorea/?brand_redir=104958162837">페이스북</a>을 팔로우하고 사장님의 예쁨을 받으세요!</p>
+                <!-- Card Body -->
+         <div class="card-body">
+                               
+                 <p>KITWARE의 <a href="https://www.facebook.com/GoogleKorea/?brand_redir=104958162837">페이스북</a>을 팔로우하고 사장님의 예쁨을 받으세요!</p>
                   <p class="mb-0">또한 회사의 소개 영상을 보여주는 <a href="https://www.youtube.com/watch?v=ApXoWvfEYVU">유튜브</a>를 응원해주세요.</p>
+                   
+                  </div>
                 </div>
               </div>
-
+              
+            <!-- 3번카드 근태관리 -->
+            <div class="col-xl-4 col-lg-5">
+              <div class="card shadow mb-4">
+                <!-- 출결버튼 상단바 -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">THE KITWARE</h6>
+                  
+                </div>
+                <!-- Card Body -->
+         <div class="card-body" style="background-color:#eaf8ff !important">
+                            <div align="center">   
+                 <img id="file_img" src="${pageContext.request.contextPath}/resources/img/ALPHA.png" alt="사진" height=260>
+                </div>
+                   
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-
-        </div>
-        <!-- /.container-fluid -->
-
+                      
+          </div> <!-- 컨텐츠플루이드 -->
+          
+          
+          
+        
+     
       </div>
       <!-- End of Main Content -->
 
     </div>
     <!-- End of Content Wrapper -->
 
+  <!-- Page level plugins -->
+  <script src="${pageContext.request.contextPath}/resources/vendor/chart.js/Chart.min.js"></script>
 
+<%--   <!-- Page level custom scripts -->
+  <script src="${pageContext.request.contextPath}/resources/js/chart-area-demo.js"></script>
+  <script src="${pageContext.request.contextPath}/resources/js/chart-pie-demo.js"></script>
+   --%>
+  
 
 </body>
 

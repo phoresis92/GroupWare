@@ -18,16 +18,11 @@ $.ajax({
 	}
 })
 </script>
-
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <title>KITWARE-BETA</title>
   
+  <title>KITWARE-BETA</title>  
 
   <!-- Custom fonts for this template-->
   <link href="${pageContext.request.contextPath}/resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -38,11 +33,11 @@ $.ajax({
   
 <%--   <script src="${pageContext.request.contextPath}/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
  --%>
-  <script src="${pageContext.request.contextPath}/resources/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-  <script src="${pageContext.request.contextPath}/resources/js/sb-admin-2.min.js"></script>
+  <script src="${pageContext.request.contextPath}/resources/vendor/jquery-easing/jquery.easing.min.js"></script> 
   
-  
+<style>
+ul .nav-item {padding-left:7px;}
+</style>
 </head>
 
 <body>
@@ -51,32 +46,25 @@ $.ajax({
   <div>
 
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" style="height:100% !important;">
+    <ul class="navbar-nav sidebar sidebar-dark" id="accordionSidebar"">
            <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="${pageContext.request.contextPath}/member/main">
-        
+	<i class="fab fa-kickstarter-k"></i>
         <div class="sidebar-brand-text mx-3">KITWARE <sup>beta</sup></div>
       </a>
-
+     
+     
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
 
-          <!-- Divider -->
-
-
-      <!-- Nav Item - Dashboard -->
-     
-
-      <!-- Divider -->
-      <hr class="sidebar-divider">
- <li class="nav-item active">
-        <a class="nav-link" href="${pageContext.request.contextPath}/boardList?bgno=2">
+ 	  <li class="nav-item active">
+       	  <a class="nav-link" href="${pageContext.request.contextPath}/boardList?bgno=2">
           <i class="fas fa-flag"></i>
           <span>공지사항</span></a>
       </li>
-            <hr class="sidebar-divider">
+      <hr class="sidebar-divider">
       
-   			<!-- 전자결재 -->
+   	  <!-- 전자결재 -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
           <i class="fas fa-pen-nib"></i>
@@ -110,8 +98,8 @@ $.ajax({
             <h6 class="collapse-header">전자메일:</h6>
             <a class="collapse-item" href="${pageContext.request.contextPath}/email/write">메일 보내기</a>
             <a class="collapse-item" href="${pageContext.request.contextPath}/email/receive">받은 메일함 (<span id="menu_email_count">0</span>)</a>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/email/send">보낸 메일함</a></a>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/email/recycle">휴지통</a></a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/email/send">보낸 메일함</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/email/recycle">휴지통</a>
                    
           </div>
         </div>
@@ -165,6 +153,7 @@ $.ajax({
       <hr class="sidebar-divider">
       
       <!-- 관리자 -->
+      <c:if test="${sessionScope.member.member_status eq '9'}">
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
           <!-- <i class="fas fa-fw fa-wrench"></i> -->
@@ -197,15 +186,14 @@ $.ajax({
             <div class="collapse-divider"></div>
             <h6 class="collapse-header">통계:</h6>
             <a class="collapse-item" href="${pageContext.request.contextPath}/manager/statistics">회원통계</a>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/statistics2">부서별 통계</a>
             <a class="collapse-item" href="${pageContext.request.contextPath}/apv_payment/statistics">지출 통계</a>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/commuting/statistics">근태 통계</a>
        
           </div>
         </div>
       </li>
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
+      </c:if>
 
     
 

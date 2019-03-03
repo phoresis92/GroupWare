@@ -14,16 +14,31 @@
 
 <link href="${pageContext.request.contextPath}/resources/css/basic.css" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/resources/css/common.css" rel="stylesheet">
+  <link href="${pageContext.request.contextPath}/resources/css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
 <body>
-<div class="container">
-<div class="row content">
-<div class="col-sm"></div>
-<div class="joinbox commonbox col-sm-9 col-md-7 col-lg-6">
-<form id="form_join" action="${pageContext.request.contextPath}/member/join" method="post">
 
-<!-- 이름 -->
+<div class="container">
+
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+
+      <div class="col-xl-10 col-lg-12 col-md-9" style="height:100% !important">
+
+        <div class="card o-hidden border-0 shadow-lg my-5">
+          <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+<form id="form_join" action="${pageContext.request.contextPath}/member/join" method="post">
+            <div class="row">
+            
+              <div class="col-lg-6 d" style="background-color:#eaf8ff"><%-- <img id="file_img" src="${pageContext.request.contextPath}/resources/img/ALPHA.png" alt="사진"> --%>
+              
+              <div class="p-5">
+               <div class="text-center">
+                    <h1 class="h4 text-gray-900 mb-4">Create Account</h1>
+                  </div>
+              <!-- 이름 -->
 <div class="form-group textbox">
 	<label for="member_name">이름</label>
 	<a href="#" data-toggle="tooltip" data-placement="left" title="필수입력사항"></a>
@@ -66,6 +81,17 @@
 	<a href="#" data-toggle="tooltip" data-placement="left" title="필수입력사항"></a>
 	<input type="text" class="form-control" id="member_email" name="member_email" maxlength="30">
 </div>
+              
+              </div>
+              
+              
+              </div>
+              <div class="col-lg-6">
+                <div class="p-5">
+                     <div class="text-center">
+                    <h1 class="h4 text-gray-900 mb-4"> &nbsp; </h1>
+                  </div>
+                
 
 <!-- 주소 -->
 <div class="input-group">
@@ -94,38 +120,33 @@
 	<input type="text" class="form-control" id="member_phone" name="member_phone" maxlength="11">
 </div>
 
-<!-- 부서 -->
-<div class="form-group textbox">
-	<label for="member_department">부서</label>
-	<select class="form-control" id="member_department" name="member_department">
-		<option></option>
-		<c:forEach var="dept" items="${dept}">
-			<option value="${dept.department_id}">${dept.department_name}</option>		
-		</c:forEach>		
-	</select>
-</div>
-
-<!-- 직급 -->
-<div class="form-group textbox">
-	<label for="member_rank">직급</label>
-	<select class="form-control" id="member_rank" name="member_rank">
-		<option></option>
-		<c:forEach var="rank" items="${rank}">
-			<option value="${rank.rank_id}">${rank.rank_name}</option>		
-		</c:forEach>
-	</select>
-</div>
-
 <!-- 가입 버튼 -->
 <div class="form-group textbox">
 <button type="submit" class="btn btn-primary btn-lg">가입하기</button>
 </div>
 
-</form>
-</div>
+<div class="form-group textbox">
+		 <a href="${pageContext.request.contextPath}/member/login" class="btn btn-google btn-user btn-block">
+                       Back to login 
+                    </a>
+		</div>
 
-<div class="col-sm"></div>
-</div>
-</div>
+
+             
+                  
+                </div>
+              </div>
+            </div>
+</form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  
+
+
 </body>
 </html>

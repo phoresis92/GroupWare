@@ -3,15 +3,12 @@ $(function(){
 	$("#btn_edit").click(function(){
 		var flag = true;
 		if ($("#member_pw_now").val() == "") {
-			$("#member_pw_now").siblings("[data-toggle='tooltip']").tooltip('show');
 			flag = false;
 		}
 		if ($("#member_pw").val() == "") {
-			$("#member_pw").siblings("[data-toggle='tooltip']").tooltip('show');
 			flag = false;
 		}
-		if ($("#member_pw1").val() == "") {			
-			$("#member_pw1").siblings("[data-toggle='tooltip']").tooltip('show');
+		if ($("#member_pw1").val() == "") {
 			flag = false;
 		}
 		if (flag == true){
@@ -39,7 +36,11 @@ $(function(){
 				$('#editPwfail').html("새 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
 				$('#editPwfail').show();
 			}
-		}			
+		} else{
+			$('#editPwfail').html("모두 입력해 주세요.");
+			$('#editPwfail').show();
+		}
+
 	});
 	// Label Zoom 효과 - input 선택했을 때
 	$("input").focus(function() {
@@ -52,9 +53,7 @@ $(function(){
 	        'blur': function () { // input 태그가 focus를 잃으면
 	            if ($(this).val() == '') { // input 태그에  value값이 없으면 'focus' class 삭제
 	                $(this).parent().removeClass('focus');
-	            } 
-	            // 선택한 input에서 다른곳으로 focus가 이동하면 툴팁 숨기기
-	            $(this).siblings("[data-toggle='tooltip']").tooltip('hide');           
+	            }        
 	        }
 	    });
 	});

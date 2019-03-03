@@ -6,8 +6,12 @@
 	  
 	  <div class="card-header py-3" style="height:50px !important">
 	<strong class="m-0 font-weight-bold text-primary"><c:out value="${replyInfo.rewriter}"/></strong> <c:out value="${replyInfo.redate}"/>
-	<a href="#"  onclick="fn_replyDelete('<c:out value="${replyInfo.reno}"/>')">삭제</a>
-	<a href="#"  onclick="fn_replyUpdate('<c:out value="${replyInfo.reno}"/>')">수정</a>
+	<c:if test="${sessionScope.member.member_status eq '9' || sessionScope.member.member_name eq replyInfo.rewriter}">
+		<a href="#"  onclick="fn_replyDelete('<c:out value="${replyInfo.reno}"/>')">삭제</a>
+		<<c:if test="${sessionScope.member.member_name eq replyInfo.rewriter}">
+		<a href="#"  onclick="fn_replyUpdate('<c:out value="${replyInfo.reno}"/>')">수정</a>
+		</c:if>
+	</c:if>
 	<a href="#"  onclick="fn_replyReply('<c:out value="${replyInfo.reno}"/>')">댓글</a>
 	</div>
 	<div id="reply<c:out value="${replyInfo.reno}"/>"><c:out value="${replyInfo.rememo}"/></div>

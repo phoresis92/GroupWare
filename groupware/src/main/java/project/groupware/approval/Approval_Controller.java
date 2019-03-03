@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +35,7 @@ import dto.Calendar_Dto;
 import dto.MemDeposit;
 import dto.PageInfo;
 import project.groupware.calendar.Calendar_Service;
+import project.groupware.commuting.Service;
 import project.groupware.member.Member;
 
 @Controller
@@ -44,6 +46,9 @@ public class Approval_Controller {
 	
 	@Resource(name="Cal_Service")
 	private Calendar_Service cal_Service;
+	
+	@Resource(name="commutingService")
+	private Service commuting_service;
 
 	
 	//================================================================================================================================================================
@@ -415,13 +420,29 @@ public class Approval_Controller {
 		System.out.println(dto);
 		String cc = dto.getApproval_cc();
 		
+		int skip = 0;
 		int end = 0;
 		if(dto.getApproval_mem2() == null || dto.getApproval_mem2() == "") {
 			end = 1;
 		}else if(dto.getApproval_mem3() == null || dto.getApproval_mem3() == "") {
 			end = 2;
+			if(dto.getApproval_auth2() == 3) {
+				end = 1;
+			}
 		}else {
 			end = 3;
+			if(dto.getApproval_auth3() == 3 && dto.getApproval_auth2() == 3) {
+				end = 1;
+			}else if(dto.getApproval_auth3() == 3 && dto.getApproval_auth2() != 3) {
+				end = 2;
+			}else if(dto.getApproval_auth3() != 3 && dto.getApproval_auth2() == 3) {
+				end = 3;
+				
+				skip = 1;
+				
+			}else if(dto.getApproval_auth3() != 3 && dto.getApproval_auth3() != 3) {
+				end = 3;
+			}
 		}
 		
 		
@@ -449,7 +470,11 @@ public class Approval_Controller {
 			int result = apvService.recoverVacat(map);
 			System.out.println(result);
 		}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		
+		try {
 		if(cc.equals("1_wholeVacat") && what == 1 && end == where) {
 			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -466,6 +491,33 @@ public class Approval_Controller {
 			calDto.setCalendar_end(sdf.format(dto.getApproval_enddate()));
 			cal_Service.addCal(calDto);
 			System.out.println("calDto: " + calDto);
+			
+			//==========================================================================commuting process
+			SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+
+			Calendar cal1 = Calendar.getInstance();
+		    cal1.setTime(dto.getApproval_startdate());
+		    Calendar cal2 = Calendar.getInstance();
+		    cal2.setTime(dto.getApproval_enddate());
+		    
+		    while(cal1.compareTo(cal2) == -1 ) {
+		    	
+		    	HashMap<String, Object> map = new HashMap<String, Object>();
+		    	map.put("commuting_member_id", dto.getApproval_member_id());
+		    	map.put("commuting_status_date", new Date(cal1.getTimeInMillis()));
+		    	map.put("commuting_status", "연차");
+		    	map.put("commuting_comment", "[연차]"+dto.getApproval_title());
+		    	
+		    	
+		    	System.out.println("addVacatToComm : "+commuting_service.addVacatToComm(map));
+		    	
+		    	
+		    	cal1.add(Calendar.DATE, 1);
+		    	
+		    }
+			
+			
+		    
 		}else if(cc.equals("2_halfVacat_AM") && what == 1 && end == where) {
 			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -484,6 +536,18 @@ public class Approval_Controller {
 			calDto.setCalendar_end(en + " " + "13:00:00");
 			cal_Service.addCal(calDto);
 			System.out.println("calDto: " + calDto);
+			
+			
+			Calendar cal1 = Calendar.getInstance();
+		    cal1.setTime(dto.getApproval_startdate());
+			
+	    	HashMap<String, Object> map = new HashMap<String, Object>();
+	    	map.put("commuting_member_id", dto.getApproval_member_id());
+	    	map.put("commuting_status_date", new Date(cal1.getTimeInMillis()));
+	    	map.put("commuting_status", "오전반차");
+	    	map.put("commuting_comment", "[오전반차]"+dto.getApproval_title());
+	    	
+	    	System.out.println("addVacatToComm : "+commuting_service.addVacatToComm(map));
 			
 		}else if(cc.equals("2_halfVacat_PM") && what == 1 && end == where) {
 			
@@ -504,17 +568,34 @@ public class Approval_Controller {
 			cal_Service.addCal(calDto);
 			System.out.println("calDto: " + calDto);
 			
-		}
-		
-		}catch(Exception e) {
+			
+			Calendar cal1 = Calendar.getInstance();
+		    cal1.setTime(dto.getApproval_startdate());
+			
+	    	HashMap<String, Object> map = new HashMap<String, Object>();
+	    	map.put("commuting_member_id", dto.getApproval_member_id());
+	    	map.put("commuting_status_date", new Date(cal1.getTimeInMillis()));
+	    	map.put("commuting_status", "오후반차");
+	    	map.put("commuting_comment", "[오후반차]"+dto.getApproval_title());
+	    	
+	    	System.out.println("addVacatToComm : "+commuting_service.addVacatToComm(map));
 			
 		}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("approval_id", approval_id);
 		map.put("what", what);
 		map.put("why", why);
 		map.put("end", end);
+		map.put("approval_auth1", dto.getApproval_auth1());
+		map.put("approval_auth2", dto.getApproval_auth2());
+		map.put("approval_auth3", dto.getApproval_auth3());
+		
+		map.put("skip", skip);
 		
 		int result = 0;
 		
@@ -944,7 +1025,7 @@ public class Approval_Controller {
 	@RequestMapping("/apv_payment/statistics")
 	public ModelAndView payment_approval() {
 		ModelAndView mav = new ModelAndView("/manager/statistics3");
-		for (int i = 2; i < 6; i++) {
+		for (int i = 2; i <= 6; i++) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("pay_title", i);
 			ArrayList<ApvPayment_Dto> list = apvService.getPayTitle(map);

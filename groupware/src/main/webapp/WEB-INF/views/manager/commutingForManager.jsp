@@ -15,6 +15,11 @@
 	border: 1px solid lightgray;
 	background-color: #fdfdfd;
 }
+
+.parentNode{
+display: block;
+}
+
 </style>
 
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -33,25 +38,7 @@ $(function(){
 		$(".board:first").css("background", "#dddddd");
 	});
 	
-	$("#allcheck").click(function(){
-	    //클릭되었으면
-	    if($("#allcheck").prop("checked")){
-	        //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 true로 정의
-	        $("input[name=checkedReply]").prop("checked",true);
-	        //클릭이 안되있으면
-	    }else{
-	        //input태그의 name이 chk인 태그들을 찾아서 checked옵션을 false로 정의
-	        $("input[name=checkedReply]").prop("checked",false);
-	    }
-	});
 	
-	$("#frm").submit(function(){
-		if(!$("input[name=checkedReply]").is(":checked")){
-			alert("삭제할 댓글을 선택해 주세요");
-			return false;
-		}
-		return true;
-	});
 });
 
 $( function() {
@@ -150,19 +137,19 @@ function datePick(){
 
 <div class="row">
 
-<div class="col-3">
+<div class="col-3" style="max-width: 20% !important;">
 
 
 					<h2>직원 선택</h2>
 					
-					<div class="container col-5" style="padding:0px; margin: 0px; width: 500px;">
-				    <div class="easyui-panel" style="overflow-x:hidden; height:700px; width: 240px;">
+					<div style="padding:0px; margin: 0px; width: 250px;" id="parentNode">
+				    <div class="easyui-panel" style="overflow-x:hidden; height:700px; width: 250px;">
 				        <ul id="tt" class="easyui-tree">
 
 
 						<li><span>KITWARE</span>
 							<ul>
-								<c:forEach items="${deptList}" var="dept">
+								<c:forEach items="${deptList}" var="dept" >
 									<li data-options="state:'closed'"><span>${dept.department_id}) ${dept.department_name}</span>
 										<ul>
  											<c:forEach items="${memList}" var="mem">
@@ -183,6 +170,7 @@ function datePick(){
     
 </div>
 
+ <%--                <div class="card-header py-4">
 
 <div class="container-fulid col-9">
 	<div class="clearfix">
@@ -190,12 +178,12 @@ function datePick(){
 		<h2>${ year }년 ${ month }월</h2>
 	</div>	
 	<div class="float-right ">
-		<input type="text" id="halfPick" name="halfPick" onchange="datePick()" value="${ dPick }">
-		<button onclick="previousYear()">이전해</button>
-		<button onclick="previousMonth()">이전달</button>
-		<button onclick="today()">오늘</button>
-		<button onclick="nextMonth()">다음달</button>
-		<button onclick="nextYear()">다음해</button>
+		<input type="text" id="halfPick" name="halfPick" class="btn btn-outline-primary" onchange="datePick()" value="${ dPick }">
+		<button class="btn btn-outline-primary" onclick="previousYear()">이전해</button>
+		<button class="btn btn-outline-primary" onclick="previousMonth()">이전달</button>
+		<button class="btn btn-outline-primary" onclick="today()">오늘</button>
+		<button class="btn btn-outline-primary" onclick="nextMonth()">다음달</button>
+		<button class="btn btn-outline-primary" onclick="nextYear()">다음해</button>
 	</div>
 	</div>
 	<div class="row board text-center" style="background-color: #dddddd">
@@ -220,8 +208,82 @@ function datePick(){
 		</div>
 	</c:forEach>						
 </div>
-</div>
+</div></div>
+ --%>
+ 
+ 
+<div class="container" style="margin-right: 0; margin-left: 0;">
+	<div class="container-fluid text-center">
 
+		<!-- 게시글 -->
+ 	<div class="col-lg-12">
+ 			
+             
+              <div class="card" >
+                <div class="card-header py-3">
+   <form id="selectDayForm" action="${ pageContext.request.contextPath }/commuting/commuting"></form>          	
+					<div class="container-fulid">
+					
+	<div class="clearfix">
+	<div class="float-left">
+		<h2>${ year }년 ${ month }월</h2>
+	</div>	
+	<div class="float-right ">
+		<input type="text" id="halfPick" name="halfPick" class="btn btn-outline-primary" onchange="datePick()" value="${ dPick }">
+		<button class="btn btn-outline-primary" onclick="previousYear()">이전해</button>
+		<button class="btn btn-outline-primary" onclick="previousMonth()">이전달</button>
+		<button class="btn btn-outline-primary" onclick="today()">오늘</button>
+		<button class="btn btn-outline-primary" onclick="nextMonth()">다음달</button>
+		<button class="btn btn-outline-primary" onclick="nextYear()">다음해</button>
+	</div>
+	</div>
+	 
+               
+                <div class="card-body text-center">
+                  <hr>
+                  
+                  <div style="height:650px; overflow:auto; overflow-x:hidden; overflow-y:auto;" align=left>
+                  
+                  
+	<div class="row board text-center" style="background-color: #dddddd">
+		<div class="col-sm"><strong>날짜</strong></div>
+		<div class="col-sm"><strong>출근시간</strong></div>
+		<div class="col-sm"><strong>퇴근시간</strong></div>
+		<div class="col-sm"><strong>지각시간</strong></div>
+		<div class="col-sm"><strong>근무시간</strong></div>
+		<div class="col-sm"><strong>상태</strong></div>
+		<div class="col-sm"><strong>근태사유</strong></div>
+	</div>
+	
+	<c:forEach items="${calendar}" var="calendar" varStatus="status">
+		<div class="row board text-center" id="row_${status.count}" onclick="console.log(this.value)">
+			<div class="col-sm" id="day_${status.count}">${calendar.day}(${calendar.days})</div>								
+			<div class="col-sm" id="arrive_${status.count}"></div>
+			<div class="col-sm" id="leave_${status.count}"></div>
+			<div class="col-sm" id="delay_${status.count}"></div>							
+			<div class="col-sm" id="over_${status.count}"></div>
+			<div class="col-sm" id="stat_${status.count}"></div>
+			<div class="col-sm" id="reason_${status.count}"></div>
+		</div>
+	</c:forEach>	
+</div>
+                  
+                  
+                  </div>
+                 
+                  <hr>
+            
+                </div>
+              </div>
+			
+            </div>
+	
+	</div>
+	
+</div>
+</div>
+</div>	
+ 
 	<script>
 	
 	$('#tt').tree({

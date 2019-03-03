@@ -455,7 +455,7 @@ function sendApv(){
 	${ sessionScope.member.member_name }
 	<c:choose>
 	
-	<c:when test="${ empty sessionScope.member.rank_name }">입사대기</c:when>
+	<c:when test="${ empty sessionScope.member.rank_name }">관리자</c:when>
 	<c:otherwise>${ sessionScope.member.rank_name }</c:otherwise>
 	
 	</c:choose></td>
@@ -463,7 +463,7 @@ function sendApv(){
 	
 	<c:choose>
 	
-	<c:when test="${ sessionScope.member.department_name == null }">발령대기</c:when>
+	<c:when test="${ sessionScope.member.department_name == null }">관리자</c:when>
 	<c:otherwise>${ sessionScope.member.department_name }</c:otherwise>
 	
 	</c:choose></td>

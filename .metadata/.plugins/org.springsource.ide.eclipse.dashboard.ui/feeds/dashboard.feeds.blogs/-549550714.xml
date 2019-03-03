@@ -101,7 +101,7 @@
       <name>Josh Long</name>
     </author>
     <id>tag:spring.io,2019-02-26:3586</id>
-    <updated>2019-02-26T22:02:59Z</updated>
+    <updated>2019-02-26T22:02:00Z</updated>
     <content type="html">&lt;p&gt;Hi Spring fans! What a week! This week I&amp;rsquo;m in San Francisco, CA; Columbus, OH (for the &lt;a href="https://springonetour.io/2019/columbus"&gt;epic SpringOne Tour stop there&lt;/a&gt;), and then it&amp;rsquo;s off to Tel Aviv, Israel for customer visits and an appearance at the &lt;a href="https://www.meetup.com/JavaIL/events/259118206/"&gt;Israel JUG&lt;/a&gt;. If you&amp;rsquo;re around, then I&amp;rsquo;d love to connect! &lt;/p&gt;
 &lt;p&gt;Anyway, and as always, we&amp;rsquo;ve got tons to cover so let&amp;rsquo;s get to it! &lt;/p&gt;
 &lt;ul&gt;
@@ -122,8 +122,6 @@
   &lt;li&gt;Netifi have put together a collection of YouTube videos related to &lt;a href="https://twitter.com/netifi_inc/status/1100096845924233218?s=12"&gt;RSocket with speakers from Pivotal, Facebook and Netifi &lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;This isn&amp;rsquo;t strictly speaking related to Spring, but it&amp;rsquo;s interesting: SalesForce&amp;rsquo;s &lt;a href="https://twitter.com/ryanmichela/status/1098372725993697280?s=12"&gt;jProtoc 0.9.0 is out! It&amp;rsquo;s a Java protofuf compiler.&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;I love watching the cool things that Thomas Darimont gets up to. This time he&amp;rsquo;s put together a nice demo on using &lt;a href="https://github.com/thomasdarimont/spring-boot-security-saml-sample/tree/poc/keycloak-saml-idp#run-with-keycloak"&gt;Spring Security, SAML, Spring Boot and IBM/RedHat/JBoss KeyCloak&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;
-  &lt;p&gt;&lt;a href="https://www.washingtonpost.com/politics/2019/02/22/roger-stone-takes-stand-much-ridiculousness-ensues/"&gt;Roger Stone takes the stand ? and much ridiculousness ensues - The Washington Post&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
   &lt;li&gt;This post is &lt;em&gt;nuts&lt;/em&gt;! It&amp;rsquo;s how we got &lt;a href="https://bsideup.github.io/posts/jni-cross-compilation/"&gt;JNI cross-compilation with Docker to work in order to create a Java agent to aid developers using Reactor&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;Have you seen &lt;a href="https://github.com/reactor/BlockHound/blob/1.0.0.M1/example/src/test/java/com/example/ReactorTest.java"&gt;BlockHound 1.0.0.M1?&lt;/a&gt; It&amp;rsquo;s a plugin that detects blocked threads in your reactive code.&lt;/li&gt;
   &lt;li&gt;I love this podcast interview with Michael Cote and Paul Czarkowski &lt;a href="https://twitter.com/pivotalcf/status/1098407368273076225?s=12"&gt; on running Spring Boot apps on Kubernetes and more&lt;/a&gt;.&lt;/li&gt;

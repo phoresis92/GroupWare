@@ -28,6 +28,9 @@ $(document).ready(function(){
     <c:forEach var="pay" items="${title_5}">
     	pay5 += ${pay.pay_cash};	    		    
     </c:forEach>
+    <c:forEach var="pay" items="${title_6}">
+    	pay6 += ${pay.pay_cash};	    		    
+	</c:forEach>
 });
 $(document).ready(function(){
 	google.charts.load("current", {packages:['corechart']});
@@ -39,7 +42,8 @@ $(document).ready(function(){
             [type[0], pay2, "red"],
             [type[1], pay3, "primary"],
             [type[2], pay4, "green"],
-            [type[3], pay5, "purple"]
+            [type[3], pay5, "purple"],
+            [type[4], pay6, "orange"]
           ]);
 
       var view = new google.visualization.DataView(data);
@@ -112,10 +116,20 @@ $(document).ready(function(){
 	    		pay5_2017 += ${pay.pay_cash};
 	    	}    
 	    </c:forEach>
+	    <c:forEach var="pay" items="${title_6}">
+	    var date = "${pay.pay_date}";
+		var yy = date.slice(24,28);
+		    if (yy == '2019'){
+		    	pay6_2019 += ${pay.pay_cash};
+			} else if (yy == '2018'){
+	    		pay6_2018 += ${pay.pay_cash};
+	    	} else if (yy == '2017'){
+	    		pay6_2017 += ${pay.pay_cash};
+	    	}    
+	    </c:forEach>
     
 		var data = google.visualization.arrayToDataTable([
-		    ['Genre', type[0], type[1], type[2], type[3],
-		    	type[4], { role: 'annotation' } ],
+		    ['Genre', type[0], type[1], type[2], type[3], type[4], { role: 'annotation' } ],
 		    ['2017', pay2_2017, pay3_2017, pay4_2017, pay5_2017, pay6_2017, ''],
 		    ['2018', pay2_2018, pay3_2018, pay4_2018, pay5_2018, pay6_2018, ''],
 		    ['2019', pay2_2019, pay3_2019, pay4_2019, pay5_2019, pay6_2019, ''],
@@ -285,6 +299,40 @@ $(document).ready(function(){
   	    	}
   		} 		    		    
   	    </c:forEach>
+  	  <c:forEach var="pay" items="${title_6}">
+	    var str = "${pay.pay_date}";
+		var date_format = str.slice(4,10) + " " +str.slice(24,28);
+		var date = new Date(date_format);
+		var yy = str.slice(24,28);
+		var mm = date.toISOString().slice(0,10).replace(/-/g,"").slice(4,6);
+		if (yy == '2019'){
+			if (mm == '01'){
+		    	pay6_01 += ${pay.pay_cash};
+			} else if (mm == '02'){
+	    		pay6_02 += ${pay.pay_cash};
+	    	} else if (mm == '03'){
+	    		pay6_03 += ${pay.pay_cash};
+	    	}else if (mm == '04'){
+	    		pay6_04 += ${pay.pay_cash};
+	    	} else if (mm == '05'){
+	    		pay6_05 += ${pay.pay_cash};
+	    	}  else if (mm == '06'){
+	    		pay6_06 += ${pay.pay_cash};
+	    	} else if (mm == '07'){
+	    		pay6_07 += ${pay.pay_cash};
+	    	}  else if (mm == '08'){
+	    		pay6_08 += ${pay.pay_cash};
+	    	} else if (mm == '09'){
+	    		pay6_09 += ${pay.pay_cash};
+	    	}  else if (mm == '10'){
+	    		pay6_10 += ${pay.pay_cash};
+	    	} else if (mm == '11'){
+	    		pay6_11 += ${pay.pay_cash};
+	    	}  else if (mm == '12'){
+	    		pay6_12 += ${pay.pay_cash};
+	    	}
+		} 		    		    
+	    </c:forEach>
   	    
         var data = google.visualization.arrayToDataTable([
           ['Month', type[0], type[1], type[2], type[3], type[4]],
@@ -388,7 +436,7 @@ $(document).ready(function(){
 				},
 				{
 				  text: type[4],
-				  values: [0],
+				  values: [pay6],
 				  backgroundColor: '#6FB07F'
 				}
 			]
@@ -406,6 +454,141 @@ $(document).ready(function(){
 
 </head>
 <body>
+
+ <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+              							<h2>회원통계</h2>
+
+          </div>
+
+ 
+
+          <!-- Content Row -->
+
+          <div class="row">
+
+            <!-- 2번1번차트헤더 -->
+            <div class="col-xl-6 col-lg-7">
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">성별통계</h6>
+                  
+                </div>
+                <!-- 차트바디 -->
+                <div class="card-body">
+                  
+                    
+                    <div id="columnchart_values"></div>
+                    
+
+                  
+                  
+                </div>
+              </div>
+            </div>
+            
+              <!-- 2번 차트헤더 -->
+            <div class="col-xl-6 col-lg-7">
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">직급통계</h6>
+                  
+                </div>
+                <!-- 차트바디 -->
+                <div class="card-body">
+                  
+                  
+			 <div id="columnchart_values1"></div>
+
+
+                  
+                  
+                </div>
+              </div>
+            </div>
+            
+             <!-- 3번 차트헤더 -->
+            <div class="col-xl-6 col-lg-7">
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">부서통계</h6>
+                  
+                </div>
+                <!-- 차트바디 -->
+                <div class="card-body">
+                  
+                  <div id="myChart" class="chartbox"></div>
+                  
+		<!-- 	<div id="piechart" style="width: 600px; height: 400px;"></div> -->
+
+                  
+                  
+                </div>
+              </div>
+            </div>
+            
+             <!-- 4번 차트헤더 -->
+            <div class="col-xl-6 col-lg-7">
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">부서통계</h6>
+                  
+                </div>
+                <!-- 차트바디 -->
+                <div class="card-body">
+                  
+                  <div id="myChart" class="chartbox"></div>
+                  
+		<!-- 	<div id="piechart" style="width: 600px; height: 400px;"></div> -->
+
+                  
+                  
+                </div>
+              </div>
+            </div>
+            
+            
+              <!-- 5번 긴차트헤더 -->
+            <div class="col-xl-9 col-lg-7">
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">직급통계</h6>
+                  
+                </div>
+                <!-- 차트바디 -->
+                <div class="card-body">
+                  
+                  
+			<div id="columnchart_material"style="width: 900px; height: 500px;"></div>
+
+
+
+                  
+                  
+                </div>
+              </div>
+            </div>
+            
+
+         
+          </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+
+
+
+
+
 <br>
 <div id="columnchart_values"></div>
 <br>

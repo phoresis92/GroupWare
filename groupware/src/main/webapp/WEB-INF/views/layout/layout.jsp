@@ -17,72 +17,20 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 <!-- 횡스크롤 원인 -->
  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<style>
- .side_layout{float:left; max-width:device-width;}
-@media (min-width:600px){
-.side_layout{float:left; min-width:240px; max-width:240px !important;}
-</style>
-
-<script type="text/javascript">
-$(document).ready(function(){
-	var id = $("#header_member_id").val();
-	var param = "member_id="+id;
-	$.ajax({
-		type:"POST",
-		url:"../email/count",
-		data:param,
-		success:function(data){
-			var obj = eval('('+data+')');
-			$("#email_count").html(obj.value);
-			$("#menu_email_count").html(obj.value);
-			$("#header_email_count").html(obj.value);
-			$("#header_email_count2").html(obj.value);
-			$("#main_email_count").html(obj.value);
-		}
-	});
-});
-setInterval('email()', 30000)
-
-function email(){
-	if($("#header_member_id").val() == "") {
-		$(location).attr("href", "../member/logout");
-	}
-	var id = $("#header_member_id").val();
-	var param = "member_id="+id;
-	$.ajax({
-		type:"POST",
-		url:"../email/pop3",
-		data:param,
-		success:function(data){
-			var obj = eval('('+data+')');
-			$("#email_count").html(obj.value);
-			$("#menu_email_count").html(obj.value);
-			$("#header_email_count").html(obj.value);
-			$("#header_email_count2").html(obj.value);
-			$("#main_email_count").html(obj.value);
-		}
-	});
-}
-$(function() {
-	if($("#header_member_id").val() == "") {
-		$(location).attr("href", "../member/logout");
-	}
-});
-
-</script>
+ <link href="${pageContext.request.contextPath}/resources/css/sb-admin-2.min.css" rel="stylesheet">
 </head>
 <body>
 <div>
 
-<div class="content" style="font-family:Verdana,sans-serif;line-height:1.5;font-size:15px;">
+<div class="content">
 		<tiles:insertAttribute name="header" />
 	</div>
 	
-	<div class="row" style="font-family:Verdana,sans-serif;line-height:1.5;font-size:15px;">
-<div class="col-sm side_layout" style="padding-right:0px !important;">
+	<div class="row">
+		<div class="side_layout bg-gradient-primary">
 			<tiles:insertAttribute name="menu" />
 		</div>
-		<div class="col-sm-7 col-md-8 col-lg-9" style="float:left;">
+		<div class="col-sm col-md col-lg">
 		<!-- <div class="container-fluid"> -->
 		<br>
 			<tiles:insertAttribute name="body" />

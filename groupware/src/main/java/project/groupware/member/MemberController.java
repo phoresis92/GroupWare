@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -23,7 +24,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import dto.ApvPayment_Dto;
 import dto.MemDeposit;
+import project.groupware.approval.ApvService;
 import project.groupware.board.BoardSvc;
 import project.groupware.common.SearchVO;
 import project.groupware.department.Department;
@@ -47,6 +50,9 @@ public class MemberController {
 	
 	@Resource(name="emailService")
 	private project.groupware.email.Service email_service;
+	
+	@Resource(name="ApvService")
+	private ApvService apvService;
 	
 	@Autowired
     private BoardSvc boardSvc;
@@ -109,16 +115,7 @@ public class MemberController {
 	}
 	
 	@RequestMapping("/member/join")
-	public ModelAndView memberJoin() { // 로그인 페이지에서 회원가입 버튼 눌렀을 때 실행
-		ModelAndView mav = new ModelAndView("member/join");
-		// dept_service에서 부서명 읽음
-		ArrayList<Department> dept_list = dept_service.getAll();
-		// rank_service에서 직급 읽음
-		ArrayList<Rank> rank_list = rank_service.getAll();
-		mav.addObject("dept", dept_list);
-		mav.addObject("rank", rank_list);
-		return mav;
-	}
+	public void memberJoin() {} // 로그인 페이지에서 회원가입 버튼 눌렀을 때 실행	
 	
 	@RequestMapping(value="/member/join", method=RequestMethod.POST)
 	public String join(Member m) { // 회원가입
@@ -126,7 +123,7 @@ public class MemberController {
 		int id = member_service.getIdNum();		
 		// Calendar로 년도 생성
 		Calendar cal = Calendar.getInstance();
-		int yy = cal.get(Calendar.YEAR);		
+		int yy = cal.get(Calendar.YEAR);
 		// 생성된 년도와 sequence 값으로 사번 조합( (년도 % 100) * 1000000 + sequence 값) 
 		int make_id = (yy % 100) * 1000000 + id;
 		// 생성한 사번을 member 객체에 set
@@ -347,7 +344,7 @@ public class MemberController {
 			Member m = (Member)session.getAttribute("member");
 			m.setMember_pw(member.getMember_pw());
 			mav.addObject("type", type);
-			mav.setViewName("redirect:/member/editPw");
+			mav.setViewName("redirect:/member/myinfo");
 		} else {
 			mav.setViewName("redirect:/member/login");
 		}
@@ -363,7 +360,7 @@ public class MemberController {
         searchVO.pageCalculate( boardSvc.selectBoardCount(searchVO) ); // startRow, endRow
 
         List<?> listview  = boardSvc.selectBoardList(searchVO);
-        
+        System.out.println(searchVO);
         modelMap.addAttribute("listview", listview);
         modelMap.addAttribute("searchVO", searchVO);
         return "/board/BoardList";
@@ -377,8 +374,20 @@ public class MemberController {
 	}
 	
 	@RequestMapping("/member/main")
-	public String groupwareMain() { // 그룹웨어 메인페이지 이동	
-		return "/member/main";
+	public ModelAndView groupwareMain() { // 그룹웨어 메인페이지 이동	
+		ModelAndView mav = new ModelAndView("/member/main");
+		Calendar cal = Calendar.getInstance();
+		int yy = cal.get(Calendar.YEAR);
+		int mm = cal.get(Calendar.MONTH) + 1;
+		mav.addObject("year", yy);
+		mav.addObject("month", mm);
+		for (int i = 2; i <= 6; i++) {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("pay_title", i);
+			ArrayList<ApvPayment_Dto> list = apvService.getPayTitle(map);
+			mav.addObject("title_"+i, list);			
+		}
+		return mav;
 	} 
 	
 	// 임시 비밀번호 생성

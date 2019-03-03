@@ -182,7 +182,7 @@ $.getList = function(p){
 			str = '<table class="table table-hover text-center">';
 			str += '<thead><tr class="text-center"><th>번호</th><th>부서명</th><th>직원수</th>';
 			str += '<th class="text-right">';
-			str += '<a id="a_add_dept" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modal_edit_dept">추가</a>';
+			str += '<button id="a_add_dept" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modal_edit_dept">추가</button>';
 			str += '</th></tr></thead>';
 			for(i = startNum; i < endNum; i++){							
 				str += '<tr>';
@@ -190,8 +190,8 @@ $.getList = function(p){
 				str += '<td>' + arr[i].department_name + '</td>';
 				str += '<td>' + arr[i].department_count + '</td>';
 				str += '<td class="text-right">';
-				str += '<a id="a_edit_dept" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modal_edit_dept">수정</a>';
-				str += '<a id="a_del_dept" class="btn btn-outline-primary btn-sm">삭제</a>';
+				str += '<button id="a_edit_dept" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modal_edit_dept">수정</button>';
+				str += '<button id="a_del_dept" class="btn btn-outline-primary btn-sm">삭제</button>';
 				str += '</td>';
 				str += '</tr>';
 			}
@@ -201,7 +201,6 @@ $.getList = function(p){
 		}
 	});
 }
-
 </script>
 </head>
 <body>
@@ -236,11 +235,11 @@ $.getList = function(p){
 	</div>
 	<br>
 	<div id="searchForm" align="center">
-			<select name="opt" class="btn btn-primary">
+			<select name="opt" class="btn btn-outline-primary">
 				<option value="0">부서</option>
 			</select>
-			<input type="text" class="btn btn-primary" size="20" name="condition" />&nbsp;
-			<input type="button" id="btn_dept_opt" class="btn btn-primary" value="검색" />
+			<input type="text" class="btn btn-outline-primary" size="20" name="condition" />&nbsp;
+			<input type="button" id="btn_dept_opt" class="btn btn-outline-primary" value="검색" />
 	</div>
 	
 <!-- The Modal -->

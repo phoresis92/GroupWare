@@ -79,7 +79,7 @@ $(document).ready(function(){
 		<div class="row content">
 			<div class="col-sm text-left">
 				<br>
-				<h2>자유게시판 글 작성</h2>
+				<h2>${bgno eq '1' ? '자유게시판' : '공지사항'} 글 작성</h2>
 
 				<form id="form1" name="form1" action="boardSave" method="post" enctype="multipart/form-data"
 				action="${pageContext.request.contextPath}/email/write"	method="post">
@@ -119,7 +119,7 @@ $(document).ready(function(){
 						<input type="hidden" name="bgno" value="<c:out value="${bgno}"/>">
 						<input type="hidden" name="brdno"
 							value="<c:out value="${boardInfo.brdno}"/>"> 
-							<a href="${pageContext.request.contextPath}/boardList" class="btn btn-outline-primary">돌아가기</a> 
+							<a href="${pageContext.request.contextPath}/boardList?bgno=${bgno}" class="btn btn-outline-primary">돌아가기</a> 
 							<a href="#"	class="btn btn-outline-primary" onclick="fn_formSubmit()">저장</a>
 					</div>
 

@@ -41,7 +41,7 @@
 		member_address3, member_phone, member_department, member_rank, member_gender)
 		VALUES(#{member_id}, #{member_pw}, #{member_name}, #{member_birth}, 
 		#{member_email, jdbcType=VARCHAR}, #{member_address1}, #{member_address2}, #{member_address3},  #{member_phone},
-		 #{member_department}, #{member_rank}, #{member_gender})
+		 999, 99, #{member_gender})
 	</insert>	
 	
 	<select id="selectAll" resultMap="memberResult">
@@ -49,7 +49,7 @@
 	</select>
 	
 	<select id="selectMember" parameterType="int" resultMap="memberResult">
-		SELECT * FROM member WHERE member_id = #{member_id}
+		select * from member m , department d, rank k where m.member_department = d.department_id(+) and m.member_rank = k.rank_id(+) and member_id = #{member_id}
 	</select>
 	
 	<select id="selectName" parameterType="int" resultType="String">
@@ -126,7 +126,7 @@
 	</select>	
 	
 	<select id="selectAllMemJoin" resultMap="memberResult">
-		select * from member m , department d, rank k where m.member_department = d.department_id(+) and m.member_rank = k.rank_id(+)
+		select * from member m , department d, rank k where m.member_department = d.department_id(+) and m.member_rank = k.rank_id(+) and m.member_status in (1,2,5)  
 	</select>
 
 	<select id="selectByDeptId" parameterType="int" resultMap="memberResult">

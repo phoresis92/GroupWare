@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,20 +15,42 @@
 <link href="${pageContext.request.contextPath}/resources/css/basic.css" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/resources/css/common.css" rel="stylesheet">
 
+  <!-- 헤드 네비게이션 효과 -->
+  <link href="${pageContext.request.contextPath}/resources/css/sb-admin-2.min.css" rel="stylesheet">
+  <style>
+  .tab-content .active{
+  padding-left: 0px;
+    padding-right: 0px;
+    }
+  </style>
 </head>
 <body>
 <div class="container">
-<div class="row content">
-<div class="col-sm"></div>
-<div class="loginbox commonbox col-sm-7 col-md-6 col-lg-5">
+
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+
+      <div class="col-xl-10 col-lg-12 col-md-9" style="height:100% !important">
+
+        <div class="card o-hidden border-0 shadow-lg my-5">
+          <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+                <div class="col-lg-6 d" style="background-color:#eaf8ff !important"><img id="file_img" src="${pageContext.request.contextPath}/resources/img/ALPHA.png" alt="사진"></div>
+              <div class="col-lg-6">
+                <div class="p-5">
+                  <div class="text-center">
+                    <h1 class="h4 text-gray-900 mb-4">Find ID/PW</h1>
+                  </div>
+                
 
 <!-- Nav tabs -->
   <ul class="nav nav-tabs textbox">
     <li class="nav-item">
-      <a class="nav-link active" data-toggle="tab" href="#menu1">아이디 찾기</a>
+      <a class="nav-link active" data-toggle="tab" href="#menu1">ID</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#menu2">비밀번호 찾기</a>
+      <a class="nav-link" data-toggle="tab" href="#menu2">PassWord</a>
     </li>
   </ul>
   
@@ -57,8 +81,16 @@
 		
 		<!-- 사번 찾기 버튼 -->
 		<div class="form-group textbox">
-			<button id="btn_find_id" type="button" class="btn btn-primary">아이디 찾기</button>
+			<button id="btn_find_id" type="button" class="btn btn-primary">Find ID</button>
 		</div>
+		
+		<div class="form-group textbox">
+		 <a href="${pageContext.request.contextPath}/member/login" class="btn btn-google btn-user btn-block">
+                       Back to login 
+                    </a>
+		</div>
+		
+		
     </div>
     
     <div id="menu2" class="container tab-pane fade"><br>
@@ -86,15 +118,24 @@
 		
 		<!-- 비밀번호 찾기 버튼 -->
 		<div class="form-group textbox">
-			<button id="btn_find_pw" type="button" class="btn btn-primary">비밀번호 찾기</button>
+			<button id="btn_find_pw" type="button" class="btn btn-primary">Find PassWord</button>
+			
+		</div>
+		<div class="form-group textbox">
+		 <a href="${pageContext.request.contextPath}/member/login" class="btn btn-google btn-user btn-block">
+                       Back to login 
+                    </a>
 		</div>
     </div>
   </div>
 </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-<div class="col-sm"></div>
-</div>
-
+      </div>
 <!-- The Modal -->
   <div class="modal fade" id="modal_findId">
     <div class="modal-dialog">
@@ -143,6 +184,6 @@
       </div>
     </div>
   </div>
-</div>
+    </div>
 </body>
 </html>

@@ -17,16 +17,43 @@ $.ajax({
 	success: function(data){
 		//console.log(data);
 		$('#apvCount2').text(data);
-	}
-})
-$.ajax({
-	type:'POST',
-	url: '${ pageContext.request.contextPath }/approval/notAuthApvCount',
-	success: function(data){
-		//console.log(data);
 		$('#apvCount3').text(data);
 	}
 })
+$.ajax({
+	type:"POST",
+	url:"${ pageContext.request.contextPath }/email/count",
+	success:function(data){
+		$("#email_count").html(data);
+		$("#menu_email_count").html(data);
+		$("#main_email_count").html(data);
+		$("#header_email_count").html(data);
+		$("#header_email_count2").html(data);
+	}
+});
+setInterval('email()', 30000)
+
+function email(){
+	if($("#header_member_id").val() == "") {
+		$(location).attr("href", "${ pageContext.request.contextPath }/member/logout");
+	}
+	$.ajax({
+		type:"POST",
+		url:"${ pageContext.request.contextPath }/email/pop3",
+		success:function(data){
+			$("#email_count").html(data);
+			$("#menu_email_count").html(data);
+			$("#main_email_count").html(data);
+			$("#header_email_count").html(data);
+			$("#header_email_count2").html(data);
+		}
+	});
+}
+$(document).ready(function() {
+	if($("#header_member_id").val() == "") {
+		$(location).attr("href", "${ pageContext.request.contextPath }/member/logout");
+	}
+});
 </script>
 </head>
 <body>
@@ -39,7 +66,7 @@ $.ajax({
             <i class="fa fa-bars"></i>
           </button>
           
-			<div><a href="${pageContext.request.contextPath}/member/main"><img id="file_img" src="${pageContext.request.contextPath}/resources/img/logooo.png" alt="사진"  height="60px"></a></div>
+			<div><a href="${pageContext.request.contextPath}/member/main"><img id="main_file_img" src="${pageContext.request.contextPath}/resources/img/logooo.png" alt="사진"  height="60px"></a></div>
 
 
           <!-- Topbar Navbar -->
@@ -80,7 +107,7 @@ $.ajax({
               <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-envelope fa-fw"></i>
                 <!-- Counter - Messages -->
-                <span class="badge badge-danger badge-counter"> <span id="header_email_count">0</span> <!-- 숫자가 들어갈 공간 -->  </span>
+                <span class="badge badge-danger badge-counter"> <span id="header_email_count"></span> <!-- 숫자가 들어갈 공간 -->  </span>
               </a>
               <!-- Dropdown - Messages -->
               <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown">
@@ -89,8 +116,8 @@ $.ajax({
                 </h6>
                 <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="dropdown-list-image mr-3">
-                   <div class="icon-circle bg-warning">
-                <i class="far fa-envelope"></i>
+                   <div class="icon-circle bg-primary">
+                <i class="far fa-envelope text-white"></i>
                    
  </div>
                     
