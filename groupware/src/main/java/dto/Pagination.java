@@ -11,8 +11,8 @@ public class Pagination {
 		int countPage = 10; //페이지 수		
 		
 		int totalCount = list.size(); // 총 게시물 수
-		int totalPage = totalCount / countList; // 총 페이지 수;
-		if(totalCount%countList>0) { totalPage++; }
+		int totalPage = ((totalCount - 1) / countList) + 1; // 총 페이지 수;
+		
 		if(totalPage < page) { page = totalPage; }
 		
 		int startPage = ((page-1)  / countPage ) * countPage + 1; 
@@ -21,8 +21,18 @@ public class Pagination {
 		
 		//==========================================================
 		
-		int startNum = (page-1) * countList +1;
+		int startNum = (page-1) * countList;
 		int endNum = page * countList;
+		
+		if (endNum > totalCount) {
+			endNum = totalCount;
+		}
+		if (startNum < 0){
+			startNum = 0;
+		}
+		if (endNum < 0){
+			endNum = 0;
+		}
 		
 		//ArrayList<BoardBean> boardList = boardListService.getboardlist(startNum , endNum);
 		
@@ -31,18 +41,7 @@ public class Pagination {
 		pageInfo.setStartPage(startPage);
 		pageInfo.setEndPage(endPage);
 		pageInfo.setTotalPage(totalPage);
-		pageInfo.setCountList(countList);
-		
-		if (endNum > totalCount) {
-			endNum = totalCount;
-		}
-		if(totalCount != 0) {
-			startNum--;
-			endNum--;
-		}
-		if (startNum < 0){
-			startNum = 0;
-		}
+		pageInfo.setCountList(countList);		
 		pageInfo.setStartNum(startNum);
 		pageInfo.setEndNum(endNum);
 		pageInfo.setTotalCount(totalCount);

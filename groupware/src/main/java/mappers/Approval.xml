@@ -412,7 +412,9 @@ approval_mem3 = #{approval_mem3},
 approval_title = #{approval_title},
 approval_content = #{approval_content},
 approval_indate = sysdate,
-approval_cc = #{approval_cc}
+approval_cc = #{approval_cc},
+approval_startdate = #{approval_startdate, jdbcType=DATE},
+approval_enddate = #{approval_enddate, jdbcType=DATE}
 where approval_id = #{approval_id}
 	</update>
 	

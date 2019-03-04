@@ -227,101 +227,27 @@ $(function(){
 	</div>
 	<div>
 			
-			<ul class="pagination justify-content-center">
-			
-				<c:choose>
-					<c:when test="${ pageInfo.page eq 1 }">
-					
-					<li class="page-item disabled"><a class="page-link" href="#">1</a></li>
-					
-					</c:when>
-					
-					<c:when test="${ pageInfo.page eq 0 }">
-					
-					<li class="page-item disabled"><a class="page-link" href="#">1</a></li>
-					
-					</c:when>
-				
-					<c:otherwise>
-					
-					<li class="page-item"><a class="page-link" href="${ pageContext.request.contextPath }/approval/myApvList?page=1">1</a></li>
-					
-					</c:otherwise>
-				</c:choose>
-			
-			
-				<c:choose>
-					<c:when test="${ pageInfo.page <= 1 }">
+			<ul class="pagination justify-content-center">	
+				<c:if test="${pageInfo.page != 1}">	
+					<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/approval/${toSearch}?page=1"><i class="fas fa-angle-double-left"></i></a></li>					
+				</c:if>
+				<c:if test="${pageInfo.page >= 11}">	
+					<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/approval/${toSearch}?page=${pageInfo.page-1}"><i class="fas fa-angle-left"></i></a></li>			
+				</c:if>
 										
-					<li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
-					
-					</c:when>
-					
-					<c:otherwise>
-					
-					<li class="page-item"><a class="page-link" href="${ pageContext.request.contextPath }/approval/myApvList?page=${ pageInfo.page -1 }">이전</a></li>
-					
-					</c:otherwise>
-					
-				</c:choose>
-			
-			
 				<c:forEach var="i" begin="${pageInfo.startPage}" end="${pageInfo.endPage}">
-				
-					<c:choose>
-					<c:when test="${i eq pageInfo.page }">
-					
-					<li class="page-item active"><a class="page-link" href="${ pageContext.request.contextPath }/approval/myApvList?page=${ i }">${ i }</a></li>
-					
-					</c:when>
-					
-					<c:otherwise>
-					
-					<li class="page-item"><a class="page-link" href="${ pageContext.request.contextPath }/approval/myApvList?page=${ i }">${ i }</a></li>
-					
-					</c:otherwise>
-					
-					</c:choose>
+					<c:if test="${i eq pageInfo.page }">
+						<li class="page-item active"><a class="page-link" href="#">${i}</a></li>					
+					</c:if>					
+					<c:if test="${i != pageInfo.page }">					
+						<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/approval/${toSearch}?page=${i}">${i}</a></li>					
+					</c:if>
 				</c:forEach>
 			
-			
-			
-			
-				<c:choose>
-				
-					<c:when test="${ pageInfo.page >= pageInfo.totalPage }">
-					
-					<li class="page-item disabled"><a class="page-link" href="#">다음</a></li>
-					
-					</c:when>
-					
-					<c:otherwise>
-					
-					<li class="page-item"><a class="page-link" href="${ pageContext.request.contextPath }/approval/myApvList?page=${ pageInfo.page +1 }">다음</a></li>
-	
-					</c:otherwise>
-				
-				</c:choose>
-				
-			
-
-
-				
-				<c:choose>
-				
-					<c:when test="${ pageInfo.page eq pageInfo.totalPage }">
-					
-					<li class="page-item disabled"><a class="page-link" href="#">${ pageInfo.totalPage }</a></li>
-					
-					</c:when>
-					
-					<c:otherwise>
-					
-					<li class="page-item"><a class="page-link" href="${ pageContext.request.contextPath }/approval/myApvList?page=${ pageInfo.totalPage }">${ pageInfo.totalPage }</a></li>
-					
-					</c:otherwise>
-					
-				</c:choose>
+				<c:if test="${ pageInfo.endPage != pageInfo.totalPage }">					
+					<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/approval/${toSearch}?page=${pageInfo.endPage+1}"><i class="fas fa-angle-right"></i></a></li>
+					<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/approval/${toSearch}?page=${pageInfo.endPage+1}"><i class="fas fa-angle-double-right"></i></a></li>	
+				</c:if>
 				
 			</ul> <!-- Paging end -->
 

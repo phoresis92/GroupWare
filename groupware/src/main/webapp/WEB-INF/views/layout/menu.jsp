@@ -185,7 +185,7 @@ ul .nav-item {padding-left:7px;}
             <a class="collapse-item" href="${pageContext.request.contextPath}/manager/rank?page=1">직급 관리</a>
             <div class="collapse-divider"></div>
             <h6 class="collapse-header">통계:</h6>
-            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/statistics">회원통계</a>
+            <a class="collapse-item" href="${pageContext.request.contextPath}/manager/statistics">회원 통계</a>
             <a class="collapse-item" href="${pageContext.request.contextPath}/apv_payment/statistics">지출 통계</a>
        
           </div>

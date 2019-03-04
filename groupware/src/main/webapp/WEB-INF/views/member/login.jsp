@@ -48,7 +48,7 @@
 					<a href="#" data-toggle="tooltip" data-placement="left" title="비밀번호를 입력하세요!"></a>
 					<input type="password" class="form-control" id="member_pw" name="member_pw" maxlength="16" style="ime-mode: disabled;">
 				</div>
-</form>
+			</form>
       <!-- 로그인 실패 -->
 			<div class="form-group textbox" >
 				<div class="alert alert-danger" id="loginfail" style="display:none;">

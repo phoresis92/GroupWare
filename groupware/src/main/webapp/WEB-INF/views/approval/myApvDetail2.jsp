@@ -392,6 +392,9 @@ if( where == 1 ){
 		if(${ apvDto.approval_auth2 == 0 }){
 			console.log('예결가능')
 			$('<button></button>').text('예결').attr('onclick','preAuth()').attr('class','btn btn-outline-primary').appendTo('#authDiv');
+		}else if(${ apvDto.approval_auth2 == 3 && apvDto.approval_auth1 == 0 }){
+			console.log('예결가능')
+			$('<button></button>').text('예결').attr('onclick','preAuth()').attr('class','btn btn-outline-primary').appendTo('#authDiv');
 		}else{
 			$('<button></button>').text('승인').attr('onclick','auth()').attr('class','btn btn-outline-primary').appendTo('#authDiv');
 			$('<button></button>').text('반려').attr('data-toggle','modal').attr('class','btn btn-outline-primary').attr('data-target','#returning').appendTo('#authDiv');

@@ -39,10 +39,10 @@
 		<c:when test="${empty m.member_img}">
 			<c:choose>
 				<c:when test="${m.member_gender eq '남'}">
-					<img src="../resources/img/m_img.png" alt="사진" width="120px" height="150px">
+					<img src="${pageContext.request.contextPath}/resources/img/m_img.png" alt="사진" width="120px" height="150px">
 				</c:when>
 				<c:otherwise>
-					<img src="../resources/img/f_img.png" alt="사진" width="120px" height="150px">
+					<img src="${pageContext.request.contextPath}/resources/img/f_img.png" alt="사진" width="120px" height="150px">
 				</c:otherwise>
 			</c:choose>
 		</c:when>
@@ -136,7 +136,7 @@
 </div>
 <td>
 <div class="form-group textbox">
-<button type="button" id="editinfo" class="btn btn-secondary">수정하기</button>
+<button type="button" id="editinfo" class="btn btn-outline-primary">수정하기</button>
 </div>
 </td>
 </tr>
@@ -158,10 +158,10 @@
 		<c:when test="${empty m.member_img}">
 			<c:choose>
 				<c:when test="${m.member_gender eq '남'}">
-					<img id="file_img" src="../resources/img/m_img.png" alt="사진" width="120px" height="150px">
+					<img id="file_img" src="${pageContext.request.contextPath}/resources/img/m_img.png" alt="사진" width="120px" height="150px">
 				</c:when>
 				<c:otherwise>
-					<img id="file_img" src="../resources/img/f_img.png" alt="사진" width="120px" height="150px">
+					<img id="file_img" src="${pageContext.request.contextPath}/resources/img/f_img.png" alt="사진" width="120px" height="150px">
 				</c:otherwise>
 			</c:choose>
 		</c:when>
@@ -229,7 +229,7 @@
 </td>
 <td>
 <div class="form-group textbox">
-	<input type="button" class="btn btn-primary" onclick="sample6_execDaumPostcode()" value="우편번호 찾기">
+	<input type="button" class="btn btn-outline-primary" onclick="sample6_execDaumPostcode()" value="우편번호 찾기">
 </div>
 </td>
 <td></td>
@@ -238,9 +238,9 @@
 <td>
 <div class="filebox">
 <input type="hidden" name="member_img" value="${m.member_img}"/>
-<label class="btn btn-success" for="change_img">변경</label>
+<label class="btn btn-outline-primary" for="change_img">변경</label>
 <input id="change_img" type="file" name="img_file" accept="image/*"/>
-<label class="btn btn-success" for="clear_img">초기화</label>
+<label class="btn btn-outline-primary" for="clear_img">초기화</label>
 <input id="clear_img" type="button"/>
 </div>
 </td>
@@ -274,9 +274,9 @@
 <td>
 <div class="filebox">
 <input type="hidden" name="member_sign" value="${m.member_sign}"/>
-<label class="btn btn-success" for="change_sign">변경</label>
+<label class="btn btn-outline-primary" for="change_sign">변경</label>
 <input type="file" id="change_sign" name="sign_file" accept="image/*"/>
-<label class="btn btn-success" for="clear_sign">초기화</label>
+<label class="btn btn-outline-primary" for="clear_sign">초기화</label>
 <input id="clear_sign" type="button"/>
 </div>
 </td>
@@ -291,7 +291,7 @@
 <td>
 <!-- 수정 버튼 -->
 <div class="form-group textbox">
-<button type="submit" class="btn btn-secondary">저장</button>
+<button type="submit" class="btn btn-outline-primary">저장</button>
 </div>
 </td>
 </tr>
@@ -354,8 +354,8 @@
         
         <!-- Modal footer -->
         <div class="modal-footer">
-     	   <button type="button" id="modal_edit_member" class="btn btn-primary btn-sm" data-dismiss="modal">수정</button>
-           <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">닫기</button>
+     	   <button type="button" id="modal_edit_member" class="btn btn-outline-primary" data-dismiss="modal">수정</button>
+           <button type="button" class="btn btn-outline-primary" data-dismiss="modal">닫기</button>
         </div>
         
       </div>      
@@ -365,14 +365,14 @@
 <!-- 매니저 수정 버튼 -->
 <c:if test="${sessionScope.member.member_status eq '9' && sessionScope.member.member_status != m.member_status}">
 	<c:choose>
-		<c:when test="${sessionScope.member.member_status eq '0'}">
-			<a id="authorization" class="btn btn-outline-secondary btn-sm" href="${pageContext.request.contextPath}/manager/authorization?member_id=${member.member_id}">승인</a>
+		<c:when test="${m.member_status eq '0'}">
+			<a id="authorization" class="btn btn-outline-primary" href="${pageContext.request.contextPath}/manager/authorization?member_id=${m.member_id}">승인</a>
 		</c:when>
 		<c:otherwise>
-			<a id="btn_manager_edit" class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#modal_manager_edit">수정</a>
+			<button id="btn_manager_edit" class="btn btn-outline-primary" data-toggle="modal" data-target="#modal_manager_edit">수정</button>
 		</c:otherwise>
 	</c:choose>
-	<a class="btn btn-outline-secondary btn-sm" href="${pageContext.request.contextPath}/manager/member?page=1">목록</a>	
+	<a class="btn btn-outline-primary" href="${pageContext.request.contextPath}/manager/member?page=1">목록</a>	
 </c:if>  
 </body>
 </html>

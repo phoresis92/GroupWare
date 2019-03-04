@@ -131,13 +131,13 @@ function datePick(){
 
 </head>
 <body>
-
+	<div class="container-fluid text-center">
 <form id="selectDayForm" action="${ pageContext.request.contextPath }/manager/commuting"></form>
 
 
 <div class="row">
 
-<div class="col-3" style="max-width: 20% !important;">
+<div class="col-3">
 
 
 					<h2>직원 선택</h2>
@@ -212,8 +212,8 @@ function datePick(){
  --%>
  
  
-<div class="container" style="margin-right: 0; margin-left: 0;">
-	<div class="container-fluid text-center">
+<div class="col-9">
+
 
 		<!-- 게시글 -->
  	<div class="col-lg-12">

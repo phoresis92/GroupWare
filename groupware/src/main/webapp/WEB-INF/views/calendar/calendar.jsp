@@ -27,12 +27,12 @@
 <script src='${pageContext.request.contextPath}/resources/fullcalendar/fullcalendar.js'></script>
 <script src='${pageContext.request.contextPath}/resources/fullcalendar/lang/ko.js'></script>
 
+
+
 <!-- summernote -->
 <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
 <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
 
-<!-- jscolor -->
-<script src="${pageContext.request.contextPath}/resources/jscolor.js"></script>
 
 </head>
 

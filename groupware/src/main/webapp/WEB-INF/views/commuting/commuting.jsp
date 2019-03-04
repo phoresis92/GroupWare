@@ -85,7 +85,7 @@ setInterval('time()', 1000);
 function time() {
 	$.ajax({
 		type:"POST",
-		url:"${pageContext.request.contextPath}/commuting/current_time",
+		url:"../commuting/current_time",
 		success:function(data){
 			var obj = eval('('+data+')');			
 			$("#current_time").html(obj.value);				
@@ -122,7 +122,7 @@ $(function(){
 					
 					$('#reason_${ now }').text(json.commuting_comment);
 					if($('#arrive_${ now }').text() != '' || $('#leave_${ now }').text() != ''){
-						$('#reasonBtn_${ now }').html("<button onclick='goModal(${ now });'>입력</button>");
+						$('#reasonBtn_${ now }').html("<button class='btn btn-outline-primary btn-sm' click='goModal(${ now });'>입력</button>");
 					}
 					
 				}catch(Exception){
@@ -188,7 +188,7 @@ $(function(){
 		var param = "year=${ year }&month=${ month }";
 		$.ajax({
 			type:"POST",
-			url:"${pageContext.request.contextPath}/commuting/view",
+			url:"../commuting/view",
 			data:param,
 			success:function(data){
 				var arr = JSON.parse(data);
@@ -255,7 +255,7 @@ $(function(){
 					
 					$('#reason_'+num+'').html(arr[i].commuting_comment);
 					if($('#arrive_'+num+'').text() != '' || $('#leave_'+num+'').text() != ''){
-						$('#reasonBtn_'+num+'').html("<button onclick='goModal("+num+");'>입력</button>");
+						$('#reasonBtn_'+num+'').html("<button class='btn btn-outline-primary btn-sm' onclick='goModal("+num+");'>입력</button>");
 					}
 				}//for end
 				

@@ -49,8 +49,8 @@
 	</select>
 	
 	<select id="selectMember" parameterType="int" resultMap="memberResult">
-		select * from member m , department d, rank k where m.member_department = d.department_id(+) and m.member_rank = k.rank_id(+) and member_id = #{member_id}
-	</select>
+      select * from member m , department d, rank k where m.member_department = d.department_id(+) and m.member_rank = k.rank_id(+) and member_id = #{member_id}
+   </select>
 	
 	<select id="selectName" parameterType="int" resultType="String">
 		SELECT member_name FROM member WHERE member_id = #{member_id}
@@ -123,6 +123,9 @@
 		<foreach collection="list" item="member" open="(" close=")" separator=",">
 		#{member}
 		</foreach>
+		<if test="condition!=null and condition!=''">
+			AND ${option} LIKE '%'||#{condition}||'%'
+		</if>
 	</select>	
 	
 	<select id="selectAllMemJoin" resultMap="memberResult">

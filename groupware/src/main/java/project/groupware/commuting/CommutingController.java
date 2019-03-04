@@ -184,15 +184,12 @@ public class CommutingController {
 		map.put("date1",date1);
 		map.put("date2",date2);
 		
-		System.out.println(map.get("date1"));
-		System.out.println(map.get("date2"));
 		System.out.println(map.get("member_id"));
-		System.out.println(map);
 		
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("ddHH:mm:ss");
 		ArrayList<Commuting> list = commuting_service.getValue(map);
-		System.out.println("result List : "+list);
+		System.out.println(list);
 		JSONArray arr = new JSONArray();
 		for(Commuting comm : list) {
 			JSONObject obj = new JSONObject();
@@ -356,6 +353,56 @@ public class CommutingController {
 			return "출근처리 먼저 해주세요.";
 		}
 		
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/commuting/allView", method=RequestMethod.POST, produces = "application/text; charset=utf8")
+	public String view (@RequestParam(value="year") int year, @RequestParam(value="member_id", required=false) String member_id,  HttpServletRequest req) {
+
+		HttpSession session = req.getSession();
+		Member m = (Member) session.getAttribute("member");
+
+		String date1 = year +"-01-01";
+		String date2 = (year+1)+"-01-01";
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		if(member_id != null) {
+			map.put("member_id",member_id);
+		}else {
+			map.put("member_id",m.getMember_id());
+		}
+		map.put("date1",date1);
+		map.put("date2",date2);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("ddHH:mm:ss");
+		SimpleDateFormat sdf_mm = new SimpleDateFormat("MM");
+		ArrayList<Commuting> list = commuting_service.getValue(map);
+		JSONArray arr = new JSONArray();
+		for(Commuting comm : list) {
+			JSONObject obj = new JSONObject();
+			obj.put("commuting_id", comm.getCommuting_id());
+			obj.put("commuting_member_id", comm.getCommuting_member_id());
+			try {
+				obj.put("commuting_arrive", sdf.format(comm.getCommuting_arrive()));
+			} catch (Exception e) {
+				obj.put("commuting_arrive", null);
+			}
+			try {
+				obj.put("commuting_leave", sdf.format(comm.getCommuting_leave()));
+			} catch (Exception e) {
+				obj.put("commuting_leave", null);
+			}
+			obj.put("commuting_comment", comm.getCommuting_comment());
+			obj.put("commuting_status", comm.getCommuting_status());
+			try {
+				obj.put("commuting_status_date", sdf.format(comm.getCommuting_status_date()));
+				obj.put("month", sdf_mm.format(comm.getCommuting_status_date()));
+			}catch(Exception e) {
+				obj.put("commuting_status_date", null);
+			}
+			arr.add(obj);
+		}
+		return arr.toJSONString();
 	}
 	
 }

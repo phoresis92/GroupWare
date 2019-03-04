@@ -22,11 +22,6 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script> -->
 
 
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/jquery-easyui/themes/default/easyui.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/jquery-easyui/themes/icon.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/jquery-easyui/demo.css">
-   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/jquery-easyui/jquery.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/jquery-easyui/jquery.easyui.min.js"></script>
     
 
 <!-- fullcalendar ref -->
@@ -35,6 +30,10 @@
 <script src='${pageContext.request.contextPath}/resources/fullcalendar/lib/moment.min.js'></script>
 <script src='${pageContext.request.contextPath}/resources/fullcalendar/fullcalendar.js'></script>
 <script src='${pageContext.request.contextPath}/resources/fullcalendar/lang/ko.js'></script>
+
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/jquery-easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/jquery-easyui/themes/icon.css">
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/jquery-easyui/jquery.easyui.min.js"></script>
 
 </head>
 

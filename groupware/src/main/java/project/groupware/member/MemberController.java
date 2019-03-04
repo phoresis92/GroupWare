@@ -378,9 +378,7 @@ public class MemberController {
 		ModelAndView mav = new ModelAndView("/member/main");
 		Calendar cal = Calendar.getInstance();
 		int yy = cal.get(Calendar.YEAR);
-		int mm = cal.get(Calendar.MONTH) + 1;
 		mav.addObject("year", yy);
-		mav.addObject("month", mm);
 		for (int i = 2; i <= 6; i++) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("pay_title", i);

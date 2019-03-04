@@ -12,9 +12,12 @@
 
 <link href="${pageContext.request.contextPath}/resources/css/basic.css" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/resources/css/common.css" rel="stylesheet">
+
+<!-- 헤드 네비게이션 효과 -->
+  <link href="${pageContext.request.contextPath}/resources/css/sb-admin-2.min.css" rel="stylesheet">
 <script>
 function next()
-{location = "../member/login";}
+{location = "${pageContext.request.contextPath}/member/login";}
 
 setInterval('time()', 1000)
 
@@ -28,12 +31,24 @@ function time(){
 </head>
 <body onLoad="setTimeout('next()', 5000)">
 <div class="container-fluid">
-	<div class="row content">
-		<div class="col"></div>
-		<div class="loginbox commonbox col-sm-11col-md-11 col-lg-11">		
-			<!-- 안내 -->
-			<div class="form-group textbox text-center text-white">
-				<c:choose>
+
+<!-- Outer Row -->
+    <div class="row justify-content-center">
+
+      <div class="col-xl-10 col-lg-12 col-md-9" style="height:100% !important">
+
+        <div class="card o-hidden border-0 shadow-lg my-5">
+          <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+               <div class="col-lg-6 d" style="background-color:#eaf8ff !important"><img id="file_img" src="${pageContext.request.contextPath}/resources/img/ALPHA.png" alt="사진"></div>
+              <div class="col-lg-6">
+                <div class="p-5">
+                  <div class="text-center">
+                    <h1 class="h4 text-gray-900 mb-4">Welcome KIT!</h1>
+                  </div>
+                <form>
+           		<c:choose>
 					<c:when test="${type eq '0'}">
 						<h3>가입을 축하합니다.</h3>
 						<h3>가입 축하 이메일을 보냈으니 확인하시기 바랍니다.</h3>
@@ -52,10 +67,21 @@ function time(){
 					</c:otherwise>
 				</c:choose>
 				<br><h3><strong><span id="time">5</span>초 후 로그인 페이지로 이동합니다!</strong></h3>
-			</div>			
-		</div>
-		<div class="col"></div>
-	</div>
+
+                  <hr>
+                  <div class="text-center">
+                    <a class="small" href="">About Kitware!</a>
+                  </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>	
 </div>
 </body>
 </html>

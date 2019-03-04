@@ -1,15 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-
 <!DOCTYPE html>
+<html>
 <head>
-
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
 
   <title>KITWARE-BETA</title>
 
@@ -21,8 +18,8 @@
   <link href="${pageContext.request.contextPath}/resources/css/sb-admin-2.min.css" rel="stylesheet">
   
   <style>
-  #timecheck{
-  margin-top: 24px;
+ .timecheck{
+  margin-top: 5px;
   }
   .map_wrap {position:relative;overflow:hidden;width:100%;height:350px;}
 .radius_border{border:1px solid #919191;border-radius:5px;}     
@@ -36,8 +33,9 @@
 .custom_zoomcontrol {position:absolute;top:50px;right:10px;width:36px;height:80px;overflow:hidden;z-index:1;background-color:#f5f5f5;} 
 .custom_zoomcontrol span {display:block;width:36px;height:40px;text-align:center;cursor:pointer;}     
 .custom_zoomcontrol span img {width:15px;height:15px;padding:12px 0;border:none;}             
-.custom_zoomcontrol span:first-child{border-bottom:1px solid #bfbfbf;}            
-  </style>
+.custom_zoomcontrol span:first-child{border-bottom:1px solid #bfbfbf;} 
+     
+</style>
   
  <script type="text/javascript">
  /* 출석용 시계 */
@@ -46,7 +44,7 @@ setInterval('time()', 1000);
 function time() {
 	$.ajax({
 		type:"POST",
-		url:"../commuting/current_time",
+		url:"${pageContext.request.contextPath}/commuting/current_time",
 		success:function(data){
 			var obj = eval('('+data+')');			
 			$("#current_time").html(obj.value);				
@@ -93,7 +91,7 @@ $(function(){
 });
 $.ajax({
 	type:'POST',
-	url: '${ pageContext.request.contextPath }/mainBoard',
+	url: '${pageContext.request.contextPath}/mainBoard',
 	success: function(data){
 		var arr = eval('('+data+')');
 		var length = arr.length < 5 ? arr.length : 5;
@@ -102,7 +100,7 @@ $.ajax({
 			str += '<tr>';
 			str += '<td class="text-left" style="max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">';
 			str +=	'<a href="${pageContext.request.contextPath}/boardRead?brdno='+arr[i].brdno+'&brddate='+arr[i].brddate+'&brdhit='+arr[i].brdhit+'">' + arr[i].title + '</a></td>';
-			str += '<td>' + arr[i].brddate.slice(5) + '</td>';
+			str += '<td width="65px;">' + arr[i].brddate.slice(5) + '</td>';
 			str += '</tr>';
 		}
 		str += "</table>";	
@@ -197,10 +195,10 @@ $("#leave").click(function(){
 
 <script type="text/javascript">
 $(document).ready(function(){	
-	var param = "year=${ year }&month=${ month }";
+	var param = "year=${ year }";
 	$.ajax({
 		type:"POST",
-		url:"../commuting/view",
+		url:"${pageContext.request.contextPath}/commuting/allView",
 		data:param,
 		success:function(data){
 			var arr = JSON.parse(data);
@@ -235,7 +233,7 @@ $(document).ready(function(){
 				}catch(Exception){}				
 				
 				dataTable.addRows([
-				     [ new Date(${year}, ${month}-1, parseInt(arr[i].commuting_status_date.substring(0,2))), status],
+				     [ new Date(${year}, arr[i].month-1, parseInt(arr[i].commuting_status_date.substring(0,2))), status],
 				   ]);
 				
 			}//for end	
@@ -698,7 +696,7 @@ $(document).ready(function(){
                 <!-- Card Body -->
          <div class="card-body">
                                
-                 <div id="timecheck">
+                 <div class="timecheck">
                   <div class="card bg-primary text-white shadow">
                     <div class="card-body">
                       <div align="center" id="current_time"></div>
@@ -710,18 +708,18 @@ $(document).ready(function(){
                  <input type="hidden" id="commuting_member_id" value="${sessionScope.member.member_id}"/>
                    
                    <div class="timecheck">
-                      <div id="arrive" style="width:100%;" class="card bg-info text-white shadow">
+                      <div id="arrive" style="width:100%;" class="card bg-info text-white shadow btn-outline-info">
                     <div class="card-body" align="center" style="cursor:pointer;" id="arrTime">
-                     출근체크
+                   		  출근체크
                       <div class="text-white-50 small" align="center" >9시 이전에 체크해주세요!</div>
                     </div>
                   </div>
                 </div>
                 
                	<div class="timecheck">
-                  <div  id="leave" style="width:100%;" class="card bg-warning text-white shadow">
+                  <div  id="leave" style="width:100%;" class="card bg-warning text-white shadow btn-outline-warning">
                    <div class="card-body" align="center" style="cursor:pointer;" id="leavTime">
-                      퇴근체크
+               		       퇴근체크
                       <div class="text-white-50 small" align="center">6시 이후에 체크해주세요!</div>
                     </div>
                   </div>
@@ -740,7 +738,7 @@ $(document).ready(function(){
               <div class="card shadow mb-4">
                 <!-- 공지사항으로 상단바 -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">근무현황</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">근무 현황</h6>
                   <div class="dropdown no-arrow">
                    
                     
@@ -753,7 +751,7 @@ $(document).ready(function(){
                     <div id="calendar_basic"></div>
                   </div>
                   <hr>
-                  <code>당월 근무현황을 확인해주세요.</code>
+                  <code>근무현황을 확인해주세요.</code>
                   
                 </div>
               </div>
@@ -796,7 +794,7 @@ $(document).ready(function(){
                     </span>
                   </div>
                   <hr> <code>당월 지출통계입니다.</code>
-                  </div>
+             </div>
                                     
                   </div>
                
@@ -842,7 +840,7 @@ $(document).ready(function(){
               <div class="card shadow mb-4">
                 <!-- 1번 상단바 -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">공지사항</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">회사 위치</h6>
                   
                 </div>
                 <!-- Card Body -->

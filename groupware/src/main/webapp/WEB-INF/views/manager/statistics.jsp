@@ -96,7 +96,7 @@ $(document).ready(function(){
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-              							<h2>회원통계</h2>
+              							<h2>회원 통계</h2>
 
           </div>
 
@@ -114,7 +114,7 @@ $(document).ready(function(){
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">성별통계</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">성별 비율</h6>
                   
                 </div>
                 <!-- 차트바디 -->
@@ -133,7 +133,7 @@ $(document).ready(function(){
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">직급통계</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">직급별 사원 비율</h6>
                   
                 </div>
                 <!-- 차트바디 -->
@@ -153,7 +153,7 @@ $(document).ready(function(){
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">부서통계</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">부서별 사원 비율</h6>
                   
                 </div>
                 <!-- 차트바디 -->

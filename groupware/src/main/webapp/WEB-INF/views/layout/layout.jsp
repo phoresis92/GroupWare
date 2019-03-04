@@ -30,10 +30,11 @@
 		<div class="side_layout bg-gradient-primary">
 			<tiles:insertAttribute name="menu" />
 		</div>
-		<div class="col-sm col-md col-lg">
+		<div class="col-sm col-md col-lg container-fluid">
 		<!-- <div class="container-fluid"> -->
-		<br>
+			<br>
 			<tiles:insertAttribute name="body" />
+			<br>
 		</div>
 	</div>
 	

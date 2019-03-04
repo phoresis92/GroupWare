@@ -62,7 +62,7 @@ public class ManagerController {
 	private project.groupware.rank.Service rankService;
 	
 	@RequestMapping("/manager/member")
-	public ModelAndView getMember(@RequestParam(value="page") int page) {
+	public ModelAndView getMember(HttpServletRequest req, @RequestParam(value="page") int page) {
 		ModelAndView mav = new ModelAndView("/manager/managerMember");
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Integer> status_list = new ArrayList<Integer>();
@@ -72,24 +72,45 @@ public class ManagerController {
 		status_list.add(3); // 퇴직
 		status_list.add(4); // 정지
 		status_list.add(5); // 휴가
-		status_list.add(6); // ??
+//		status_list.add(6); // ??
 		status_list.add(9); // 관리자
 		map.put("list", status_list);
+		String option = req.getParameter("option");
+		String condition = req.getParameter("condition");
+		if (option != null && !option.equals("")) {
+			map.put("option", option);			
+		}
+		if (condition != null && !condition.equals("")) {
+			map.put("condition", condition);			
+		}
 		ArrayList<Member> list = member_service.getCondition(map);
+		mav.addObject("option",option);
+		mav.addObject("condition",condition);
 		mav.addObject("page", new Pagination().paging(page, list));
 		mav.addObject("list",list);
 		mav.addObject("address","member");
+		
 		return mav;
 	}
 	
 	@RequestMapping("/manager/unauthorized")
-	public ModelAndView getUnauthorized() {
+	public ModelAndView getUnauthorized(HttpServletRequest req, @RequestParam(value="page") int page) {
 		ModelAndView mav = new ModelAndView("/manager/managerMember");		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Integer> status_list = new ArrayList<Integer>();
 		status_list.add(0); // 미승인
 		map.put("list", status_list);
+		String option = req.getParameter("option");
+		String condition = req.getParameter("condition");
+		if (option != null && !option.equals("")) {
+			map.put("option", option);			
+		}
+		if (condition != null && !condition.equals("")) {
+			map.put("condition", condition);			
+		}
 		ArrayList<Member> list = member_service.getCondition(map);
+		mav.addObject("option",option);
+		mav.addObject("condition",condition);
 		mav.addObject("page", new Pagination().paging(1, list));
 		mav.addObject("list",list);
 		mav.addObject("address","unauthorized");
@@ -113,7 +134,7 @@ public class ManagerController {
 	}
 	
 	@RequestMapping("/manager/authorization")
-	public String aa(@RequestParam(value="member_id") int member_id) {
+	public String setAuthorization(@RequestParam(value="member_id") int member_id) {
 		Member m = member_service.getMember(member_id);
 		m.setMember_status(2); // 재직
 		member_service.editPw(m);
@@ -121,7 +142,7 @@ public class ManagerController {
 	}
 	
 	@RequestMapping("/manager/refuse")
-	public String d(@RequestParam(value="member_id") int member_id) {		
+	public String setRefuse(@RequestParam(value="member_id") int member_id) {		
 		Member m = member_service.getMember(member_id);
 		m.setMember_status(4); // 정지
 		member_service.editPw(m);
@@ -129,7 +150,7 @@ public class ManagerController {
 	}
 	
 	@RequestMapping("/manager/memberView")
-	public String dd(HttpServletRequest req, @RequestParam(value="member_id") int member_id) {
+	public String memberView(HttpServletRequest req, @RequestParam(value="member_id") int member_id) {
 //		String page = req.getParameter("page");
 //		String opt = req.getParameter("opt");
 //		String condition = req.getParameter("condition");
@@ -138,7 +159,7 @@ public class ManagerController {
 	}
 	
 	@RequestMapping("/manager/deleteMember")
-	public void asdf(@RequestParam(value="member_id") int member_id) {
+	public void memberDelete(@RequestParam(value="member_id") int member_id) {
 		
 	}
 	
