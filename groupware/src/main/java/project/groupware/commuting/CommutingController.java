@@ -186,9 +186,13 @@ public class CommutingController {
 		
 		System.out.println(map.get("member_id"));
 		
-		
+		ArrayList<Commuting> list = null;
 		SimpleDateFormat sdf = new SimpleDateFormat("ddHH:mm:ss");
-		ArrayList<Commuting> list = commuting_service.getValue(map);
+		try {
+		list = commuting_service.getValue(map);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		System.out.println(list);
 		JSONArray arr = new JSONArray();
 		for(Commuting comm : list) {
