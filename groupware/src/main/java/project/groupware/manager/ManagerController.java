@@ -138,7 +138,7 @@ public class ManagerController {
 		Member m = member_service.getMember(member_id);
 		m.setMember_status(2); // 재직
 		member_service.editPw(m);
-		return "redirect:/manager/unauthorized";
+		return "redirect:/manager/unauthorized?page=1";
 	}
 	
 	@RequestMapping("/manager/refuse")
@@ -146,7 +146,7 @@ public class ManagerController {
 		Member m = member_service.getMember(member_id);
 		m.setMember_status(4); // 정지
 		member_service.editPw(m);
-		return "redirect:/manager/unauthorized";
+		return "redirect:/manager/unauthorized?page=1";
 	}
 	
 	@RequestMapping("/manager/memberView")
@@ -266,7 +266,7 @@ public class ManagerController {
 		model.addAttribute("pageInfo", paging(page,list));
 		
 		model.addAttribute("auth" , 3); // 관리자 삭제 가능
-		
+		model.addAttribute("toSearch" , "manager/apvDelList");
 		return "/approval/myApvList";
 	}
 	
@@ -287,7 +287,7 @@ public class ManagerController {
 		model.addAttribute("pageInfo", paging(page,list));
 		
 		model.addAttribute("auth" , 0); // 관리자 삭제 가능
-		
+		model.addAttribute("toSearch" , "manager/allApvList");
 		return "/approval/myApvList";
 	}
 	

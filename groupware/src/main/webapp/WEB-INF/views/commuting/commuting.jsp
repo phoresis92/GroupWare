@@ -394,7 +394,86 @@ function commentBtn(){
 
 </head>
 <body>
+<div class="container">
+	<div class="container-fluid text-center">
 
+		<!-- 게시글 -->
+ 	<div class="col-lg-12">
+ 		
+              <div class="card" >
+                <div class="card-header py-3">
+                
+                  <h4 class="m-0 font-weight-bold text-primary"><strong>근태관리</strong></h4><div align="right">	
+				<div>
+				   <form id="selectDayForm" action="${ pageContext.request.contextPath }/commuting/commuting"></form>          	
+				
+						<div class="clearfix">
+	<div class="float-left">
+		<h2>${ year }년 ${ month }월  <strong><span id="current_time"></span></strong></h2>
+	</div>	
+	 <div class="float-right">
+					<input type="hidden" id="commuting_member_id" value="${sessionScope.member.member_id}"/>
+					<button style="width: 150pt;" type="button" id="arrive" class="btn btn-outline-success">출근</button>
+					<button style="width: 150pt;" type="button" id="leave" class="btn btn-outline-success">퇴근</button>
+					</div>
+					
+					</div>
+				</div>
+			
+				</div>
+                </div>
+                
+                <div class="card-body text-center">
+                
+                  <div class="clearfix">
+                  <div class="float-right">
+                  
+		<input class="btn btn-outline-primary" type="text" id="halfPick" name="halfPick" onchange="datePick()" value="${ dPick }">
+		<button class="btn btn-outline-primary" onclick="previousYear()">이전해</button>
+		<button class="btn btn-outline-primary" onclick="previousMonth()">이전달</button>
+		<button class="btn btn-outline-primary" onclick="today()">오늘</button>
+		<button class="btn btn-outline-primary" onclick="nextMonth()">다음달</button>
+		<button class="btn btn-outline-primary" onclick="nextYear()">다음해</button>
+	</div></div>
+                  <hr>
+                   <div style="height:650px; overflow:auto; overflow-x:hidden; overflow-y:auto;" align=left>
+                  
+                  
+	<div class="row board text-center" style="background-color: #dddddd;" >
+		<div class="col-sm"><strong>날짜</strong></div>
+		<div class="col-sm"><strong>출근시간</strong></div>
+		<div class="col-sm"><strong>퇴근시간</strong></div>
+		<div class="col-sm"><strong>지각시간</strong></div>
+		<div class="col-sm"><strong>근무시간</strong></div>
+		<div class="col-sm"><strong>상태</strong></div>
+		<div class="col-sm"><strong>근태사유</strong></div>
+		<div style="width:8%"><strong></strong></div>
+	</div>
+	
+	<c:forEach items="${calendar}" var="calendar" varStatus="status">
+		<div class="row board text-center" id="row_${status.count}" onclick="console.log(this.value)">
+			<div class="col-sm" id="day_${status.count}">${calendar.day}(${calendar.days})</div>								
+			<div class="col-sm" id="arrive_${status.count}"></div>
+			<div class="col-sm" id="leave_${status.count}"></div>
+			<div class="col-sm" id="delay_${status.count}"></div>							
+			<div class="col-sm" id="over_${status.count}"></div>
+			<div class="col-sm" id="stat_${status.count}"></div>
+			<div class="col-sm" id="reason_${status.count}"></div>
+			<div style="width:8%" id="reasonBtn_${status.count}"></div>
+		</div>
+	</c:forEach>						
+</div>
+                  
+                  <hr>
+                 
+                
+			
+                </div>
+              </div>
+			
+            </div>
+            </div></div>
+<%-- 
 <div class="container">
 	<div class="container-fluid text-center">
 
@@ -432,7 +511,7 @@ function commentBtn(){
                 <div class="card-body text-center">
                   <hr>
                   
-                  <div style="height:650px; overflow:auto; overflow-x:hidden; overflow-y:auto;" align=left>
+     <div style="height:650px; overflow:auto; overflow-x:hidden; overflow-y:auto;" align=left>
                   
                   
 	<div class="row board text-center" style="background-color: #dddddd;" >
@@ -474,7 +553,7 @@ function commentBtn(){
 	
 </div>	
 
-
+ --%>
 
 
 

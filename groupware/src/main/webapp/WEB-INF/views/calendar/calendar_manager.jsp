@@ -16,10 +16,10 @@
  --%>  
 
 <!-- bootstrap ref -->
-<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script> -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 
 
     
@@ -315,9 +315,7 @@ function chk(){
 				
 					<h2>직원 선택</h2>
 					
-				<div id="showComp">
-					<input id="campCal" type="checkbox" value="campCal" onchange="chk()">회사일정 같이보기
-				</div>
+				
 					
 					<div class="container col-5" style="padding:0px; margin: 0px; width: 500px;">
 				    <div class="easyui-panel" style="overflow-x:hidden; height:500px; width: 240px;">
@@ -348,10 +346,33 @@ function chk(){
 				
 			</div>
 			<!-- The calendar container -->
-			<div class="col-9">
+			<div class="container">
+	<div class="container-fluid text-center">
+
+		<!-- 게시글 -->
+ 	<div class="col-lg-12">
+ 		
+              <div class="card" >
+                <div class="card-header py-3">
+                  <h4 class="m-0 font-weight-bold text-primary"><strong>사원 일정조회</strong></h4><div align="right"><c:if test="${ who != 99999 }">	
+				<div id="showComp">
+					<input id="campCal" type="checkbox" value="campCal" onchange="chk()">회사일정 같이보기
+				</div>
+				</c:if>
+				</div>
+                </div>
+                <div class="card-body text-center">
+                  
+                  <hr>
+                  <div id="calendar"></div>
+                 
+                
 			
-				<div id="calendar"></div>
-			</div>
+                </div>
+              </div>
+			
+            </div>
+            </div></div>
 		</div>
 	</div>
 	

@@ -115,7 +115,7 @@
                   
                   
                   <hr>
-                  <div style="height:450px; overflow:auto;">
+                  <div style="height:800px; overflow:auto;">
                   
                   <table class="table table-hover" border="1">
 

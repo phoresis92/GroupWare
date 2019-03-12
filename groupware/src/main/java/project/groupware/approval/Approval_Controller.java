@@ -238,7 +238,7 @@ public class Approval_Controller {
 		
 		model.addAttribute("pageInfo", paging(page,apvList));
 		
-		model.addAttribute("toSearch", "myApvList");
+		model.addAttribute("toSearch", "approval/myApvList");
 		
 		}catch(Exception e) {
 			
@@ -322,7 +322,7 @@ public class Approval_Controller {
 		
 		model.addAttribute("auth" , 1); // 결재  notAuthApvList
 		
-		model.addAttribute("toSearch", "notAuthApvList");
+		model.addAttribute("toSearch", "approval/notAuthApvList");
 		
 		return "/approval/myApvList";
 	} // myApvList end
@@ -356,7 +356,7 @@ public class Approval_Controller {
 		
 		model.addAttribute("auth" , 0); 
 		
-		model.addAttribute("toSearch", "yesAuthApvList");
+		model.addAttribute("toSearch", "approval/yesAuthApvList");
 
 		return "/approval/myApvList";
 	} // myApvList end
@@ -628,7 +628,7 @@ public class Approval_Controller {
 		
 		model.addAttribute("auth" , 2);
 		
-		model.addAttribute("toSearch", "tempApvList");
+		model.addAttribute("toSearch", "approval/tempApvList");
 		
 		return "/approval/myApvList";
 	} // myApvList end
@@ -934,26 +934,26 @@ public class Approval_Controller {
 		
 		ArrayList<Approval_Dto> list = null;
 		String toSearch = req.getParameter("toSearch");
-		if(toSearch.equals("myApvList")) {
+		if(toSearch.equals("approval/myApvList")) {
 			list = apvService.getSearchmyApvList(map);
 			model.addAttribute("auth" , 0); 
-			model.addAttribute("toSearch" , "myApvList"); 
-		}else if(toSearch.equals("tempApvList")) {
+			model.addAttribute("toSearch" , "approval/myApvList"); 
+		}else if(toSearch.equals("approval/tempApvList")) {
 			list = apvService.getSearchtempApvList(map);
 			model.addAttribute("auth" , 2);
-			model.addAttribute("toSearch" , "tempApvList"); 
-		}else if(toSearch.equals("yesAuthApvList")) {
+			model.addAttribute("toSearch" , "approval/tempApvList"); 
+		}else if(toSearch.equals("approval/yesAuthApvList")) {
 			list = apvService.getSearchyesAuthApvList(map);
 			model.addAttribute("auth" , 0); // 결재  notAuthApvList
-			model.addAttribute("toSearch" , "yesAuthApvList"); 
-		}else if(toSearch.equals("allApvList")) {
+			model.addAttribute("toSearch" , "approval/yesAuthApvList"); 
+		}else if(toSearch.equals("manager/allApvList")) {
 			list = apvService.getSearchallApvList(map);
 			model.addAttribute("auth" , 0); // 결재  notAuthApvList
-			model.addAttribute("toSearch" , "allApvList"); 
-		}else if(toSearch.equals("apvDelList")) {
+			model.addAttribute("toSearch" , "manager/allApvList"); 
+		}else if(toSearch.equals("manager/apvDelList")) {
 			list = apvService.getSearchapvDelList(map);
 			model.addAttribute("auth" , 3); // 결재  notAuthApvList
-			model.addAttribute("toSearch" , "apvDelList"); 
+			model.addAttribute("toSearch" , "manager/apvDelList"); 
 		}
 		
 		

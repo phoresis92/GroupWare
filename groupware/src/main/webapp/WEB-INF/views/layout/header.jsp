@@ -149,20 +149,21 @@ $(document).ready(function() {
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="${pageContext.request.contextPath}/member/myinfo">
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                  내 정보
+                		  내 정보
                 </a>
                 <a class="dropdown-item" href="${pageContext.request.contextPath}/member/editPw?type=0">
                   <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                  정보 변경
+              		    정보 변경
                 </a>
                 <a class="dropdown-item" href="${pageContext.request.contextPath}/member/myboard?member_name=${sessionScope.member.member_name}">
                   <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                  내 게시글
+                  		내 게시글
                 </a>
+                
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                  로그아웃
+                		  로그아웃
                 </a>
               </div>
             </li>

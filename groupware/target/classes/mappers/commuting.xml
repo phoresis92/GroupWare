@@ -35,10 +35,10 @@ and (to_char(commuting_arrive, 'YYYY-MM-DD') = to_char(sysdate, 'YYYY-MM-DD') or
 	
 	<select id="selectValue" parameterType="map" resultMap="commutingResult">
 	select commuting_id, commuting_member_id, commuting_arrive, commuting_leave, commuting_comment, commuting_status, commuting_status_date from commuting
-where ((commuting_arrive between #{date1} and #{date2}
-and commuting_arrive != #{date2})
-or(commuting_status_date between #{date1} and #{date2}
-and commuting_status_date != #{date2}))
+where ((commuting_arrive between to_date(#{date1}) and to_date(#{date2})
+and commuting_arrive != to_date(#{date2}))
+or(commuting_status_date between to_date(#{date1}) and to_date(#{date2})
+and commuting_status_date != to_date(#{date2})))
 and commuting_member_id = #{member_id}
 	</select>
 	

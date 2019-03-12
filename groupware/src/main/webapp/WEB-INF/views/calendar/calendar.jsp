@@ -27,12 +27,12 @@
 <script src='${pageContext.request.contextPath}/resources/fullcalendar/fullcalendar.js'></script>
 <script src='${pageContext.request.contextPath}/resources/fullcalendar/lang/ko.js'></script>
 
-
-
 <!-- summernote -->
 <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
 <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
 
+<!-- jscolor -->
+<script src="${pageContext.request.contextPath}/resources/jscolor.js"></script>
 
 </head>
 
@@ -914,34 +914,41 @@ function chk(){
 </style>
 
 <body>
+<div class="container">
+	<div class="container-fluid text-center">
 
-	<div class="container-fluid">
-		<div>
-		
-			<c:choose>
+		<!-- 게시글 -->
+ 	<div class="col-lg-12">
+ 		
+              <div class="card" >
+                <div class="card-header py-3">
+                  <h4 class="m-0 font-weight-bold text-primary"><strong><c:choose>
 				<c:when test="${ who != 99999 }">
-					<h1>내일정 관리</h1>
+					<h4>내일정 관리</h4>
 				</c:when>
 				<c:otherwise>
-					<h1>회사일정 관리</h1>
+					<h4>회사일정 관리</h4>
 				</c:otherwise>
-			</c:choose>
-				
-				<c:if test="${ who != 99999 }">	
+			</c:choose></strong></h4><div align="right"><c:if test="${ who != 99999 }">	
 				<div>
 					<input id="campCal" type="checkbox" value="campCal" onchange="chk()">회사일정 같이보기
 				</div>
 				</c:if>
-		
-			<!-- The calendar container -->
-				<div id="calendar"></div>
-				<!-- <input class="jscolor {hash:true}" value="ab2567"> -->
-		</div>
-	</div>
-	
-	
-	
-	
+				</div>
+                </div>
+                <div class="card-body text-center">
+                  
+                  <hr>
+                  <div id="calendar"></div>
+                 
+                
+			
+                </div>
+              </div>
+			
+            </div>
+            </div></div>
+
 					<!-- 일정보기 ================================================================================================================================== -->
 					<div class="modal fade" id="dayModal" role="dialog">
     					<div class="modal-dialog">

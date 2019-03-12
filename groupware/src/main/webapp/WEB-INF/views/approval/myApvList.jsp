@@ -229,10 +229,10 @@ $(function(){
 			
 			<ul class="pagination justify-content-center">	
 				<c:if test="${pageInfo.page != 1}">	
-					<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/approval/${toSearch}?page=1"><i class="fas fa-angle-double-left"></i></a></li>					
+					<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/${toSearch}?page=1"><i class="fas fa-angle-double-left"></i></a></li>					
 				</c:if>
 				<c:if test="${pageInfo.page >= 11}">	
-					<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/approval/${toSearch}?page=${pageInfo.page-1}"><i class="fas fa-angle-left"></i></a></li>			
+					<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/${toSearch}?page=${pageInfo.page-1}"><i class="fas fa-angle-left"></i></a></li>			
 				</c:if>
 										
 				<c:forEach var="i" begin="${pageInfo.startPage}" end="${pageInfo.endPage}">
@@ -240,13 +240,13 @@ $(function(){
 						<li class="page-item active"><a class="page-link" href="#">${i}</a></li>					
 					</c:if>					
 					<c:if test="${i != pageInfo.page }">					
-						<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/approval/${toSearch}?page=${i}">${i}</a></li>					
+						<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/${toSearch}?page=${i}">${i}</a></li>					
 					</c:if>
 				</c:forEach>
 			
 				<c:if test="${ pageInfo.endPage != pageInfo.totalPage }">					
-					<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/approval/${toSearch}?page=${pageInfo.endPage+1}"><i class="fas fa-angle-right"></i></a></li>
-					<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/approval/${toSearch}?page=${pageInfo.endPage+1}"><i class="fas fa-angle-double-right"></i></a></li>	
+					<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/${toSearch}?page=${pageInfo.endPage+1}"><i class="fas fa-angle-right"></i></a></li>
+					<li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/${toSearch}?page=${pageInfo.endPage+1}"><i class="fas fa-angle-double-right"></i></a></li>	
 				</c:if>
 				
 			</ul> <!-- Paging end -->

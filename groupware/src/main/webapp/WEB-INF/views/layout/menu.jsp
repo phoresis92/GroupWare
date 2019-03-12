@@ -4,20 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script>
-function fn_formSubmit(){
-	document.form1.submit();	
-}
 
-$.ajax({
-	type:'POST',
-	url: '${ pageContext.request.contextPath }/approval/notAuthApvCount',
-	success: function(data){
-		//console.log(data);
-		$('#apvCount').text(data);
-	}
-})
-</script>
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -33,8 +20,23 @@ $.ajax({
   
 <%--   <script src="${pageContext.request.contextPath}/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
  --%>
-  <script src="${pageContext.request.contextPath}/resources/vendor/jquery-easing/jquery.easing.min.js"></script> 
+  <script src="${pageContext.request.contextPath}/resources/vendor/jquery-easing/jquery.easing.min.js"></script>
   
+  <script src="${pageContext.request.contextPath}/resources/js/sb-admin-2.min.js"></script> 
+  <script>
+function fn_formSubmit(){
+	document.form1.submit();	
+}
+
+$.ajax({
+	type:'POST',
+	url: '${ pageContext.request.contextPath }/approval/notAuthApvCount',
+	success: function(data){
+		//console.log(data);
+		$('#apvCount').text(data);
+	}
+})
+</script>
 <style>
 ul .nav-item {padding-left:7px;}
 </style>

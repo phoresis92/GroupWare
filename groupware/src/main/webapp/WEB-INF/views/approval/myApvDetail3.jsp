@@ -108,7 +108,7 @@ height: 60px;
 		<!-- 결제칸 끝 -->
         
                   <hr>
-                  <div style="height:450px; overflow:auto;">
+                  <div style="height:1000px; overflow:auto;">
                   
                   <table class="table table" border="1">
 
