@@ -4,6 +4,8 @@
 <p>2019.02.11 - 2019.03.04(개발기간:3주)</p>
 <p>진행인원 : 3명</p>
 
+[52.79.145.202/groupware](http://52.79.145.202/groupware)
+
 | JDK | Java 1.8.0_191 | 
 |:------:|:------:|
 |   DBMS    |   AWS RDS (Oracle Standard Edition)    |
