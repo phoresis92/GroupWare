@@ -5,10 +5,14 @@
 <mapper namespace="project.groupware.commuting.Dao"> <!-- Dao implements한 클래스 이름지정 -->
 
 	<resultMap id="commutingResult" type="project.groupware.commuting.Commuting"> <!-- id:검색된결과를 반환, type:Bean/DTO/VO -->
-		<result column="commuting_id" property="commuting_id" /> <!-- column:컬럼이름, property:멤버변수 -->
-		<result column="commuting_member_id" property="commuting_member_id" />
-		<result column="commuting_arrive" property="commuting_arrive" />
-		<result column="commuting_leave" property="commuting_leave" />
+		<result column="commuting_id" 			property="commuting_id" 			/> <!-- column:컬럼이름, property:멤버변수 -->
+		<result column="commuting_member_id" 	property="commuting_member_id" 		/>
+		<result column="commuting_arrive" 		property="commuting_arrive" 		/>
+		<result column="commuting_leave" 		property="commuting_leave" 			/>
+
+		<result column="commuting_comment" 		property="commuting_comment" 		/>
+		<result column="commuting_status" 		property="commuting_status" 		/>
+		<result column="commuting_status_date" 	property="commuting_status_date" 	/>
 	</resultMap>
 
 
@@ -34,12 +38,19 @@ and (to_char(commuting_arrive, 'YYYY-MM-DD') = to_char(sysdate, 'YYYY-MM-DD') or
 	</select>
 	
 	<select id="selectValue" parameterType="map" resultMap="commutingResult">
-	select commuting_id, commuting_member_id, commuting_arrive, commuting_leave, commuting_comment, commuting_status, commuting_status_date from commuting
-where ((commuting_arrive between #{date1} and #{date2}
-and commuting_arrive != #{date2})
-or(commuting_status_date between #{date1} and #{date2}
-and commuting_status_date != #{date2}))
-and commuting_member_id = #{member_id}
+		SELECT  COMMUTING_ID, 
+			commuting_member_id, 
+			commuting_arrive, 
+			commuting_leave, 
+			commuting_comment, 
+			commuting_status, 
+			commuting_status_date 
+	   FROM COMMUTING
+	where ((commuting_arrive between TO_DATE(#{date1, jdbcType=VARCHAR}, 'YYYY-MM-DD') and TO_DATE(#{date2, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+			and commuting_arrive != TO_DATE(#{date2, jdbcType=VARCHAR},'YYYY-MM-DD'))
+		or(commuting_status_date between TO_DATE(#{date1, jdbcType=VARCHAR},'YYYY-MM-DD') and TO_DATE(#{date2, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+		and commuting_status_date != TO_DATE(#{date2, jdbcType=VARCHAR}, 'YYYY-MM-DD')))
+	and commuting_member_id = #{member_id} 
 	</select>
 	
 	

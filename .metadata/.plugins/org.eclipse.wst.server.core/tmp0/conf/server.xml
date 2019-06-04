@@ -43,7 +43,7 @@
              Note: The pattern used is equivalent to using pattern="common" -->
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs" pattern="%h %l %u %t &quot;%r&quot; %s %b" prefix="localhost_access_log" suffix=".txt"/>
 
-      <Context docBase="C:\Users\hushe\dev\eclipse-jee-2018-12-R-win32-x86_64\gware\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\ROOT" path="" reloadable="false"/><Context docBase="C:\Users\hushe\dev\eclipse-jee-2018-12-R-win32-x86_64\gware\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\groupware2" path="/groupware2" reloadable="true" source="org.eclipse.jst.jee.server:groupware2"/><Context docBase="C:\Users\hushe\dev\eclipse-jee-2018-12-R-win32-x86_64\gware\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\groupware" path="/groupware" reloadable="true" source="org.eclipse.jst.jee.server:groupware"/></Host>
+      <Context docBase="C:\Users\hushe\dev\eclipse-jee-2018-12-R-win32-x86_64\gware\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\ROOT" path="" reloadable="false"/><Context docBase="C:\Users\hushe\dev\eclipse-jee-2018-12-R-win32-x86_64\gware\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\groupware" path="/groupware" reloadable="true" source="org.eclipse.jst.jee.server:groupware"/></Host>
     </Engine>
   </Service>
 </Server>

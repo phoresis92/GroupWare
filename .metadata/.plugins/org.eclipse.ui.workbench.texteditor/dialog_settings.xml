@@ -2,12 +2,15 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="allView" key="selection"/>
+		<item value="comm result" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="comm result"/>
+			<item value="commResult"/>
+			<item value="comm"/>
 			<item value="allView"/>
 			<item value="calend"/>
 			<item value="not"/>
@@ -16,13 +19,10 @@
 			<item value="cate"/>
 			<item value="selectAll"/>
 			<item value=".."/>
-			<item value="comm result"/>
-			<item value="comm"/>
 			<item value="timecheck"/>
 			<item value="leave"/>
 			<item value="dele"/>
 			<item value="del"/>
-			<item value="삭제요청"/>
 		</list>
 		<list key="replacehistory">
 		</list>

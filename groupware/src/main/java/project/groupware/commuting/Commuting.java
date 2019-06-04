@@ -4,13 +4,13 @@ import java.util.Date;
 
 public class Commuting {
 	
-	private int commuting_id;
-	private String commuting_member_id;
-	private Date commuting_arrive;
-	private Date commuting_leave;
-	private String commuting_comment;
-	private String commuting_status;
-	private Date commuting_status_date;
+	private int 		commuting_id;
+	private String	 	commuting_member_id;
+	private Date 		commuting_arrive;
+	private Date 		commuting_leave;
+	private String 		commuting_comment;
+	private String 		commuting_status;
+	private Date 		commuting_status_date;
 	
 	public Commuting() {}
 
