@@ -165,11 +165,18 @@ public class CommutingController {
 		HttpSession session = req.getSession();
 		Member m = (Member) session.getAttribute("member");
 
-		String date1 = year +"-"+ month+"-01";
-		String date2 = "";
-		if(month < 12) {
+		String date1, date2 ;
+		if(month < 10) {
+		    date1 = year + "-0" +    month   + "-01";
+			date2 = year + "-0" + (month+1)  + "-01";
+			if(month == 9){
+				date2 = year + "-" + (month+1)  + "-01";
+			}
+		}else if(month < 12) {
+			date1 = year +"-"+ month+"-01";
 			date2 = year +"-"+ (month+1) +"-01";
 		}else if(month >= 12) {
+			date1 = year +"-"+ month+"-01";
 			date2 = (year+1) + "-01-01";
 		}
 		
