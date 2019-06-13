@@ -197,10 +197,15 @@ $(function(){
 					
 					
 					console.log(arr[i].commuting_status);
+					console.log(arr[i].commuting_status_date);
+					//console.log(arr[i].commuting_status_date.substring(0,2));
+					try{
 					var num = parseInt(arr[i].commuting_status_date.substring(0,2));
 					$('#reason_'+num+'').val(arr[i].commuting_comment);
 					$('#row_'+num+'').val(arr[i].commuting_id);
-					
+					}catch(e){
+						console.log(e)
+					}
 					
 					
 					try{

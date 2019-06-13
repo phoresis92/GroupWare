@@ -18,6 +18,8 @@ import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,7 +69,7 @@ public class Approval_Controller {
 	}
 	
 	@RequestMapping(value="/approval", method=RequestMethod.POST)
-	public String approvalWrite(Approval_Dto dto, HttpServletRequest req, @RequestParam (value="countVacat", required=false) String countVacat ) {
+	public String approvalWrite(Approval_Dto dto, HttpServletRequest req, @RequestParam (value="countVacat", required=false) String countVacat ) throws IOException, Exception {
 		
 		System.out.println(dto.getApproval_startdate());
 		System.out.println(dto.getApproval_enddate());
@@ -118,6 +120,20 @@ public class Approval_Controller {
 		
 		if(!dto.getFile().getOriginalFilename().equals("")) {
 
+				/*
+				 * //===========================================================================
+				 * ======= String uploadpath = "test/approvalFile";
+				 * 
+				 * ResponseEntity<String> img_path = new ResponseEntity<String>(
+				 * UploadFileUtils.uploadFile(uploadpath, file.getOriginalFilename(),
+				 * file.getBytes()), HttpStatus.CREATED); String certificatePath = (String)
+				 * img_path.getBody(); System.out.println(certificatePath);
+				 * //===========================================================================
+				 * =======
+				 */
+			
+			
+			
 			//String fileName = p.getFile1().getOriginalFilename();
 			String fileName = mkFileName(file, dto.getApproval_cate(), seq);
 			String path = file_path + fileName;

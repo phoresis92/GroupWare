@@ -39,14 +39,14 @@
 				<div class="form-group textbox">
 					<label for="member_id">Enter your ID</label>
 					<a href="#" data-toggle="tooltip" data-placement="left" title="아이디를 입력하세요!"></a>
-					<input type="text" class="form-control" id="member_id" name="member_id" maxlength="12">
+					<input type="text" class="form-control" id="member_id" name="member_id" maxlength="12" value="1">
 				</div>
 				
 				<!-- 비밀번호 -->
 				<div class="form-group textbox">
 					<label for="member_pw">Password</label>
 					<a href="#" data-toggle="tooltip" data-placement="left" title="비밀번호를 입력하세요!"></a>
-					<input type="password" class="form-control" id="member_pw" name="member_pw" maxlength="16" style="ime-mode: disabled;">
+					<input type="password" class="form-control" id="member_pw" name="member_pw" maxlength="16" style="ime-mode: disabled;" value="1234">
 				</div>
 			</form>
       <!-- 로그인 실패 -->

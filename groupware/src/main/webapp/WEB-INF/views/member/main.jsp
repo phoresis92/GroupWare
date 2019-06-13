@@ -141,7 +141,7 @@ $(document).ready(function(){
 			async: false,
 			url:"${pageContext.request.contextPath}/commuting/arrive",
 			success:function(data){
-				console.log(data);
+				//console.log(data);
 				try{
 					var obj = JSON.parse(data);		
 				}catch(Exception){
@@ -172,7 +172,7 @@ $("#leave").click(function(){
 				type:"POST",
 				url:"${pageContext.request.contextPath}/commuting/leave",
 				success:function(data){
-					console.log(data);
+					//console.log(data);
 					try{
 						var obj = JSON.parse(data);		
 					}catch(Exception){
@@ -202,7 +202,7 @@ $(document).ready(function(){
 		data:param,
 		success:function(data){
 			var arr = JSON.parse(data);
-			console.log(arr);
+			//console.log(arr);
 
 			google.charts.load("current", {packages:["calendar"]});
 			google.charts.setOnLoadCallback(drawChart);
@@ -215,7 +215,7 @@ $(document).ready(function(){
 
 			for(var i = 0; i < arr.length; i++){			
 				
-				console.log(arr[i].commuting_status);
+				//console.log(arr[i].commuting_status);
 				var num = parseInt(arr[i].commuting_status_date.substring(0,2));
 				var status = 0;
 				try{
@@ -468,7 +468,7 @@ $(document).ready(function(){
                type: 'POST',
                url: "${pageContext.request.contextPath}/apv_Vacat/getVacation",
                success: function(data) {
-     				console.log(data);
+     				//console.log(data);
                    // Call the "updateEvent" method
                    
                    $('#mainleftVacat').text(data);
@@ -795,7 +795,7 @@ $(document).ready(function(){
                 <!-- Card Body -->
          <div  class="card-body">
                  <div id="map" style="width:100%;height:280px;"></div>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=24b4b7c7fee91787dba7c79d2b9fdffb"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4d98026d582115563e15a336ff21a605"></script>
 <script>
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = { 

@@ -10,4 +10,6 @@
 <fullyQualifiedTypeName name="project.groupware.member.Member"/>
 <fullyQualifiedTypeName name="java.util.Date"/>
 <fullyQualifiedTypeName name="project.groupware.commuting.Service"/>
+<fullyQualifiedTypeName name="com.amazonaws.protocol.Protocol"/>
+<fullyQualifiedTypeName name="com.amazonaws.Protocol"/>
 </qualifiedTypeNameHistroy>

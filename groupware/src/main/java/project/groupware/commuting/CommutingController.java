@@ -165,7 +165,7 @@ public class CommutingController {
 		HttpSession session = req.getSession();
 		Member m = (Member) session.getAttribute("member");
 
-		String date1, date2 ;
+		String date1 = null, date2 = null;
 		if(month < 10) {
 		    date1 = year + "-0" +    month   + "-01";
 			date2 = year + "-0" + (month+1)  + "-01";
@@ -195,8 +195,11 @@ public class CommutingController {
 		
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("ddHH:mm:ss");
+		System.out.println("befpre===============================================");
 		ArrayList<Commuting> list = commuting_service.getValue(map);
+		System.out.println("after===============================================");
 		System.out.println(list);
+		System.out.println("===============================================");
 		JSONArray arr = new JSONArray();
 		for(Commuting comm : list) {
 			JSONObject obj = new JSONObject();
@@ -222,6 +225,7 @@ public class CommutingController {
 			arr.add(obj);
 			System.out.println(obj);
 		}
+		System.out.println("===============================================");
 		System.out.println(arr);
 		return arr.toJSONString();
 	}
